@@ -1,6 +1,5 @@
 import { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import { prisma } from './prisma'
 
 // Extend NextAuth types
 declare module 'next-auth' {
@@ -19,6 +18,9 @@ declare module 'next-auth' {
 
 // Helper function to safely get user from database
 async function getUserFromDb(email: string) {
+  // Dynamic import to avoid build-time Prisma initialization
+  const { prisma } = await import('./prisma')
+  
   try {
     const user = await prisma.user.findUnique({
       where: { email }

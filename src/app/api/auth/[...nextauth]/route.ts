@@ -1,8 +1,14 @@
 import NextAuth from 'next-auth'
 import { authOptions } from '@/lib/auth'
 
-// Ensure we export the handler properly for Next.js 14 App Router
+// Force dynamic rendering - never cache this route
 export const dynamic = 'force-dynamic'
+
+// Ensure this runs on Node.js runtime (not edge)
+export const runtime = 'nodejs'
+
+// Disable static generation for this route
+export const dynamicParams = true
 
 const handler = NextAuth(authOptions)
 
