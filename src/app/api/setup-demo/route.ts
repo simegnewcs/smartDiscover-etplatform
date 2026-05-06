@@ -53,7 +53,6 @@ export async function POST() {
       update: {},
       create: {
         name: 'Addis Ababa',
-        description: 'Capital of Ethiopia',
       },
     })
 

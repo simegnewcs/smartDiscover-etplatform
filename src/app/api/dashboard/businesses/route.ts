@@ -55,7 +55,7 @@ export async function GET() {
       website: business.website,
       verified: business.verified,
       image: business.images[0]?.imageUrl || null,
-      rating: ratingMap[business.id] || 0,
+      rating: ratingMap[business.id.toString()] || 0,
       reviewCount: business._count.reviews,
       createdAt: business.createdAt,
       updatedAt: business.updatedAt
