@@ -1,7 +1,7 @@
 # HelloET - Local Discovery Platform for Ethiopia
 A modern, trusted local discovery platform built with Next.js, TypeScript, and MySQL to help users discover businesses across Ethiopia.
 
-## 🚀 Features
+## Features
 
 ### Core Features
 - **Business Discovery**: Search and browse businesses by category, location, and keywords
