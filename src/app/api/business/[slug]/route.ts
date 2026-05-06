@@ -90,7 +90,7 @@ export async function GET(
     })
 
     const nearbyRatingMap = nearbyRatings.reduce((acc, rating) => {
-      acc[rating.businessId] = rating._avg.rating || 0
+      acc[rating.businessId.toString()] = rating._avg.rating || 0
       return acc
     }, {} as Record<string, number>)
 
