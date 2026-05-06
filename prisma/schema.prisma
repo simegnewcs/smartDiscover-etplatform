@@ -1,0 +1,209 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           BigInt   @id @default(autoincrement())
+  email        String   @unique
+  name         String
+  passwordHash String   @map("password_hash")
+  role         UserRole @default(USER)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  ownedBusinesses Business[] @relation("BusinessOwner")
+  reviews          Review[]
+
+  @@map("users")
+}
+
+model Business {
+  id          BigInt   @id @default(autoincrement())
+  slug        String   @unique
+  name        String
+  description String?
+  categoryId  BigInt   @map("category_id")
+  cityId      BigInt   @map("city_id")
+  subcityId   BigInt?  @map("subcity_id")
+  address     String?
+  latitude    Decimal? @db.Decimal(10, 8)
+  longitude   Decimal? @db.Decimal(11, 8)
+  phone       String?
+  email       String?
+  website     String?
+  verified    Boolean  @default(false)
+  ownerId     BigInt?  @map("owner_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  category   Category       @relation(fields: [categoryId], references: [id])
+  city       City           @relation(fields: [cityId], references: [id])
+  subcity    Subcity?       @relation(fields: [subcityId], references: [id])
+  owner      User?          @relation("BusinessOwner", fields: [ownerId], references: [id])
+  images     BusinessImage[]
+  hours      BusinessHour[]
+  reviews    Review[]
+  subscription Subscription?
+
+  @@map("businesses")
+}
+
+model Category {
+  id          BigInt     @id @default(autoincrement())
+  name        String     @unique
+  description String?
+  icon        String?
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+
+  // Relations
+  businesses Business[]
+
+  @@map("categories")
+}
+
+model City {
+  id        BigInt   @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  businesses Business[]
+  subcities  Subcity[]
+
+  @@map("cities")
+}
+
+model Subcity {
+  id       BigInt   @id @default(autoincrement())
+  name     String
+  cityId   BigInt   @map("city_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  city       City       @relation(fields: [cityId], references: [id])
+  businesses Business[]
+
+  @@unique([name, cityId])
+  @@map("subcities")
+}
+
+model BusinessImage {
+  id         BigInt  @id @default(autoincrement())
+  businessId BigInt  @map("business_id")
+  imageUrl   String  @map("image_url")
+  sortOrder  Int     @default(0) @map("sort_order")
+
+  // Relations
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  @@map("business_images")
+}
+
+model BusinessHour {
+  id         BigInt     @id @default(autoincrement())
+  businessId BigInt     @map("business_id")
+  day        DayOfWeek
+  openTime   String?    @map("open_time")
+  closeTime  String?    @map("close_time")
+  isClosed   Boolean    @default(false) @map("is_closed")
+
+  // Relations
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  @@unique([businessId, day])
+  @@map("business_hours")
+}
+
+model Review {
+  id         BigInt   @id @default(autoincrement())
+  userId     BigInt   @map("user_id")
+  businessId BigInt   @map("business_id")
+  rating     Int      // 1-5
+  comment    String?
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  user     User     @relation(fields: [userId], references: [id])
+  business Business @relation(fields: [businessId], references: [id])
+
+  @@map("reviews")
+}
+
+model Subscription {
+  id         BigInt       @id @default(autoincrement())
+  businessId BigInt       @unique @map("business_id")
+  plan       SubscriptionPlan
+  startDate  DateTime     @map("start_date")
+  endDate    DateTime     @map("end_date")
+  status     SubscriptionStatus
+  createdAt  DateTime     @default(now()) @map("created_at")
+  updatedAt  DateTime     @updatedAt @map("updated_at")
+
+  // Relations
+  business Business @relation(fields: [businessId], references: [id])
+
+  @@map("subscriptions")
+}
+
+model AnalyticsEvent {
+  id         BigInt   @id @default(autoincrement())
+  businessId BigInt   @map("business_id")
+  eventType  EventType
+  userId     BigInt?  @map("user_id")
+  metadata   Json?    // Additional event data
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@map("analytics_events")
+}
+
+// Enums
+enum UserRole {
+  USER
+  BUSINESS_OWNER
+  ADMIN
+}
+
+enum DayOfWeek {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
+
+enum SubscriptionPlan {
+  FREE
+  BASIC
+  PREMIUM
+  ENTERPRISE
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELLED
+  EXPIRED
+}
+
+enum EventType {
+  PAGE_VIEW
+  CLICK
+  CALL
+  SAVE
+  DIRECTION
+}
