@@ -4,7 +4,6 @@ import { prisma } from '@/lib/prisma'
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    console.log('Registration request body:', body)
 
     const { 
       name, email, password, userType,
@@ -26,12 +25,9 @@ export async function POST(request: Request) {
 
     // Check if user already exists
     try {
-      console.log('Checking if user exists...')
       const existingUser = await prisma.user.findUnique({
         where: { email }
       })
-
-      console.log('Existing user found:', existingUser ? 'Yes' : 'No')
 
       if (existingUser) {
         return NextResponse.json(
@@ -54,7 +50,6 @@ export async function POST(request: Request) {
     // Create user and business (using plain text password for demo - in production use bcrypt)
     let user;
     try {
-      console.log('Creating user...')
       user = await prisma.user.create({
         data: {
           name,
@@ -63,18 +58,14 @@ export async function POST(request: Request) {
           role: role,
         }
       })
-      console.log('User created successfully:', user.email)
 
       // If business owner, create the business
       if (role === 'BUSINESS_OWNER' && businessName && businessType && phone && businessCity) {
-        console.log('Creating business for user...')
-        
         // Always create a unique category for each business
         let category;
         try {
           // Create unique category name by combining business type and business name
           const uniqueCategoryName = `${businessType} - ${businessName}`
-          console.log('Creating unique category for business:', uniqueCategoryName)
           
           try {
             category = await prisma.category.create({
@@ -84,13 +75,11 @@ export async function POST(request: Request) {
                 icon: 'building'
               }
             })
-            console.log('Category created successfully:', category.name, 'ID:', category.id.toString())
           } catch (createError) {
             console.error('Error creating category:', createError)
             // If unique constraint fails, append timestamp
             const timestamp = Date.now()
             const uniqueNameWithTimestamp = `${uniqueCategoryName} (${timestamp})`
-            console.log('Retrying with timestamp:', uniqueNameWithTimestamp)
             
             category = await prisma.category.create({
               data: {
@@ -99,7 +88,6 @@ export async function POST(request: Request) {
                 icon: 'building'
               }
             })
-            console.log('Category created with timestamp:', category.name, 'ID:', category.id.toString())
           }
         } catch (categoryError) {
           console.error('Error creating category:', categoryError)
@@ -117,7 +105,6 @@ export async function POST(request: Request) {
           })
           
           if (!city) {
-            console.log('Creating new city:', businessCity)
             city = await prisma.city.create({
               data: {
                 name: businessCity
@@ -144,7 +131,6 @@ export async function POST(request: Request) {
             })
             
             if (!subcity) {
-              console.log('Creating new subcity:', businessSubcity)
               subcity = await prisma.subcity.create({
                 data: {
                   name: businessSubcity,
@@ -171,8 +157,6 @@ export async function POST(request: Request) {
             counter++
           }
 
-          console.log('Creating business with categoryId:', category.id.toString(), 'category name:', category.name)
-          
           business = await prisma.business.create({
             data: {
               slug: uniqueSlug,
@@ -191,11 +175,9 @@ export async function POST(request: Request) {
               ownerId: user.id,
             }
           })
-          console.log('Business created successfully:', business.name)
 
           // Create business images if provided
           if (images && images.length > 0) {
-            console.log('Creating business images:', images.length)
             try {
               for (let i = 0; i < images.length; i++) {
                 await prisma.businessImage.create({
@@ -206,7 +188,6 @@ export async function POST(request: Request) {
                   }
                 })
               }
-              console.log('Business images created successfully')
             } catch (imageError) {
               console.error('Error creating business images:', imageError)
               // Don't fail the registration if images fail

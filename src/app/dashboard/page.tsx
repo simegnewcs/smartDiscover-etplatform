@@ -402,8 +402,7 @@ function BusinessOwnerDashboard({ session }: { session: any }) {
                   <Icon className="w-6 h-6 text-white" />
                 </div>
                 <div className={`text-sm font-medium ${
-                  stat.changeType === 'positive' ? 'text-green-600' : 
-                  stat.changeType === 'negative' ? 'text-red-600' : 'text-neutral-500'
+                  stat.changeType === 'positive' ? 'text-green-600' : 'text-neutral-500'
                 }`}>
                   {stat.change}
                 </div>

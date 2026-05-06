@@ -5,8 +5,6 @@ export async function POST(request: Request) {
   try {
     const { name, description, category, city, subcity, address, latitude, longitude, phone, email, website, ownerId, images } = await request.json()
 
-    console.log('Creating business:', name)
-
     // Basic validation
     if (!name || !category || !city || !ownerId) {
       return NextResponse.json(
@@ -31,7 +29,6 @@ export async function POST(request: Request) {
       }
       
       if (!categoryRecord) {
-        console.log('Creating new category:', category)
         try {
           categoryRecord = await prisma.category.create({
             data: {
@@ -40,7 +37,6 @@ export async function POST(request: Request) {
               icon: 'building'
             }
           })
-          console.log('Category created:', categoryRecord.name, 'ID:', categoryRecord.id.toString())
         } catch (createError) {
           console.error('Error creating category:', createError)
           // If creation fails, try to find it again
@@ -51,8 +47,6 @@ export async function POST(request: Request) {
             throw createError
           }
         }
-      } else {
-        console.log('Found existing category:', categoryRecord.name)
       }
     } catch (categoryError) {
       console.error('Error finding/creating category:', categoryError)
@@ -70,7 +64,6 @@ export async function POST(request: Request) {
       })
       
       if (!cityRecord) {
-        console.log('Creating new city:', city)
         cityRecord = await prisma.city.create({
           data: {
             name: city
@@ -97,7 +90,6 @@ export async function POST(request: Request) {
         })
         
         if (!subcityRecord) {
-          console.log('Creating new subcity:', subcity)
           subcityRecord = await prisma.subcity.create({
             data: {
               name: subcity,
@@ -181,7 +173,6 @@ export async function POST(request: Request) {
         })
       }
 
-      console.log('Business created successfully:', business.name)
     } catch (businessError) {
       console.error('Error creating business:', businessError)
       return NextResponse.json(
