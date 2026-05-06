@@ -17,6 +17,19 @@ declare module 'next-auth' {
   }
 }
 
+// Helper function to safely get user from database
+async function getUserFromDb(email: string) {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { email }
+    })
+    return user
+  } catch (error) {
+    console.error('Database error in authorize:', error)
+    return null
+  }
+}
+
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
@@ -30,9 +43,13 @@ export const authOptions: NextAuthOptions = {
           return null
         }
 
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email }
-        })
+        // Check if DATABASE_URL is set (build-time check)
+        if (!process.env.DATABASE_URL) {
+          console.error('DATABASE_URL not set')
+          return null
+        }
+
+        const user = await getUserFromDb(credentials.email)
 
         if (!user || user.passwordHash !== credentials.password) {
           return null
