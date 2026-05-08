@@ -196,34 +196,6 @@ function LoginForm() {
           </div>
         </div>
 
-        {/* Demo Accounts */}
-        <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
-          <h3 className="font-semibold text-blue-900 mb-3">Demo Accounts</h3>
-          <div className="space-y-3 text-sm">
-            <div>
-              <p className="font-medium text-blue-800">Business Owner:</p>
-              <p className="text-blue-700">Email: business@helloet.com</p>
-              <p className="text-blue-700">Password: demo123</p>
-            </div>
-            <div>
-              <p className="font-medium text-blue-800">Regular User:</p>
-              <p className="text-blue-700">Email: user@helloet.com</p>
-              <p className="text-blue-700">Password: demo123</p>
-            </div>
-          </div>
-          <button
-            onClick={() => {
-              setFormData({
-                email: 'business@helloet.com',
-                password: 'demo123'
-              })
-            }}
-            className="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-          >
-            Fill with Demo Account
-          </button>
-        </div>
-
         {/* Benefits */}
         <div className="mt-8 grid grid-cols-1 gap-4">
           <div className="bg-white rounded-lg border border-neutral-200 p-4">
