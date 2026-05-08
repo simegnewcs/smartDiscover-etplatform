@@ -29,6 +29,7 @@ export default function Navbar() {
 
   const navigationItems = [
     { name: 'Businesses', href: '/businesses' },
+    { name: 'About', href: '/about' },
     { name: 'Dashboard', href: '/dashboard' }
   ]
 
