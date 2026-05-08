@@ -122,6 +122,7 @@ function AllBusinessesContent() {
   }
 
   const filteredBusinesses = businesses.filter(business => {
+    const matchesSearch = !searchTerm ||
                          business.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          business.description?.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesLocation = selectedLocation === 'all' || 
