@@ -8,28 +8,53 @@ import { Search, MapPin, ChevronRight, Compass, Sparkles, Play, Pause } from 'lu
 const ethiopianLandmarks = [
   {
     name: 'Lalibela Rock Churches',
-    image: 'https://images.unsplash.com/photo-1535320404287-416e1c1b2e70?w=1920&q=80',
+    image: 'https://images.unsplash.com/photo-1611348524140-53c9a25263d6?w=1920&q=80',
     description: 'Ancient UNESCO World Heritage rock-hewn churches'
   },
   {
+    name: 'Gondar — Fasilides Castle',
+    image: 'https://images.unsplash.com/photo-1632923057888-c5836fc78432?w=1920&q=80',
+    description: 'Royal enclosure of medieval Ethiopian emperors'
+  },
+  {
+    name: 'Lake Tana',
+    image: 'https://images.unsplash.com/photo-1504450874802-0ba2bcd9b5ae?w=1920&q=80',
+    description: 'Source of the Blue Nile — sacred island monasteries'
+  },
+  {
     name: 'Simien Mountains',
-    image: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1920&q=80',
+    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80',
     description: 'Breathtaking highlands & endemic wildlife'
   },
   {
+    name: 'Blue Nile Falls',
+    image: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=1920&q=80',
+    description: 'Tis Issat — The Smoking Water near Bahir Dar'
+  },
+  {
     name: 'Addis Ababa',
-    image: 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=1920&q=80',
+    image: 'https://images.unsplash.com/photo-1570655652364-2e0a67455ac6?w=1920&q=80',
     description: 'Vibrant capital of modern Ethiopia'
   },
   {
     name: 'Axum Stelae',
-    image: 'https://images.unsplash.com/photo-1489392191049-fc10c97e64b6?w=1920&q=80',
+    image: 'https://images.unsplash.com/photo-1523805009345-7448845a9e53?w=1920&q=80',
     description: 'Ancient obelisks of the Axumite Empire'
   },
   {
-    name: 'Blue Nile Falls',
-    image: 'https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=1920&q=80',
-    description: 'Smoking Water — Tis Issat'
+    name: 'Omo Valley',
+    image: 'https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?w=1920&q=80',
+    description: 'Home to diverse indigenous tribes of Ethiopia'
+  },
+  {
+    name: 'Bale Mountains',
+    image: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1920&q=80',
+    description: 'Africa\'s largest Afroalpine ecosystem'
+  },
+  {
+    name: 'Harar Old City',
+    image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=1920&q=80',
+    description: 'UNESCO walled city — 4th holiest city in Islam'
   }
 ]
 
