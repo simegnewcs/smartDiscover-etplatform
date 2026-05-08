@@ -13,7 +13,7 @@ const ethiopianLandmarks = [
   },
   {
     name: 'Gondar — Fasilides Castle',
-    image: 'https://images.unsplash.com/photo-1632923057888-c5836fc78432?w=1920&q=80',
+    image: 'https://images.unsplash.com/photo-1518684079-3c830dcef090?w=1920&q=80',
     description: 'Royal enclosure of medieval Ethiopian emperors'
   },
   {
@@ -53,7 +53,7 @@ const ethiopianLandmarks = [
   },
   {
     name: 'Harar Old City',
-    image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=1920&q=80',
+    image: 'https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?w=1920&q=80',
     description: 'UNESCO walled city — 4th holiest city in Islam'
   }
 ]
