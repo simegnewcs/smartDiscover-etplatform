@@ -1,7 +1,32 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { MessageCircle, X, Send, Bot, User, Loader2, Sparkles } from 'lucide-react'
+import { MessageCircle, X, Send, Bot, User, Loader2, Sparkles, ExternalLink } from 'lucide-react'
+
+function MessageContent({ text }: { text: string }) {
+  const urlRegex = /(https?:\/\/[^\s]+)/g
+  const parts = text.split(urlRegex)
+  return (
+    <span>
+      {parts.map((part, i) =>
+        urlRegex.test(part) ? (
+          <a
+            key={i}
+            href={part}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-0.5 underline underline-offset-2 font-medium text-[#EEF578] hover:text-yellow-300 break-all"
+          >
+            {part.replace('https://helloet.devvoltz.com', 'HelloET')}
+            <ExternalLink className="w-3 h-3 flex-shrink-0" />
+          </a>
+        ) : (
+          <span key={i}>{part}</span>
+        )
+      )}
+    </span>
+  )
+}
 
 interface Message {
   id: string
@@ -140,7 +165,7 @@ export default function ChatWidget() {
                     ? 'bg-[#006747] text-white rounded-tr-sm'
                     : 'bg-white text-neutral-800 shadow-sm border border-neutral-100 rounded-tl-sm'
                 }`}>
-                  {msg.text}
+                  <MessageContent text={msg.text} />
                 </div>
               </div>
             ))}
