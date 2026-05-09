@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY
-const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent'
+const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent'
 
 async function getBusinessContext(userMessage: string): Promise<string> {
   try {
@@ -79,15 +79,11 @@ HelloET is developed by Devvoltz Technology PLC (devvoltztech@gmail.com, 0940192
 LIVE DATA FROM HELLOET DATABASE:
 ${context}`
 
-    const historyMessages = (history || []).map((msg: { role: string; text: string }) => ({
-      role: msg.role === 'assistant' ? 'model' : 'user',
-      parts: [{ text: msg.text }]
-    }))
-
     const contents = [
-      { role: 'user', parts: [{ text: systemPrompt }] },
-      { role: 'model', parts: [{ text: 'Understood! I am HelloET Assistant, ready to help users find businesses across Ethiopia.' }] },
-      ...historyMessages,
+      ...(history || []).map((msg: { role: string; text: string }) => ({
+        role: msg.role === 'assistant' ? 'model' : 'user',
+        parts: [{ text: msg.text }]
+      })),
       { role: 'user', parts: [{ text: message }] }
     ]
 
@@ -95,6 +91,7 @@ ${context}`
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
+        system_instruction: { parts: [{ text: systemPrompt }] },
         contents,
         generationConfig: {
           temperature: 0.7,
