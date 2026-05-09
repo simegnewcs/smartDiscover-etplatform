@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY
-const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent'
+const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent'
 
 async function getBusinessContext(userMessage: string): Promise<string> {
   try {
@@ -58,7 +58,8 @@ export async function POST(request: NextRequest) {
     }
 
     if (!GEMINI_API_KEY) {
-      return NextResponse.json({ error: 'Gemini API key not configured' }, { status: 500 })
+      console.error('GEMINI_API_KEY is not set. Available env keys:', Object.keys(process.env).filter(k => k.includes('GEMINI')))
+      return NextResponse.json({ error: 'Gemini API key not configured. Add GEMINI_API_KEY to your .env file.' }, { status: 500 })
     }
 
     const context = await getBusinessContext(message)
@@ -78,22 +79,22 @@ HelloET is developed by Devvoltz Technology PLC (devvoltztech@gmail.com, 0940192
 LIVE DATA FROM HELLOET DATABASE:
 ${context}`
 
+    const historyMessages = (history || []).map((msg: { role: string; text: string }) => ({
+      role: msg.role === 'assistant' ? 'model' : 'user',
+      parts: [{ text: msg.text }]
+    }))
+
     const contents = [
-      ...(history || []).map((msg: { role: string; text: string }) => ({
-        role: msg.role === 'assistant' ? 'model' : 'user',
-        parts: [{ text: msg.text }]
-      })),
-      {
-        role: 'user',
-        parts: [{ text: message }]
-      }
+      { role: 'user', parts: [{ text: systemPrompt }] },
+      { role: 'model', parts: [{ text: 'Understood! I am HelloET Assistant, ready to help users find businesses across Ethiopia.' }] },
+      ...historyMessages,
+      { role: 'user', parts: [{ text: message }] }
     ]
 
     const response = await fetch(`${GEMINI_URL}?key=${GEMINI_API_KEY}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        system_instruction: { parts: [{ text: systemPrompt }] },
         contents,
         generationConfig: {
           temperature: 0.7,
@@ -105,6 +106,9 @@ ${context}`
     if (!response.ok) {
       const err = await response.text()
       console.error('Gemini error:', err)
+      if (response.status === 429) {
+        return NextResponse.json({ reply: 'I\'m receiving too many requests right now. Please try again in a moment! In the meantime, you can browse businesses at https://helloet.devvoltz.com/businesses' }, { status: 200 })
+      }
       return NextResponse.json({ error: 'AI service error' }, { status: 500 })
     }
 
