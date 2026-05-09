@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
-import { MessageCircle, X, Send, Bot, User, Loader2, Sparkles, ExternalLink } from 'lucide-react'
+import { useState, useRef, useEffect, useCallback } from 'react'
+import { MessageCircle, X, Send, Bot, User, Loader2, Sparkles, ExternalLink, Mic, MicOff, Volume2, VolumeX } from 'lucide-react'
 
 function MessageContent({ text }: { text: string }) {
   const urlRegex = /(https?:\/\/[^\s]+)/g
@@ -55,8 +55,13 @@ export default function ChatWidget() {
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [hasUnread, setHasUnread] = useState(true)
+  const [isListening, setIsListening] = useState(false)
+  const [isSpeaking, setIsSpeaking] = useState(false)
+  const [ttsEnabled, setTtsEnabled] = useState(true)
+  const [speakingMsgId, setSpeakingMsgId] = useState<string | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+  const recognitionRef = useRef<any>(null)
 
   useEffect(() => {
     if (isOpen) {
@@ -68,6 +73,56 @@ export default function ChatWidget() {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
+
+  const speakText = useCallback((text: string, msgId: string) => {
+    if (!ttsEnabled || typeof window === 'undefined' || !window.speechSynthesis) return
+    window.speechSynthesis.cancel()
+    const clean = text.replace(/https?:\/\/[^\s]+/g, 'link').replace(/[*_`#]/g, '')
+    const utterance = new SpeechSynthesisUtterance(clean)
+    utterance.lang = 'en-US'
+    utterance.rate = 1.05
+    utterance.pitch = 1
+    utterance.onstart = () => { setIsSpeaking(true); setSpeakingMsgId(msgId) }
+    utterance.onend = () => { setIsSpeaking(false); setSpeakingMsgId(null) }
+    utterance.onerror = () => { setIsSpeaking(false); setSpeakingMsgId(null) }
+    window.speechSynthesis.speak(utterance)
+  }, [ttsEnabled])
+
+  const stopSpeaking = () => {
+    if (typeof window !== 'undefined' && window.speechSynthesis) {
+      window.speechSynthesis.cancel()
+      setIsSpeaking(false)
+      setSpeakingMsgId(null)
+    }
+  }
+
+  const toggleListening = () => {
+    if (typeof window === 'undefined') return
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
+    if (!SpeechRecognition) {
+      alert('Speech recognition is not supported in your browser. Please use Chrome.')
+      return
+    }
+    if (isListening) {
+      recognitionRef.current?.stop()
+      setIsListening(false)
+      return
+    }
+    const recognition = new SpeechRecognition()
+    recognition.lang = 'en-US'
+    recognition.interimResults = false
+    recognition.maxAlternatives = 1
+    recognition.onstart = () => setIsListening(true)
+    recognition.onresult = (event: any) => {
+      const transcript = event.results[0][0].transcript
+      setInput(transcript)
+      setIsListening(false)
+    }
+    recognition.onerror = () => setIsListening(false)
+    recognition.onend = () => setIsListening(false)
+    recognitionRef.current = recognition
+    recognition.start()
+  }
 
   const sendMessage = async (text: string) => {
     if (!text.trim() || isLoading) return
@@ -102,6 +157,7 @@ export default function ChatWidget() {
       }
 
       setMessages(prev => [...prev, assistantMessage])
+      if (ttsEnabled) speakText(assistantMessage.text, assistantMessage.id)
     } catch {
       setMessages(prev => [...prev, {
         id: (Date.now() + 1).toString(),
@@ -136,16 +192,25 @@ export default function ChatWidget() {
                 <h3 className="text-white font-semibold text-sm">HelloET Assistant</h3>
                 <div className="flex items-center gap-1">
                   <div className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse" />
-                  <span className="text-white/70 text-xs">Powered by Gemini AI</span>
+                  <span className="text-white/70 text-xs">Powered by DevVoltz </span>
                 </div>
               </div>
             </div>
-            <button
-              onClick={() => setIsOpen(false)}
-              className="w-7 h-7 bg-white/10 hover:bg-white/20 rounded-lg flex items-center justify-center transition-colors"
-            >
-              <X className="w-4 h-4 text-white" />
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => { ttsEnabled ? stopSpeaking() : null; setTtsEnabled(!ttsEnabled) }}
+                title={ttsEnabled ? 'Mute voice' : 'Enable voice'}
+                className="w-7 h-7 bg-white/10 hover:bg-white/20 rounded-lg flex items-center justify-center transition-colors"
+              >
+                {ttsEnabled ? <Volume2 className="w-4 h-4 text-[#EEF578]" /> : <VolumeX className="w-4 h-4 text-white/50" />}
+              </button>
+              <button
+                onClick={() => setIsOpen(false)}
+                className="w-7 h-7 bg-white/10 hover:bg-white/20 rounded-lg flex items-center justify-center transition-colors"
+              >
+                <X className="w-4 h-4 text-white" />
+              </button>
+            </div>
           </div>
 
           {/* Messages */}
@@ -160,12 +225,25 @@ export default function ChatWidget() {
                     : <User className="w-4 h-4 text-neutral-600" />
                   }
                 </div>
-                <div className={`max-w-[75%] px-3 py-2 rounded-2xl text-sm leading-relaxed ${
-                  msg.role === 'user'
-                    ? 'bg-[#006747] text-white rounded-tr-sm'
-                    : 'bg-white text-neutral-800 shadow-sm border border-neutral-100 rounded-tl-sm'
-                }`}>
-                  <MessageContent text={msg.text} />
+                <div className="flex flex-col gap-1 max-w-[75%]">
+                  <div className={`px-3 py-2 rounded-2xl text-sm leading-relaxed ${
+                    msg.role === 'user'
+                      ? 'bg-[#006747] text-white rounded-tr-sm'
+                      : 'bg-white text-neutral-800 shadow-sm border border-neutral-100 rounded-tl-sm'
+                  }`}>
+                    <MessageContent text={msg.text} />
+                  </div>
+                  {msg.role === 'assistant' && (
+                    <button
+                      onClick={() => speakingMsgId === msg.id ? stopSpeaking() : speakText(msg.text, msg.id)}
+                      className="self-start flex items-center gap-1 text-xs text-neutral-400 hover:text-[#006747] transition-colors px-1"
+                    >
+                      {speakingMsgId === msg.id
+                        ? <><VolumeX className="w-3 h-3" /> Stop</>
+                        : <><Volume2 className="w-3 h-3" /> Speak</>
+                      }
+                    </button>
+                  )}
                 </div>
               </div>
             ))}
@@ -200,13 +278,21 @@ export default function ChatWidget() {
 
           {/* Input */}
           <form onSubmit={handleSubmit} className="p-3 border-t border-neutral-200 bg-white flex-shrink-0">
-            <div className="flex items-center gap-2 bg-neutral-100 rounded-xl px-3 py-2">
+            <div className={`flex items-center gap-2 rounded-xl px-3 py-2 transition-colors ${isListening ? 'bg-red-50 border border-red-300' : 'bg-neutral-100'}`}>
+              <button
+                type="button"
+                onClick={toggleListening}
+                title={isListening ? 'Stop listening' : 'Speak your question'}
+                className={`w-7 h-7 rounded-lg flex items-center justify-center transition-colors flex-shrink-0 ${isListening ? 'bg-red-500 animate-pulse' : 'bg-neutral-300 hover:bg-[#006747]'}`}
+              >
+                {isListening ? <MicOff className="w-3.5 h-3.5 text-white" /> : <Mic className="w-3.5 h-3.5 text-white" />}
+              </button>
               <input
                 ref={inputRef}
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Ask about businesses in Ethiopia..."
+                placeholder={isListening ? 'Listening...' : 'Ask or speak your question...'}
                 className="flex-1 bg-transparent text-sm text-neutral-800 outline-none placeholder-neutral-400"
                 disabled={isLoading}
               />
