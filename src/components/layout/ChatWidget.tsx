@@ -1,30 +1,29 @@
 'use client'
 
 import { useState, useRef, useEffect, useCallback } from 'react'
-import { MessageCircle, X, Send, Bot, User, Loader2, Sparkles, ExternalLink, Mic, MicOff, Volume2, VolumeX } from 'lucide-react'
+import { MessageCircle, X, Send, Bot, User, Loader2, Sparkles, Mic, MicOff, Volume2, VolumeX } from 'lucide-react'
 
-function MessageContent({ text }: { text: string }) {
-  const urlRegex = /(https?:\/\/[^\s]+)/g
-  const parts = text.split(urlRegex)
+function MessageContent({ text, isUser }: { text: string; isUser: boolean }) {
+  // Strip stray markdown
+  let clean = text
+    .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
+    .replace(/\*(.*?)\*/g, '<i>$1</i>')
+    .replace(/^#{1,3}\s+/gm, '')
+
+  // Convert URLs to clickable links
+  clean = clean.replace(
+    /(https?:\/\/[^\s<]+)/g,
+    (url) => {
+      const label = url.replace('https://helloet.devvoltz.com', 'HelloET')
+      return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-0.5 underline underline-offset-2 font-semibold ${isUser ? 'text-yellow-300' : 'text-[#006747]'} break-all">🔗 ${label}</a>`
+    }
+  )
+
   return (
-    <span>
-      {parts.map((part, i) =>
-        urlRegex.test(part) ? (
-          <a
-            key={i}
-            href={part}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-0.5 underline underline-offset-2 font-medium text-[#EEF578] hover:text-yellow-300 break-all"
-          >
-            {part.replace('https://helloet.devvoltz.com', 'HelloET')}
-            <ExternalLink className="w-3 h-3 flex-shrink-0" />
-          </a>
-        ) : (
-          <span key={i}>{part}</span>
-        )
-      )}
-    </span>
+    <span
+      dangerouslySetInnerHTML={{ __html: clean }}
+      className="leading-relaxed"
+    />
   )
 }
 
@@ -59,6 +58,7 @@ export default function ChatWidget() {
   const [isSpeaking, setIsSpeaking] = useState(false)
   const [ttsEnabled, setTtsEnabled] = useState(true)
   const [speakingMsgId, setSpeakingMsgId] = useState<string | null>(null)
+  const [micLang, setMicLang] = useState<'en-US' | 'am-ET'>('en-US')
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const recognitionRef = useRef<any>(null)
@@ -77,11 +77,38 @@ export default function ChatWidget() {
   const speakText = useCallback((text: string, msgId: string) => {
     if (!ttsEnabled || typeof window === 'undefined' || !window.speechSynthesis) return
     window.speechSynthesis.cancel()
-    const clean = text.replace(/https?:\/\/[^\s]+/g, 'link').replace(/[*_`#]/g, '')
+
+    // Strip HTML tags and URLs for clean speech
+    const clean = text
+      .replace(/<[^>]+>/g, ' ')
+      .replace(/https?:\/\/[^\s]+/g, '')
+      .replace(/[*_`#]/g, '')
+      .trim()
+
+    // Detect Amharic — Unicode range U+1200–U+137F
+    const isAmharic = /[\u1200-\u137F]/.test(clean)
+
     const utterance = new SpeechSynthesisUtterance(clean)
-    utterance.lang = 'en-US'
-    utterance.rate = 1.05
+    utterance.rate = 1.0
     utterance.pitch = 1
+
+    if (isAmharic) {
+      utterance.lang = 'am-ET'
+      // Try to find an Amharic voice, fallback to any available
+      const voices = window.speechSynthesis.getVoices()
+      const amharicVoice = voices.find(v => v.lang.startsWith('am')) ||
+                           voices.find(v => v.lang.startsWith('sw')) || // Swahili as fallback
+                           null
+      if (amharicVoice) utterance.voice = amharicVoice
+      utterance.rate = 0.9
+    } else {
+      utterance.lang = 'en-US'
+      const voices = window.speechSynthesis.getVoices()
+      const enVoice = voices.find(v => v.lang === 'en-US' && v.name.includes('Google')) ||
+                      voices.find(v => v.lang === 'en-US') || null
+      if (enVoice) utterance.voice = enVoice
+    }
+
     utterance.onstart = () => { setIsSpeaking(true); setSpeakingMsgId(msgId) }
     utterance.onend = () => { setIsSpeaking(false); setSpeakingMsgId(null) }
     utterance.onerror = () => { setIsSpeaking(false); setSpeakingMsgId(null) }
@@ -109,7 +136,7 @@ export default function ChatWidget() {
       return
     }
     const recognition = new SpeechRecognition()
-    recognition.lang = 'en-US'
+    recognition.lang = micLang
     recognition.interimResults = false
     recognition.maxAlternatives = 1
     recognition.onstart = () => setIsListening(true)
@@ -231,7 +258,7 @@ export default function ChatWidget() {
                       ? 'bg-[#006747] text-white rounded-tr-sm'
                       : 'bg-white text-neutral-800 shadow-sm border border-neutral-100 rounded-tl-sm'
                   }`}>
-                    <MessageContent text={msg.text} />
+                    <MessageContent text={msg.text} isUser={msg.role === 'user'} />
                   </div>
                   {msg.role === 'assistant' && (
                     <button
@@ -281,8 +308,16 @@ export default function ChatWidget() {
             <div className={`flex items-center gap-2 rounded-xl px-3 py-2 transition-colors ${isListening ? 'bg-red-50 border border-red-300' : 'bg-neutral-100'}`}>
               <button
                 type="button"
+                onClick={() => setMicLang(micLang === 'en-US' ? 'am-ET' : 'en-US')}
+                title="Switch mic language"
+                className="text-xs font-bold text-[#006747] bg-[#D1EFE4] hover:bg-[#006747] hover:text-white px-2 py-1 rounded-lg transition-colors flex-shrink-0"
+              >
+                {micLang === 'en-US' ? 'EN' : 'አማ'}
+              </button>
+              <button
+                type="button"
                 onClick={toggleListening}
-                title={isListening ? 'Stop listening' : 'Speak your question'}
+                title={isListening ? 'Stop listening' : `Speak in ${micLang === 'am-ET' ? 'Amharic' : 'English'}`}
                 className={`w-7 h-7 rounded-lg flex items-center justify-center transition-colors flex-shrink-0 ${isListening ? 'bg-red-500 animate-pulse' : 'bg-neutral-300 hover:bg-[#006747]'}`}
               >
                 {isListening ? <MicOff className="w-3.5 h-3.5 text-white" /> : <Mic className="w-3.5 h-3.5 text-white" />}
