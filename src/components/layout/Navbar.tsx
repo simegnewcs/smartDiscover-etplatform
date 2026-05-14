@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { useSession, signOut } from 'next-auth/react'
-import { Search, Menu, X, User, LogIn, LogOut, Plus, ChevronDown } from 'lucide-react'
+import { Search, Menu, X, User, LogIn, LogOut, ChevronDown } from 'lucide-react'
 import UniversalSidebar from '@/components/layout/UniversalSidebar'
 
 export default function Navbar() {
@@ -12,9 +12,9 @@ export default function Navbar() {
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false)
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const profileMenuRef = useRef<HTMLDivElement>(null)
-  
+
   const isLoggedIn = status === 'authenticated'
-  
+
   // Close profile menu when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -75,11 +75,16 @@ export default function Navbar() {
             {/* Search button */}
          
 
-            {/* Add Business */}
-            <Link href="/auth/register" className="hidden md:flex items-center space-x-2 bg-[#006747] hover:bg-[#00523A] text-white px-4 py-2 rounded-lg transition-colors">
-              <Plus className="w-4 h-4" />
-              <span className="text-sm font-medium">Add Business</span>
-            </Link>
+            {/* Sign In Button (only for non-logged-in users) */}
+            {!isLoggedIn && (
+              <Link
+                href="/auth/login"
+                className="hidden md:flex items-center space-x-2 bg-[#006747] hover:bg-[#00523A] text-white px-4 py-2 rounded-lg transition-colors"
+              >
+                <LogIn className="w-4 h-4" />
+                <span className="text-sm font-medium">Sign In</span>
+              </Link>
+            )}
 
             {/* Profile dropdown */}
             <div className="relative" ref={profileMenuRef}>
@@ -93,11 +98,15 @@ export default function Navbar() {
               >
                 {isLoggedIn ? (
                   <>
-                    <div className="w-6 h-6 bg-[#006747] rounded-full flex items-center justify-center">
-                      <span className="text-white font-bold text-xs">
-                        {(session?.user?.name || 'U').charAt(0).toUpperCase()}
-                      </span>
-                    </div>
+                    {session?.user?.image ? (
+                      <img src={session.user.image} alt="" className="w-8 h-8 rounded-full object-cover" />
+                    ) : (
+                      <div className="w-8 h-8 bg-[#006747] rounded-full flex items-center justify-center">
+                        <span className="text-white font-bold text-sm">
+                          {(session?.user?.name || 'U').charAt(0).toUpperCase()}
+                        </span>
+                      </div>
+                    )}
                     <span className="text-sm font-medium hidden sm:block">{session?.user?.name?.split(' ')[0] || 'User'}</span>
                   </>
                 ) : (
@@ -186,12 +195,18 @@ export default function Navbar() {
                 </Link>
               ))}
               
-              <div className="border-t border-neutral-200 pt-3 mt-3">
-                <Link href="/auth/register" className="w-full flex items-center justify-center space-x-2 bg-[#006747] hover:bg-[#00523A] text-white px-4 py-2 rounded-lg transition-colors">
-                  <Plus className="w-4 h-4" />
-                  <span className="text-sm font-medium">Add Business</span>
-                </Link>
-              </div>
+              {!isLoggedIn && (
+                <div className="border-t border-neutral-200 pt-3 mt-3">
+                  <Link
+                    href="/auth/login"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="w-full flex items-center justify-center space-x-2 bg-[#006747] hover:bg-[#00523A] text-white px-4 py-2 rounded-lg transition-colors"
+                  >
+                    <LogIn className="w-4 h-4" />
+                    <span className="text-sm font-medium">Sign In</span>
+                  </Link>
+                </div>
+              )}
               
               <div className="border-t border-neutral-200 pt-3 mt-3">
                 {isLoggedIn ? (

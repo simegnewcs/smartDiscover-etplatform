@@ -19,8 +19,10 @@ import {
   Camera,
   ChevronDown,
   Grid,
-  List
+  List,
+  Bookmark
 } from 'lucide-react'
+import { useSession } from 'next-auth/react'
 
 interface Business {
   id: number
@@ -61,6 +63,7 @@ const categoryIcons: Record<string, any> = {
 function AllBusinessesContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const { data: session } = useSession()
   const categoryFromUrl = searchParams?.get('category') || 'all'
   
   const [businesses, setBusinesses] = useState<Business[]>([])
@@ -72,6 +75,38 @@ function AllBusinessesContent() {
   const [sortBy, setSortBy] = useState('name')
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
   const [showFilters, setShowFilters] = useState(false)
+  const [savedIds, setSavedIds] = useState<Set<number>>(new Set())
+  const [savingId, setSavingId] = useState<number | null>(null)
+
+  const toggleSave = async (e: React.MouseEvent, businessId: number) => {
+    e.preventDefault()
+    e.stopPropagation()
+    if (!session) {
+      router.push('/auth/login?callbackUrl=/businesses')
+      return
+    }
+    setSavingId(businessId)
+    try {
+      const res = await fetch('/api/saved', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ businessId })
+      })
+      const data = await res.json()
+      if (data.success) {
+        setSavedIds(prev => {
+          const next = new Set(prev)
+          if (data.saved) next.add(businessId)
+          else next.delete(businessId)
+          return next
+        })
+      }
+    } catch (err) {
+      console.error('Error toggling save:', err)
+    } finally {
+      setSavingId(null)
+    }
+  }
 
   const locations = [
     'All Locations',
@@ -96,6 +131,20 @@ function AllBusinessesContent() {
       router.push(`/businesses?category=${encodeURIComponent(newCategory)}`)
     }
   }
+
+  useEffect(() => {
+    if (session) {
+      fetch('/api/saved')
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            const ids = new Set<number>(data.data.savedBusinesses.map((s: any) => parseInt(s.business.id)))
+            setSavedIds(ids)
+          }
+        })
+        .catch(() => {})
+    }
+  }, [session])
 
   useEffect(() => {
     fetchData()
@@ -265,7 +314,19 @@ function AllBusinessesContent() {
                         </div>
                       )}
                       <div className="absolute top-3 left-3 bg-white px-2 py-1 rounded-full text-xs font-medium text-neutral-700">{business.category}</div>
-                      {business.verified && <div className="absolute top-3 right-3 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-medium">✓ Verified</div>}
+                      {business.verified && <div className="absolute top-3 right-12 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-medium">✓ Verified</div>}
+                      <button
+                        onClick={(e) => toggleSave(e, business.id)}
+                        disabled={savingId === business.id}
+                        className={`absolute top-3 right-3 p-2 rounded-full shadow-sm transition-colors ${
+                          savedIds.has(business.id)
+                            ? 'bg-[#006747] text-white hover:bg-[#00523A]'
+                            : 'bg-white/90 text-neutral-600 hover:bg-white hover:text-[#006747]'
+                        }`}
+                        title={savedIds.has(business.id) ? 'Remove from saved' : 'Save business'}
+                      >
+                        <Bookmark className={`w-4 h-4 ${savedIds.has(business.id) ? 'fill-white' : ''}`} />
+                      </button>
                     </div>
                     <div className="p-5">
                       <h3 className="font-semibold text-lg text-neutral-800 mb-2 group-hover:text-primary-600 transition-colors">{business.name}</h3>
@@ -312,7 +373,21 @@ function AllBusinessesContent() {
                         {business.description && <p className="text-sm text-neutral-600 line-clamp-2">{business.description}</p>}
                       </div>
                       <div className="flex flex-col items-end space-y-2">
-                        <span className="inline-flex items-center gap-1 bg-primary-500 hover:bg-primary-600 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors">View Details</span>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={(e) => toggleSave(e, business.id)}
+                            disabled={savingId === business.id}
+                            className={`p-2 rounded-lg transition-colors ${
+                              savedIds.has(business.id)
+                                ? 'bg-[#006747] text-white hover:bg-[#00523A]'
+                                : 'bg-neutral-100 text-neutral-500 hover:bg-[#D1EFE4] hover:text-[#006747]'
+                            }`}
+                            title={savedIds.has(business.id) ? 'Remove from saved' : 'Save business'}
+                          >
+                            <Bookmark className={`w-4 h-4 ${savedIds.has(business.id) ? 'fill-white' : ''}`} />
+                          </button>
+                          <span className="inline-flex items-center gap-1 bg-primary-500 hover:bg-primary-600 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors">View Details</span>
+                        </div>
                         {business.phone && <div className="flex items-center space-x-1 text-sm text-neutral-600"><Phone className="w-3 h-3" /><span>{business.phone}</span></div>}
                         {business.website && <div className="flex items-center space-x-1 text-sm text-primary-600"><Globe className="w-3 h-3" /><span>Website</span></div>}
                       </div>

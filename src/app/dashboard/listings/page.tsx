@@ -15,11 +15,14 @@ import {
   MoreVertical,
   Calendar,
   MapPin,
-  Building2
+  Building2,
+  AlertTriangle,
+  X,
+  Loader2
 } from 'lucide-react'
 
 interface Business {
-  id: number
+  id: string
   slug: string
   name: string
   description?: string
@@ -42,11 +45,37 @@ export default function BusinessListings() {
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [filterStatus, setFilterStatus] = useState('all')
-  const [selectedBusiness, setSelectedBusiness] = useState<number | null>(null)
+  const [selectedBusiness, setSelectedBusiness] = useState<Business | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
 
   useEffect(() => {
     fetchBusinesses()
   }, [])
+
+  const handleDelete = async () => {
+    if (!selectedBusiness) return
+
+    setIsDeleting(true)
+    try {
+      const res = await fetch(`/api/dashboard/businesses/${selectedBusiness.id}`, {
+        method: 'DELETE'
+      })
+
+      const data = await res.json()
+      
+      if (data.success) {
+        setBusinesses(prev => prev.filter(b => b.id !== selectedBusiness.id))
+        setSelectedBusiness(null)
+      } else {
+        alert(data.error || 'Failed to delete business')
+      }
+    } catch (error) {
+      console.error('Error deleting business:', error)
+      alert('Error deleting business')
+    } finally {
+      setIsDeleting(false)
+    }
+  }
 
   const fetchBusinesses = async () => {
     try {
@@ -282,7 +311,7 @@ export default function BusinessListings() {
                       <Edit className="w-4 h-4" />
                     </Link>
                     <button
-                      onClick={() => setSelectedBusiness(business.id)}
+                      onClick={() => setSelectedBusiness(business)}
                       className="p-2 text-neutral-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                       title="Delete Listing"
                     >
@@ -315,6 +344,46 @@ export default function BusinessListings() {
           </div>
         )}
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {selectedBusiness && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg max-w-md w-full p-6">
+            <div className="flex items-center justify-center w-12 h-12 bg-red-100 rounded-full mx-auto mb-4">
+              <AlertTriangle className="w-6 h-6 text-red-600" />
+            </div>
+            <h3 className="text-lg font-semibold text-neutral-800 text-center mb-2">
+              Delete Business
+            </h3>
+            <p className="text-neutral-600 text-center mb-6">
+              Are you sure you want to delete <strong>{selectedBusiness.name}</strong>? This action cannot be undone.
+            </p>
+            <div className="flex space-x-3">
+              <button
+                onClick={() => setSelectedBusiness(null)}
+                disabled={isDeleting}
+                className="flex-1 px-4 py-2 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDelete}
+                disabled={isDeleting}
+                className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 flex items-center justify-center"
+              >
+                {isDeleting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Deleting...
+                  </>
+                ) : (
+                  'Delete'
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

@@ -1,8 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { ArrowLeft, Building2, MapPin, Phone, Mail, Globe, Save, AlertCircle, X } from 'lucide-react'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import { ArrowLeft, Building2, MapPin, Phone, Mail, Globe, Save, AlertCircle, X, User, Lock, Clock, Camera, FileText, ExternalLink, Sparkles, Wifi, Car, Truck, CreditCard, ShoppingBag, Accessibility, Baby, Music, Tv, Utensils, Coffee, Dumbbell, Plane, BookOpen, Shield } from 'lucide-react'
 
 const businessTypes = [
   'Restaurants',
@@ -41,7 +43,31 @@ const ethiopianCities = [
   { name: 'Hosaena', subcities: ['Kebele 01', 'Kebele 02', 'Kebele 03'] }
 ]
 
+const businessFeatures = [
+  { id: 'wifi', label: 'Free WiFi', icon: Wifi },
+  { id: 'parking', label: 'Parking Available', icon: Car },
+  { id: 'delivery', label: 'Delivery Service', icon: Truck },
+  { id: 'cardPayment', label: 'Card Payment', icon: CreditCard },
+  { id: 'takeaway', label: 'Takeaway', icon: ShoppingBag },
+  { id: 'wheelchair', label: 'Wheelchair Accessible', icon: Accessibility },
+  { id: 'familyFriendly', label: 'Family Friendly', icon: Baby },
+  { id: 'liveMusic', label: 'Live Music', icon: Music },
+  { id: 'tv', label: 'TV Available', icon: Tv },
+  { id: 'outdoorSeating', label: 'Outdoor Seating', icon: Utensils },
+  { id: 'coffee', label: 'Coffee Shop', icon: Coffee },
+  { id: 'gym', label: 'Gym/Fitness', icon: Dumbbell },
+  { id: 'airportShuttle', label: 'Airport Shuttle', icon: Plane },
+  { id: 'library', label: 'Library/Reading Area', icon: BookOpen },
+  { id: 'security', label: '24/7 Security', icon: Shield },
+]
+
 export default function NewBusinessPage() {
+  const { data: session, status } = useSession()
+  const router = useRouter()
+
+  const [userData, setUserData] = useState<any>(null)
+  const [isLoadingUser, setIsLoadingUser] = useState(true)
+
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -49,17 +75,70 @@ export default function NewBusinessPage() {
     city: '',
     subcity: '',
     address: '',
-    latitude: '',
-    longitude: '',
+    mapUrl: '', // Google Maps share link
     phone: '',
     email: '',
-    website: ''
+    website: '',
+    facebook: '',
+    instagram: '',
+    telegram: '',
+    licenseNumber: '',
+    features: [] as string[], // Business features
+    operatingHours: {
+      monday: { open: '09:00', close: '18:00', closed: false },
+      tuesday: { open: '09:00', close: '18:00', closed: false },
+      wednesday: { open: '09:00', close: '18:00', closed: false },
+      thursday: { open: '09:00', close: '18:00', closed: false },
+      friday: { open: '09:00', close: '18:00', closed: false },
+      saturday: { open: '09:00', close: '18:00', closed: false },
+      sunday: { open: '09:00', close: '18:00', closed: true }
+    }
   })
   const [uploadedImages, setUploadedImages] = useState<string[]>([])
   const [isUploading, setIsUploading] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
+  const [activeSection, setActiveSection] = useState('basic')
+
+  // Check authentication and role
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push('/auth/login?callbackUrl=/dashboard/businesses/new')
+      return
+    }
+
+    if (status === 'authenticated' && session?.user) {
+      const role = session.user.role
+      if (role !== 'BUSINESS_OWNER' && role !== 'ADMIN') {
+        // User is logged in but not a business owner
+        router.push('/dashboard?error=insufficient_permissions')
+        return
+      }
+
+      // Fetch full user data
+      fetchUserData()
+    }
+  }, [status, session, router])
+
+  const fetchUserData = async () => {
+    try {
+      const res = await fetch('/api/user/profile')
+      if (res.ok) {
+        const data = await res.json()
+        setUserData(data.user)
+        // Pre-fill form with user data
+        setFormData(prev => ({
+          ...prev,
+          email: data.user?.email || ''
+        }))
+      }
+    } catch (err) {
+      console.error('Failed to fetch user data:', err)
+    } finally {
+      setIsLoadingUser(false)
+    }
+  }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
@@ -123,17 +202,13 @@ export default function NewBusinessPage() {
       return
     }
 
-    try {
-      // Get user from localStorage (in production, use proper auth)
-      const userStr = localStorage.getItem('user')
-      if (!userStr) {
-        setError('You must be logged in to add a business')
-        setIsLoading(false)
-        return
-      }
+    if (!session?.user?.id) {
+      setError('You must be logged in to add a business')
+      setIsLoading(false)
+      return
+    }
 
-      const user = JSON.parse(userStr)
-      
+    try {
       const response = await fetch('/api/businesses', {
         method: 'POST',
         headers: {
@@ -142,32 +217,17 @@ export default function NewBusinessPage() {
         body: JSON.stringify({
           ...formData,
           images: uploadedImages,
-          ownerId: user.id
+          ownerId: session.user.id
         }),
       })
 
       if (response.ok) {
         const data = await response.json()
-        setSuccess('Business created successfully!')
-        
-        // Reset form
-        setFormData({
-          name: '',
-          description: '',
-          category: '',
-          city: '',
-          subcity: '',
-          address: '',
-          latitude: '',
-          longitude: '',
-          phone: '',
-          email: '',
-          website: ''
-        })
+        setSuccess('Business created successfully! 🎉')
 
-        // Redirect after a delay
+        // Reset form after delay
         setTimeout(() => {
-          window.location.href = '/dashboard/listings'
+          router.push('/dashboard/listings')
         }, 2000)
       } else {
         const errorData = await response.json()
@@ -181,9 +241,21 @@ export default function NewBusinessPage() {
     }
   }
 
+  // Loading state while checking auth
+  if (status === 'loading' || isLoadingUser) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-[#006747] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-neutral-600">Loading...</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
           <Link
@@ -193,12 +265,41 @@ export default function NewBusinessPage() {
             <ArrowLeft className="w-5 h-5" />
             <span>Back to Listings</span>
           </Link>
-          
+
           <h1 className="text-3xl font-bold text-gray-900">Add New Business</h1>
           <p className="text-gray-600 mt-2">
             Register your business on HelloET to reach thousands of customers
           </p>
         </div>
+
+        {/* User Profile Info Card */}
+        {userData && (
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 bg-[#006747] rounded-full flex items-center justify-center flex-shrink-0">
+                <User className="w-6 h-6 text-white" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-semibold text-gray-900">Business Owner Profile</h3>
+                <p className="text-sm text-gray-500 mb-3">Your personal information (auto-filled from your account)</p>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
+                  <div className="bg-gray-50 rounded-lg p-3">
+                    <span className="text-gray-500 block text-xs">Full Name</span>
+                    <span className="font-medium text-gray-900">{userData.name}</span>
+                  </div>
+                  <div className="bg-gray-50 rounded-lg p-3">
+                    <span className="text-gray-500 block text-xs">Email</span>
+                    <span className="font-medium text-gray-900">{userData.email}</span>
+                  </div>
+                  <div className="bg-gray-50 rounded-lg p-3">
+                    <span className="text-gray-500 block text-xs">Phone</span>
+                    <span className="font-medium text-gray-900">{userData.phone || 'Not provided'}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Form */}
         <div className="bg-white shadow-sm rounded-lg border border-gray-200 p-6">
@@ -211,6 +312,32 @@ export default function NewBusinessPage() {
               </div>
             </div>
           )}
+
+          {/* Section Tabs */}
+          <div className="flex flex-wrap gap-2 mb-6 border-b border-gray-200 pb-4">
+            {[
+              { id: 'basic', label: 'Basic Info', icon: Building2 },
+              { id: 'contact', label: 'Contact & Location', icon: MapPin },
+              { id: 'features', label: 'Features', icon: Sparkles },
+              { id: 'hours', label: 'Operating Hours', icon: Clock },
+              { id: 'social', label: 'Social & Web', icon: ExternalLink },
+              { id: 'license', label: 'License & Docs', icon: FileText },
+              { id: 'images', label: 'Images', icon: Camera }
+            ].map(({ id, label, icon: Icon }) => (
+              <button
+                key={id}
+                onClick={() => setActiveSection(id)}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  activeSection === id
+                    ? 'bg-[#006747] text-white'
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                }`}
+              >
+                <Icon className="w-4 h-4" />
+                {label}
+              </button>
+            ))}
+          </div>
 
           {success && (
             <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
@@ -315,35 +442,53 @@ export default function NewBusinessPage() {
                   </select>
                 </div>
 
-                <div>
+                <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Latitude
+                    Google Maps Link (Optional)
                   </label>
-                  <input
-                    type="number"
-                    step="any"
-                    name="latitude"
-                    value={formData.latitude}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
-                    placeholder="9.0242"
-                  />
+                  <div className="relative">
+                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <input
+                      type="url"
+                      name="mapUrl"
+                      value={formData.mapUrl}
+                      onChange={handleInputChange}
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      placeholder="https://maps.google.com/?q=... or https://maps.app.goo.gl/..."
+                    />
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Share your location via Google Maps link. Optional but helps customers find you.
+                  </p>
                 </div>
+              </div>
+            </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Longitude
-                  </label>
-                  <input
-                    type="number"
-                    step="any"
-                    name="longitude"
-                    value={formData.longitude}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
-                    placeholder="38.7468"
-                  />
-                </div>
+            {/* Features Section */}
+            <div>
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">Business Features</h2>
+              <p className="text-sm text-gray-600 mb-4">Select all features that apply to your business</p>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                {businessFeatures.map(({ id, label, icon: Icon }) => (
+                  <button
+                    key={id}
+                    type="button"
+                    onClick={() => {
+                      const newFeatures = formData.features.includes(id)
+                        ? formData.features.filter(f => f !== id)
+                        : [...formData.features, id]
+                      setFormData({ ...formData, features: newFeatures })
+                    }}
+                    className={`flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all ${
+                      formData.features.includes(id)
+                        ? 'border-[#006747] bg-[#D1EFE4] text-[#006747]'
+                        : 'border-gray-200 hover:border-gray-300 bg-white text-gray-600'
+                    }`}
+                  >
+                    <Icon className="w-6 h-6 mb-2" />
+                    <span className="text-xs font-medium text-center">{label}</span>
+                  </button>
+                ))}
               </div>
             </div>
 

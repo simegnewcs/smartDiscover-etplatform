@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useSession, signOut } from 'next-auth/react'
@@ -29,107 +29,120 @@ interface SidebarItem {
   name: string
   href: string
   icon: any
-  badge?: string
+  badge?: string | number
   children?: SidebarItem[]
 }
 
-// Business Owner Navigation Items
-const businessOwnerItems: SidebarItem[] = [
-  {
-    name: 'Overview',
-    href: '/dashboard',
-    icon: LayoutDashboard
-  },
-  {
-    name: 'My Businesses',
-    href: '/dashboard/listings',
-    icon: Building2,
-    badge: '3'
-  },
-  {
-    name: 'Add Business',
-    href: '/dashboard/businesses/new',
-    icon: PlusCircle
-  },
-  {
-    name: 'Customer Reviews',
-    href: '/dashboard/reviews',
-    icon: Star,
-    badge: '12'
-  },
-  {
-    name: 'Analytics',
-    href: '/dashboard/analytics',
-    icon: TrendingUp
-  },
-  {
-    name: 'Messages',
-    href: '/dashboard/messages',
-    icon: MessageSquare,
-    badge: '5'
-  },
-  {
-    name: 'Billing',
-    href: '/dashboard/billing',
-    icon: CreditCard
-  },
-  {
-    name: 'Settings',
-    href: '/dashboard/settings',
-    icon: Settings
-  }
-]
-
-// Regular User Navigation Items
-const userItems: SidebarItem[] = [
-  {
-    name: 'Overview',
-    href: '/dashboard',
-    icon: LayoutDashboard
-  },
-  {
-    name: 'Find Businesses',
-    href: '/businesses',
-    icon: Search
-  },
-  {
-    name: 'My Reviews',
-    href: '/my-reviews',
-    icon: Star,
-    badge: '5'
-  },
-  {
-    name: 'Saved Places',
-    href: '/saved',
-    icon: Bookmark
-  },
-  {
-    name: 'Recent Activity',
-    href: '/activity',
-    icon: History
-  },
-  {
-    name: 'Notifications',
-    href: '/notifications',
-    icon: Bell,
-    badge: '2'
-  },
-  {
-    name: 'Settings',
-    href: '/dashboard/settings',
-    icon: Settings
-  }
-]
+interface DashboardStats {
+  businessCount: number
+  reviewCount: number
+  messageCount: number
+  notificationCount: number
+  savedPlacesCount: number
+  recentActivityCount: number
+}
 
 export default function Sidebar() {
   const pathname = usePathname()
   const { data: session } = useSession()
   const [expandedItems, setExpandedItems] = useState<string[]>([])
+  const [stats, setStats] = useState<DashboardStats>({
+    businessCount: 0,
+    reviewCount: 0,
+    messageCount: 0,
+    notificationCount: 0,
+    savedPlacesCount: 0,
+    recentActivityCount: 0
+  })
+  const [isLoading, setIsLoading] = useState(true)
 
   // Determine user role and get appropriate navigation items
   const userRole = session?.user?.role
   const isBusinessOwner = userRole === 'BUSINESS_OWNER'
-  const sidebarItems = isBusinessOwner ? businessOwnerItems : userItems
+
+  // Fetch dashboard stats
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const res = await fetch('/api/dashboard/stats')
+        if (res.ok) {
+          const data = await res.json()
+          setStats(data.stats)
+        }
+      } catch (error) {
+        console.error('Failed to fetch sidebar stats:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    if (session?.user) {
+      fetchStats()
+    }
+  }, [session])
+
+  // Build dynamic sidebar items with real data
+  const getSidebarItems = (): SidebarItem[] => {
+    if (isBusinessOwner) {
+      return [
+        { name: 'Overview', href: '/dashboard', icon: LayoutDashboard },
+        { 
+          name: 'My Businesses', 
+          href: '/dashboard/listings', 
+          icon: Building2,
+          badge: stats.businessCount > 0 ? stats.businessCount : undefined
+        },
+        { name: 'Add Business', href: '/dashboard/businesses/new', icon: PlusCircle },
+        { 
+          name: 'Customer Reviews', 
+          href: '/dashboard/reviews', 
+          icon: Star,
+          badge: stats.reviewCount > 0 ? stats.reviewCount : undefined
+        },
+        { name: 'Analytics', href: '/dashboard/analytics', icon: TrendingUp },
+        { 
+          name: 'Messages', 
+          href: '/dashboard/messages', 
+          icon: MessageSquare,
+          badge: stats.messageCount > 0 ? stats.messageCount : undefined
+        },
+        { name: 'Billing', href: '/dashboard/billing', icon: CreditCard },
+        { name: 'Settings', href: '/dashboard/settings', icon: Settings }
+      ]
+    } else {
+      return [
+        { name: 'Overview', href: '/dashboard', icon: LayoutDashboard },
+        { name: 'Find Businesses', href: '/businesses', icon: Search },
+        { 
+          name: 'My Reviews', 
+          href: '/my-reviews', 
+          icon: Star,
+          badge: stats.reviewCount > 0 ? stats.reviewCount : undefined
+        },
+        { 
+          name: 'Saved Places', 
+          href: '/saved', 
+          icon: Bookmark,
+          badge: stats.savedPlacesCount > 0 ? stats.savedPlacesCount : undefined
+        },
+        { 
+          name: 'Recent Activity', 
+          href: '/activity', 
+          icon: History,
+          badge: stats.recentActivityCount > 0 ? stats.recentActivityCount : undefined
+        },
+        { 
+          name: 'Notifications', 
+          href: '/notifications', 
+          icon: Bell,
+          badge: stats.notificationCount > 0 ? stats.notificationCount : undefined
+        },
+        { name: 'Settings', href: '/dashboard/settings', icon: Settings }
+      ]
+    }
+  }
+
+  const sidebarItems = getSidebarItems()
 
   const toggleExpanded = (itemName: string) => {
     setExpandedItems(prev =>
@@ -266,11 +279,15 @@ export default function Sidebar() {
         {/* User Info */}
         <div className="mt-4 p-3 bg-[#D1EFE4]/50 rounded-lg">
           <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-[#006747] rounded-full flex items-center justify-center">
-              <span className="text-white font-medium text-sm">
-                {session?.user?.name?.split(' ').map((n: string) => n[0]).join('').toUpperCase() || 'U'}
-              </span>
-            </div>
+            {session?.user?.image ? (
+              <img src={session.user.image} alt="" className="w-8 h-8 rounded-full object-cover flex-shrink-0" />
+            ) : (
+              <div className="w-8 h-8 bg-[#006747] rounded-full flex items-center justify-center flex-shrink-0">
+                <span className="text-white font-medium text-sm">
+                  {session?.user?.name?.split(' ').map((n: string) => n[0]).join('').toUpperCase() || 'U'}
+                </span>
+              </div>
+            )}
             <div className="flex-1 min-w-0">
               <div className="text-sm font-medium text-neutral-800 truncate">{session?.user?.name || 'User'}</div>
               <div className="text-xs text-neutral-500 truncate">{session?.user?.email || 'user@example.com'}</div>

@@ -98,7 +98,7 @@ export async function GET(
     }, {} as Record<string, number>)
 
     const formattedNearbyBusinesses = nearbyBusinesses.map(nearby => ({
-      id: nearby.id,
+      id: nearby.id.toString(),
       slug: nearby.slug,
       name: nearby.name,
       category: nearby.category.name,
@@ -114,16 +114,18 @@ export async function GET(
       name: business.name,
       description: business.description,
       category: {
-        ...business.category,
-        id: business.category.id.toString()
+        id: business.category.id.toString(),
+        name: business.category.name,
+        description: business.category.description,
+        icon: business.category.icon
       },
       city: {
-        ...business.city,
-        id: business.city.id.toString()
+        id: business.city.id.toString(),
+        name: business.city.name
       },
       subcity: business.subcity ? {
-        ...business.subcity,
-        id: business.subcity.id.toString()
+        id: business.subcity.id.toString(),
+        name: business.subcity.name
       } : null,
       address: business.address,
       phone: business.phone,
@@ -133,14 +135,18 @@ export async function GET(
       latitude: business.latitude ? parseFloat(business.latitude.toString()) : null,
       longitude: business.longitude ? parseFloat(business.longitude.toString()) : null,
       images: business.images.map(img => ({
-        ...img,
         id: img.id.toString(),
-        businessId: img.businessId.toString()
+        businessId: img.businessId.toString(),
+        imageUrl: img.imageUrl,
+        sortOrder: img.sortOrder
       })),
       hours: business.hours.map(hour => ({
-        ...hour,
         id: hour.id.toString(),
-        businessId: hour.businessId.toString()
+        businessId: hour.businessId.toString(),
+        day: hour.day,
+        openTime: hour.openTime,
+        closeTime: hour.closeTime,
+        isClosed: hour.isClosed
       })),
       reviews: business.reviews.map(review => ({
         id: review.id.toString(),
@@ -148,16 +154,16 @@ export async function GET(
         comment: review.comment,
         createdAt: review.createdAt,
         user: {
-          ...review.user,
-          id: review.user.id.toString()
+          id: review.user.id.toString(),
+          name: review.user.name,
+          email: review.user.email
         }
       })),
+      features: business.features || [],
+      mapUrl: business.mapUrl,
       averageRating: avgRating._avg.rating || 0,
       totalReviews: business._count.reviews,
-      nearbyBusinesses: formattedNearbyBusinesses.map((nearby: any) => ({
-        ...nearby,
-        id: nearby.id.toString()
-      }))
+      nearbyBusinesses: formattedNearbyBusinesses
     }
 
     return NextResponse.json({

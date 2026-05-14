@@ -39,9 +39,11 @@ interface Business {
   phone?: string
   email?: string
   website?: string
+  mapUrl?: string
   verified: boolean
   latitude?: number
   longitude?: number
+  features?: string[]
   images: Array<{
     id: number
     imageUrl: string
@@ -224,6 +226,24 @@ export default function BusinessDetail({ slug }: { slug: string }) {
 
   const dayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
+  const featureLabels: Record<string, string> = {
+    wifi: 'Free WiFi',
+    parking: 'Parking Available',
+    delivery: 'Delivery Service',
+    cardPayment: 'Card Payment',
+    takeaway: 'Takeaway',
+    wheelchair: 'Wheelchair Accessible',
+    familyFriendly: 'Family Friendly',
+    liveMusic: 'Live Music',
+    tv: 'TV Available',
+    outdoorSeating: 'Outdoor Seating',
+    coffeeShop: 'Coffee Shop',
+    gym: 'Gym/Fitness',
+    airportShuttle: 'Airport Shuttle',
+    library: 'Library/Reading Area',
+    security247: '24/7 Security'
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-white">
       {/* Hero Image Gallery */}
@@ -331,6 +351,28 @@ export default function BusinessDetail({ slug }: { slug: string }) {
                   <p className="text-neutral-600 leading-relaxed text-lg">{business.description}</p>
                 </div>
               )}
+
+              {/* Features */}
+              {business.features && business.features.length > 0 && (
+                <div className="border-t border-neutral-100 pt-6 mt-6">
+                  <h2 className="text-xl font-bold text-neutral-800 mb-4 flex items-center gap-2">
+                    <span className="w-8 h-8 bg-[#D1EFE4] rounded-lg flex items-center justify-center">
+                      <span className="text-[#006747]">✓</span>
+                    </span>
+                    Features
+                  </h2>
+                  <div className="flex flex-wrap gap-2">
+                    {business.features.map((feature, index) => (
+                      <span
+                        key={index}
+                        className="px-4 py-2 bg-[#D1EFE4] text-[#006747] rounded-full text-sm font-medium"
+                      >
+                        {featureLabels[feature] || feature}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Contact Information Card */}
@@ -414,6 +456,39 @@ export default function BusinessDetail({ slug }: { slug: string }) {
                     </div>
                   ))}
                 </div>
+              </div>
+            )}
+
+            {/* Map Card */}
+            {business.mapUrl && (
+              <div className="bg-white rounded-2xl shadow-xl border border-neutral-100 p-8 mb-6">
+                <h2 className="text-xl font-bold text-neutral-800 mb-6 flex items-center gap-2">
+                  <span className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <MapPin className="w-4 h-4 text-blue-600" />
+                  </span>
+                  Location Map
+                </h2>
+                <div className="aspect-video rounded-xl overflow-hidden">
+                  <iframe
+                    src={business.mapUrl}
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    className="rounded-xl"
+                  />
+                </div>
+                <a
+                  href={business.mapUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-4 inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 font-medium"
+                >
+                  <MapPin className="w-4 h-4" />
+                  View on Google Maps
+                </a>
               </div>
             )}
 

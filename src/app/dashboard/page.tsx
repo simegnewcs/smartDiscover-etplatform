@@ -27,36 +27,16 @@ import {
   Bookmark
 } from 'lucide-react'
 
-interface Business {
-  id: string
-  name: string
-  category: string
-  city: string
-  rating: number
-  reviewCount: number
-  images: { imageUrl: string }[]
-  verified: boolean
-  createdAt: string
-}
-
-interface Review {
-  id: string
-  rating: number
-  comment: string
-  createdAt: string
-  user: { name: string }
-}
-
 // User Dashboard Component
 function UserDashboard({ session }: { session: any }) {
   const [userStats, setUserStats] = useState({
     totalReviews: 0,
     savedBusinesses: 0,
     recentSearches: 0,
-    accountAge: 0
+    memberLevel: 'Explorer',
+    accountAgeDays: 0
   })
   const [myReviews, setMyReviews] = useState<any[]>([])
-  const [savedBusinesses, setSavedBusinesses] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -70,18 +50,13 @@ function UserDashboard({ session }: { session: any }) {
     }
 
     try {
-      // Fetch user's reviews
-      const reviewsRes = await fetch(`/api/user/reviews?userId=${session.user.id}`)
-      const reviewsData = await reviewsRes.json()
-      if (reviewsData.success) {
-        setMyReviews(reviewsData.data || [])
-      }
+      const res = await fetch('/api/dashboard/overview')
+      const data = await res.json()
 
-      // TODO: Add API endpoints for saved businesses and search history
-      setUserStats(prev => ({
-        ...prev,
-        totalReviews: reviewsData.data?.length || 0
-      }))
+      if (data.success) {
+        setUserStats(data.data.stats)
+        setMyReviews(data.data.myReviews || [])
+      }
     } catch (err) {
       console.error('Error fetching user data:', err)
     } finally {
@@ -153,7 +128,7 @@ function UserDashboard({ session }: { session: any }) {
               <Award className="w-6 h-6 text-[#006747]" />
             </div>
           </div>
-          <div className="text-2xl font-bold text-neutral-800">Explorer</div>
+          <div className="text-2xl font-bold text-neutral-800">{userStats.memberLevel}</div>
           <div className="text-sm text-neutral-600 mt-1">Member Level</div>
         </div>
       </div>
@@ -194,7 +169,7 @@ function UserDashboard({ session }: { session: any }) {
                   </div>
                   <p className="text-sm text-neutral-700 line-clamp-2">{review.comment || 'No comment'}</p>
                   <div className="flex items-center justify-between mt-2">
-                    <span className="text-xs text-neutral-500">{review.business?.name || 'Unknown Business'}</span>
+                    <Link href={`/business/${review.business?.slug || ''}`} className="text-xs text-[#006747] hover:underline">{review.business?.name || 'Unknown Business'}</Link>
                     <span className="text-xs text-neutral-400">
                       {new Date(review.createdAt).toLocaleDateString()}
                     </span>
@@ -247,14 +222,11 @@ function UserDashboard({ session }: { session: any }) {
 
 // Business Owner Dashboard Component
 function BusinessOwnerDashboard({ session }: { session: any }) {
-  const [businesses, setBusinesses] = useState<Business[]>([])
-  const [recentReviews, setRecentReviews] = useState<Review[]>([])
+  const [businesses, setBusinesses] = useState<any[]>([])
+  const [recentReviews, setRecentReviews] = useState<any[]>([])
   const [stats, setStats] = useState({
-    totalViews: 1247,
-    totalCalls: 89,
-    totalMessages: 34,
     averageRating: 0,
-    profileCompletion: 75,
+    profileCompletion: 0,
     totalBusinesses: 0,
     totalReviews: 0
   })
@@ -272,41 +244,15 @@ function BusinessOwnerDashboard({ session }: { session: any }) {
     }
 
     try {
-      // Fetch user's businesses
-      const response = await fetch(`/api/user/businesses?userId=${session.user.id}`)
-      const data = await response.json()
+      const res = await fetch('/api/dashboard/overview')
+      const data = await res.json()
 
       if (data.success) {
-        const userBusinesses = data.data || []
-        setBusinesses(userBusinesses)
-        
-        // Calculate stats
-        const totalReviews = userBusinesses.reduce((acc: number, b: Business) => acc + (b.reviewCount || 0), 0)
-        const avgRating = userBusinesses.length > 0 
-          ? userBusinesses.reduce((acc: number, b: Business) => acc + (b.rating || 0), 0) / userBusinesses.length 
-          : 0
-
-        setStats(prev => ({
-          ...prev,
-          totalBusinesses: userBusinesses.length,
-          totalReviews,
-          averageRating: avgRating
-        }))
-
-        // Fetch recent reviews from all businesses
-        const allReviews: Review[] = []
-        for (const business of userBusinesses.slice(0, 3)) {
-          try {
-            const reviewRes = await fetch(`/api/business/${business.id}/reviews`)
-            const reviewData = await reviewRes.json()
-            if (reviewData.success && reviewData.data) {
-              allReviews.push(...reviewData.data.slice(0, 3))
-            }
-          } catch (e) {
-            console.error('Error fetching reviews:', e)
-          }
-        }
-        setRecentReviews(allReviews.slice(0, 5))
+        setStats(data.data.stats)
+        setBusinesses(data.data.businesses || [])
+        setRecentReviews(data.data.recentReviews || [])
+      } else {
+        setError('Failed to load dashboard data')
       }
     } catch (err) {
       setError('Failed to load dashboard data')
@@ -444,9 +390,9 @@ function BusinessOwnerDashboard({ session }: { session: any }) {
               {businesses.map((business) => (
                 <div key={business.id} className="flex items-start gap-4 p-4 bg-neutral-50 rounded-xl hover:bg-neutral-100 transition-colors">
                   <div className="w-16 h-16 bg-neutral-200 rounded-lg overflow-hidden flex-shrink-0">
-                    {business.images?.[0]?.imageUrl ? (
+                    {business.image ? (
                       <img 
-                        src={business.images[0].imageUrl} 
+                        src={business.image} 
                         alt={business.name}
                         className="w-full h-full object-cover"
                       />
@@ -518,6 +464,11 @@ function BusinessOwnerDashboard({ session }: { session: any }) {
                       {new Date(review.createdAt).toLocaleDateString()}
                     </span>
                   </div>
+                  {review.business && (
+                    <Link href={`/business/${review.business.slug}`} className="text-xs text-[#006747] hover:underline mt-1 inline-block">
+                      {review.business.name}
+                    </Link>
+                  )}
                 </div>
               ))}
             </div>

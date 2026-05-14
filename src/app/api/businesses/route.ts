@@ -4,9 +4,54 @@ import { prisma } from '@/lib/prisma'
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
 
+// Helper function to extract coordinates from Google Maps URL
+function extractCoordinatesFromMapUrl(url: string): { lat: number; lng: number } | null {
+  try {
+    // Handle maps.app.goo.gl short URLs (need to resolve)
+    if (url.includes('maps.app.goo.gl')) {
+      // Short URLs need to be resolved - we'll store the URL without extracting coordinates
+      return null
+    }
+
+    // Handle standard Google Maps URLs with query parameter
+    // e.g., https://www.google.com/maps?q=9.0242,38.7468 or https://maps.google.com/?q=9.0242,38.7468
+    const qMatch = url.match(/[?&]q=(-?\d+\.?\d*),(-?\d+\.?\d*)/)
+    if (qMatch) {
+      return {
+        lat: parseFloat(qMatch[1]),
+        lng: parseFloat(qMatch[2])
+      }
+    }
+
+    // Handle URLs with @lat,lng format
+    // e.g., https://www.google.com/maps/@9.0242,38.7468,15z
+    const atMatch = url.match(/@(-?\d+\.?\d*),(-?\d+\.?\d*)/)
+    if (atMatch) {
+      return {
+        lat: parseFloat(atMatch[1]),
+        lng: parseFloat(atMatch[2])
+      }
+    }
+
+    // Handle place URLs with ll parameter
+    // e.g., https://maps.google.com/?ll=9.0242,38.7468
+    const llMatch = url.match(/[?&]ll=(-?\d+\.?\d*),(-?\d+\.?\d*)/)
+    if (llMatch) {
+      return {
+        lat: parseFloat(llMatch[1]),
+        lng: parseFloat(llMatch[2])
+      }
+    }
+
+    return null
+  } catch {
+    return null
+  }
+}
+
 export async function POST(request: Request) {
   try {
-    const { name, description, category, city, subcity, address, latitude, longitude, phone, email, website, ownerId, images } = await request.json()
+    const { name, description, category, city, subcity, address, mapUrl, phone, email, website, ownerId, images, features } = await request.json()
 
     // Basic validation
     if (!name || !category || !city || !ownerId) {
@@ -141,10 +186,19 @@ export async function POST(request: Request) {
         businessData.subcityId = subcityRecord.id
       }
 
-      if (latitude && longitude) {
-        businessData.latitude = parseFloat(latitude)
-        businessData.longitude = parseFloat(longitude)
+      // Store Google Maps URL for location
+      if (mapUrl) {
+        businessData.mapUrl = mapUrl
+        // Try to extract coordinates from Google Maps URL
+        const coords = extractCoordinatesFromMapUrl(mapUrl)
+        if (coords) {
+          businessData.latitude = coords.lat
+          businessData.longitude = coords.lng
+        }
       }
+
+      // Store features as JSON (default to empty array)
+      businessData.features = features || []
 
       business = await prisma.business.create({
         data: businessData,
@@ -166,9 +220,8 @@ export async function POST(request: Request) {
       if (images && images.length > 0) {
         const imageData = images.map((url: string, index: number) => ({
           businessId: business.id,
-          url: url,
-          sortOrder: index,
-          alt: `${name} image ${index + 1}`
+          imageUrl: url,
+          sortOrder: index
         }))
 
         await prisma.businessImage.createMany({
@@ -186,15 +239,42 @@ export async function POST(request: Request) {
 
     // Convert BigInt to string for response
     const businessForResponse = {
-      ...business,
       id: business.id.toString(),
+      slug: business.slug,
+      name: business.name,
+      description: business.description,
       categoryId: business.categoryId.toString(),
       cityId: business.cityId.toString(),
-      subcityId: business.subcityId?.toString(),
-      ownerId: business.ownerId?.toString(),
+      subcityId: business.subcityId?.toString() || null,
+      address: business.address,
+      latitude: business.latitude,
+      longitude: business.longitude,
+      phone: business.phone,
+      email: business.email,
+      website: business.website,
+      mapUrl: business.mapUrl,
+      features: business.features,
+      verified: business.verified,
+      ownerId: business.ownerId?.toString() || null,
+      createdAt: business.createdAt,
+      category: business.category ? {
+        id: business.category.id.toString(),
+        name: business.category.name,
+        description: business.category.description,
+        icon: business.category.icon
+      } : null,
+      city: business.city ? {
+        id: business.city.id.toString(),
+        name: business.city.name
+      } : null,
+      subcity: business.subcity ? {
+        id: business.subcity.id.toString(),
+        name: business.subcity.name
+      } : null,
       owner: business.owner ? {
-        ...business.owner,
-        id: business.owner.id.toString()
+        id: business.owner.id.toString(),
+        name: business.owner.name,
+        email: business.owner.email
       } : null
     }
 

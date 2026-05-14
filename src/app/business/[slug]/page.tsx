@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import BusinessDetail from '@/components/business/BusinessDetail'
 
-const siteUrl = process.env.NEXTAUTH_URL || 'https://helloet.devvoltz.com'
+const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
 
 interface PageProps {
   params: {
@@ -29,8 +29,9 @@ interface BusinessData {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   try {
+    // Use siteUrl for server-side fetch
     const response = await fetch(`${siteUrl}/api/business/${params.slug}`, {
-      next: { revalidate: 3600 }
+      cache: 'no-store'
     })
     const data = await response.json()
 
