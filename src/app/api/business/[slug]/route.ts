@@ -29,7 +29,8 @@ export async function GET(
             user: {
               select: {
                 id: true,
-                name: true
+                name: true,
+                email:true
               }
             }
           },
@@ -155,8 +156,7 @@ export async function GET(
         createdAt: review.createdAt,
         user: {
           id: review.user.id.toString(),
-          name: review.user.name,
-          email: review.user.email
+          name: review.user.name
         }
       })),
       features: business.features || [],
