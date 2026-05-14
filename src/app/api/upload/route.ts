@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { writeFile, mkdir } from 'fs/promises'
-import { join } from 'path'
-import { existsSync } from 'fs'
+import { uploadToCloudinary } from '@/lib/cloudinary'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -10,7 +8,7 @@ export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData()
     const file = formData.get('file') as File
-    
+
     if (!file) {
       return NextResponse.json(
         { success: false, message: 'No file provided' },
@@ -27,40 +25,27 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Validate file size (5MB max)
-    const maxSize = 5 * 1024 * 1024 // 5MB
+    // Validate file size (10MB max for Cloudinary free tier)
+    const maxSize = 10 * 1024 * 1024 // 10MB
     if (file.size > maxSize) {
       return NextResponse.json(
-        { success: false, message: 'File too large. Maximum size is 5MB' },
+        { success: false, message: 'File too large. Maximum size is 10MB' },
         { status: 400 }
       )
     }
 
-    // Create uploads directory if it doesn't exist
-    const uploadsDir = join(process.cwd(), 'public', 'uploads', 'businesses')
-    if (!existsSync(uploadsDir)) {
-      await mkdir(uploadsDir, { recursive: true })
-    }
-
-    // Generate unique filename
-    const timestamp = Date.now()
-    const randomString = Math.random().toString(36).substring(2, 8)
-    const filename = `${timestamp}-${randomString}.${file.type.split('/')[1]}`
-    const filepath = join(uploadsDir, filename)
-
-    // Save file
+    // Convert file to buffer
     const bytes = await file.arrayBuffer()
     const buffer = Buffer.from(bytes)
-    await writeFile(filepath, buffer)
 
-    // Return file URL
-    const fileUrl = `/uploads/businesses/${filename}`
+    // Upload to Cloudinary
+    const result = await uploadToCloudinary(buffer, 'helloet/businesses')
 
     return NextResponse.json({
       success: true,
       message: 'File uploaded successfully',
-      fileUrl: fileUrl,
-      filename: filename
+      fileUrl: result.secure_url,
+      filename: result.public_id
     })
 
   } catch (error) {
