@@ -1,4 +1,6 @@
 import { NextResponse } from 'next/server'
+import { getServerSession } from 'next-auth/next'
+import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 
 export const dynamic = 'force-dynamic'
@@ -29,8 +31,7 @@ export async function GET(
             user: {
               select: {
                 id: true,
-                name: true,
-                email:true
+                name: true
               }
             }
           },
@@ -52,7 +53,20 @@ export async function GET(
         { status: 404 }
       )
     }
-    
+
+    // If business is not verified, only admin or the owner can view it
+    if (!business.verified) {
+      const session = await getServerSession(authOptions)
+      const isAdmin = session?.user?.role === 'ADMIN'
+      const isOwner = session?.user?.id && business.ownerId?.toString() === session.user.id
+      if (!isAdmin && !isOwner) {
+        return NextResponse.json(
+          { success: false, error: 'Business not found' },
+          { status: 404 }
+        )
+      }
+    }
+
     console.log('Business found:', business.name, 'ID:', business.id.toString())
 
     // Calculate average rating

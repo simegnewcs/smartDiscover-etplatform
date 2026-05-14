@@ -1,9 +1,7 @@
 import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import Navbar from '@/components/layout/Navbar'
-import Footer from '@/components/layout/Footer'
-import ChatWidget from '@/components/layout/ChatWidget'
+import ConditionalLayout from '@/components/providers/ConditionalLayout'
 import { SessionProvider } from '@/components/providers/SessionProvider'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -226,10 +224,9 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         <SessionProvider>
-          <Navbar />
-          {children}
-          <Footer />
-          <ChatWidget />
+          <ConditionalLayout>
+            {children}
+          </ConditionalLayout>
         </SessionProvider>
       </body>
     </html>

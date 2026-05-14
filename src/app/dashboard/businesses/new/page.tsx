@@ -227,7 +227,11 @@ export default function NewBusinessPage() {
 
         // Reset form after delay
         setTimeout(() => {
-          router.push('/dashboard/listings')
+          if (session?.user?.role === 'ADMIN') {
+            router.push('/admin/businesses')
+          } else {
+            router.push('/dashboard/listings')
+          }
         }, 2000)
       } else {
         const errorData = await response.json()
@@ -620,7 +624,7 @@ export default function NewBusinessPage() {
             {/* Submit Button */}
             <div className="flex justify-end space-x-4">
               <Link
-                href="/dashboard/listings"
+                href={session?.user?.role === 'ADMIN' ? '/admin/businesses' : '/dashboard/listings'}
                 className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
               >
                 Cancel

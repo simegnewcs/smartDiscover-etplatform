@@ -308,6 +308,10 @@ export async function GET(request: Request) {
 
     if (ownerId) {
       where.ownerId = BigInt(ownerId)
+      // Owner can see all their businesses (verified or not)
+    } else {
+      // Public listing: only show verified businesses
+      where.verified = true
     }
 
     if (category) {

@@ -56,16 +56,15 @@ function LoginForm() {
       const sessionRes = await fetch('/api/auth/session')
       const session = await sessionRes.json()
 
-      // Redirect logic:
-      // - Business owners → Dashboard (to manage their business)
-      // - Regular users → Stay on homepage (or go to callbackUrl if coming from review)
-      if (session?.user?.role === 'BUSINESS_OWNER') {
+      // Redirect logic based on role
+      const role = session?.user?.role
+      if (role === 'ADMIN') {
+        window.location.href = '/admin'
+      } else if (role === 'BUSINESS_OWNER') {
         window.location.href = '/dashboard'
       } else if (callbackUrl && callbackUrl !== '/') {
-        // Only redirect regular users if they came from a specific page (like writing a review)
         window.location.href = callbackUrl
       } else {
-        // Regular users: stay on home page
         window.location.href = '/'
       }
     } catch (error) {

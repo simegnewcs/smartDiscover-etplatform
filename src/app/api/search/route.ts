@@ -14,8 +14,8 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '20')
     const offset = (page - 1) * limit
 
-    // Build where clause
-    const where: any = {}
+    // Build where clause — only show verified businesses publicly
+    const where: any = { verified: true }
 
     if (q) {
       where.OR = [

@@ -22,7 +22,8 @@ import {
   History,
   Bookmark,
   PlusCircle,
-  Bell
+  Bell,
+  ShieldCheck
 } from 'lucide-react'
 
 interface SidebarItem {
@@ -266,6 +267,16 @@ export default function Sidebar() {
             <FileText className="w-5 h-5 text-neutral-400" />
             <span className="font-medium">Help & Support</span>
           </Link>
+
+          {session?.user?.role === 'ADMIN' && (
+            <Link
+              href="/admin"
+              className="flex items-center space-x-3 px-3 py-2 bg-neutral-900 text-[#EEF578] hover:bg-neutral-800 rounded-lg transition-colors"
+            >
+              <ShieldCheck className="w-5 h-5" />
+              <span className="font-medium">Admin Panel</span>
+            </Link>
+          )}
           
           <button 
             onClick={() => signOut({ callbackUrl: '/' })}

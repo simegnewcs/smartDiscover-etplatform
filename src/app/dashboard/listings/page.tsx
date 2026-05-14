@@ -249,10 +249,15 @@ export default function BusinessListings() {
                         <h3 className="text-lg font-semibold text-neutral-800 truncate">
                           {business.name}
                         </h3>
-                        {business.verified && (
+                        {business.verified ? (
                           <div className="flex items-center space-x-1 bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-medium">
                             <span>✓</span>
                             <span>Verified</span>
+                          </div>
+                        ) : (
+                          <div className="flex items-center space-x-1 bg-orange-100 text-orange-700 px-2 py-1 rounded-full text-xs font-medium">
+                            <span>⏳</span>
+                            <span>Pending Verification</span>
                           </div>
                         )}
                       </div>
