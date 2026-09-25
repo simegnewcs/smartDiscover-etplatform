@@ -362,11 +362,11 @@ export default function HeroSection() {
               <div className="flex flex-wrap items-center justify-center gap-8 text-white mt-10">
                 <div className="flex items-center gap-2 text-sm font-medium drop-shadow-sm">
                   <Compass className="w-4 h-4 text-white/80" />
-                  <span>1000+ Verified Places</span>
+                  <span> Verified Places</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm font-medium drop-shadow-sm">
                   <MapPin className="w-4 h-4 text-white/80" />
-                  <span>Available in 80+ Cities</span>
+                  <span>Available in Ethiopia</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm font-medium drop-shadow-sm">
                   <Sparkles className="w-4 h-4 text-white/80" />
