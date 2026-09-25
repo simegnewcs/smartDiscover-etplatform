@@ -108,7 +108,7 @@ export default function BillingPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <Loader2 className="w-8 h-8 animate-spin text-[#006747]" />
+        <Loader2 className="w-8 h-8 animate-spin text-[#047857]" />
       </div>
     )
   }
@@ -124,7 +124,7 @@ export default function BillingPage() {
       </div>
 
       {/* Current Plan Card */}
-      <div className="bg-gradient-to-r from-[#006747] to-[#00523A] rounded-xl p-6 text-white">
+      <div className="bg-gradient-to-r from-[#047857] to-[#065F46] rounded-xl p-6 text-white">
         <div className="flex items-start justify-between">
           <div>
             <p className="text-white/70 text-sm">Current Plan</p>
@@ -153,7 +153,7 @@ export default function BillingPage() {
       {subscriptions.length > 0 && (
         <div className="bg-white rounded-xl border border-neutral-200 p-6">
           <h3 className="text-lg font-semibold text-neutral-800 mb-4 flex items-center gap-2">
-            <CreditCard className="w-5 h-5 text-[#006747]" />
+            <CreditCard className="w-5 h-5 text-[#047857]" />
             Active Subscriptions
           </h3>
           <div className="space-y-4">
@@ -221,11 +221,11 @@ export default function BillingPage() {
               <div
                 key={key}
                 className={`bg-white rounded-xl border-2 p-6 transition-all ${
-                  isCurrent ? 'border-[#006747] shadow-lg' : 'border-neutral-200 hover:border-neutral-300'
+                  isCurrent ? 'border-[#047857] shadow-lg' : 'border-neutral-200 hover:border-neutral-300'
                 }`}
               >
                 {isCurrent && (
-                  <span className="inline-block text-xs font-semibold bg-[#D1EFE4] text-[#006747] px-2 py-1 rounded-full mb-3">
+                  <span className="inline-block text-xs font-semibold bg-[#D1FAE5] text-[#047857] px-2 py-1 rounded-full mb-3">
                     Current Plan
                   </span>
                 )}
@@ -233,7 +233,7 @@ export default function BillingPage() {
                   <PlanIcon className="w-5 h-5" />
                 </div>
                 <h4 className="text-lg font-bold text-neutral-800">{plan.name}</h4>
-                <p className="text-[#006747] font-semibold mt-1">{plan.price}</p>
+                <p className="text-[#047857] font-semibold mt-1">{plan.price}</p>
                 <ul className="mt-4 space-y-2">
                   {plan.features.map((feature, i) => (
                     <li key={i} className="flex items-start gap-2 text-sm text-neutral-600">
@@ -243,7 +243,7 @@ export default function BillingPage() {
                   ))}
                 </ul>
                 {!isCurrent && (
-                  <button className="w-full mt-4 px-4 py-2 border-2 border-[#006747] text-[#006747] font-medium rounded-lg hover:bg-[#006747] hover:text-white transition-colors flex items-center justify-center gap-1">
+                  <button className="w-full mt-4 px-4 py-2 border-2 border-[#047857] text-[#047857] font-medium rounded-lg hover:bg-[#047857] hover:text-white transition-colors flex items-center justify-center gap-1">
                     Upgrade <ArrowRight className="w-4 h-4" />
                   </button>
                 )}

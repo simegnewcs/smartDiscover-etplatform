@@ -35,7 +35,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="bg-white shadow-sm border-b border-neutral-200 sticky top-0 z-50">
+      <nav className="bg-white/80 backdrop-blur-xl border-b border-white/20 sticky top-0 z-50 transition-all duration-300 shadow-glass">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo and Hamburger Menu */}
@@ -50,7 +50,7 @@ export default function Navbar() {
               
               {/* Logo */}
               <Link href="/" className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-[#006747] rounded-lg flex items-center justify-center">
+                <div className="w-8 h-8 bg-[#047857] rounded-lg flex items-center justify-center">
                   <span className="text-white font-bold text-lg">H</span>
                 </div>
                 <span className="text-xl font-bold text-neutral-800">HelloET</span>
@@ -63,7 +63,7 @@ export default function Navbar() {
               <Link
                 key={item.name}
                 href={item.href}
-                className="text-neutral-600 hover:text-primary-600 transition-colors font-medium"
+                className="text-neutral-600 hover:text-primary-800 transition-colors font-medium"
               >
                 {item.name}
               </Link>
@@ -78,12 +78,12 @@ export default function Navbar() {
               <div className="relative hidden md:block" ref={profileMenuRef}>
                 <button
                   onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
-                  className="flex items-center space-x-2 px-3 py-2 rounded-lg bg-[#D1EFE4] hover:bg-[#B8E5D0] text-[#006747] transition-colors"
+                  className="flex items-center space-x-2 px-3 py-2 rounded-lg bg-[#D1FAE5] hover:bg-[#B8E5D0] text-[#047857] transition-colors"
                 >
                   {session?.user?.image ? (
                     <img src={session.user.image} alt="" className="w-8 h-8 rounded-full object-cover" />
                   ) : (
-                    <div className="w-8 h-8 bg-[#006747] rounded-full flex items-center justify-center">
+                    <div className="w-8 h-8 bg-[#047857] rounded-full flex items-center justify-center">
                       <span className="text-white font-bold text-sm">
                         {(session?.user?.name || 'U').charAt(0).toUpperCase()}
                       </span>
@@ -122,17 +122,17 @@ export default function Navbar() {
               </div>
             ) : (
               /* ── Not logged in: Sign In + Register buttons ── */
-              <div className="hidden md:flex items-center space-x-2">
+              <div className="hidden md:flex items-center space-x-3">
                 <Link
                   href="/auth/login"
-                  className="flex items-center space-x-2 border border-[#006747] text-[#006747] hover:bg-[#D1EFE4] px-4 py-2 rounded-lg transition-colors text-sm font-medium"
+                  className="flex items-center space-x-2 border-2 border-brand-green text-brand-green hover:bg-brand-mint/50 px-5 py-2 rounded-xl transition-all hover:shadow-md text-sm font-semibold"
                 >
                   <LogIn className="w-4 h-4" />
                   <span>Sign In</span>
                 </Link>
                 <Link
                   href="/auth/register"
-                  className="flex items-center space-x-2 bg-[#006747] hover:bg-[#00523A] text-white px-4 py-2 rounded-lg transition-colors text-sm font-medium"
+                  className="flex items-center space-x-2 bg-gradient-to-r from-brand-green to-primary-800 hover:from-primary-800 hover:to-brand-dark text-white px-5 py-2 rounded-xl transition-all shadow-md hover:shadow-lg text-sm font-semibold transform hover:-translate-y-0.5"
                 >
                   <User className="w-4 h-4" />
                   <span>Register</span>
@@ -162,7 +162,7 @@ export default function Navbar() {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className="text-neutral-600 hover:text-primary-600 transition-colors font-medium px-2 py-2"
+                  className="text-neutral-600 hover:text-primary-800 transition-colors font-medium px-2 py-2"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {item.name}
@@ -174,7 +174,7 @@ export default function Navbar() {
                   <Link
                     href="/auth/login"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="w-full flex items-center justify-center space-x-2 bg-[#006747] hover:bg-[#00523A] text-white px-4 py-2 rounded-lg transition-colors"
+                    className="w-full flex items-center justify-center space-x-2 bg-[#047857] hover:bg-[#065F46] text-white px-4 py-2 rounded-lg transition-colors"
                   >
                     <LogIn className="w-4 h-4" />
                     <span className="text-sm font-medium">Sign In</span>
@@ -191,7 +191,7 @@ export default function Navbar() {
                     </div>
                     <Link
                       href="/dashboard"
-                      className="flex items-center space-x-2 text-neutral-600 hover:text-primary-600 transition-colors px-2 py-2"
+                      className="flex items-center space-x-2 text-neutral-600 hover:text-primary-800 transition-colors px-2 py-2"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       <User className="w-4 h-4" />
@@ -212,7 +212,7 @@ export default function Navbar() {
                   <div className="flex flex-col space-y-2">
                     <Link
                       href="/auth/login?callbackUrl=${encodeURIComponent(`/business/${slug}`)}"
-                      className="inline-flex items-center gap-2 bg-[#006747] hover:bg-[#00523A] text-white px-6 py-3 rounded-xl font-semibold transition-colors w-full justify-center"
+                      className="inline-flex items-center gap-2 bg-[#047857] hover:bg-[#065F46] text-white px-6 py-3 rounded-xl font-semibold transition-colors w-full justify-center"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       <LogIn className="w-4 h-4" />
@@ -220,7 +220,7 @@ export default function Navbar() {
                     </Link>
                     <Link
                       href="/auth/register"
-                      className="flex items-center space-x-2 text-neutral-600 hover:text-primary-600 transition-colors px-2 py-2"
+                      className="flex items-center space-x-2 text-neutral-600 hover:text-primary-800 transition-colors px-2 py-2"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       <User className="w-4 h-4" />

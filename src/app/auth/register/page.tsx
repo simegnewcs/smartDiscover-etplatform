@@ -110,11 +110,11 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#D1EFE4] to-white py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-[#D1FAE5] to-white py-12 px-4">
       <div className="max-w-xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center space-x-2 text-[#006747] hover:text-[#00523A] transition-colors mb-4">
+          <Link href="/" className="inline-flex items-center space-x-2 text-[#047857] hover:text-[#065F46] transition-colors mb-4">
             <ArrowLeft className="w-5 h-5" />
             <span>Back to Home</span>
           </Link>
@@ -147,7 +147,7 @@ export default function RegisterPage() {
                 onClick={() => setUserType('USER')}
                 className={`flex-1 flex items-center justify-center gap-3 p-4 rounded-xl border-2 transition-all ${
                   userType === 'USER'
-                    ? 'border-[#006747] bg-[#D1EFE4] text-[#006747]'
+                    ? 'border-[#047857] bg-[#D1FAE5] text-[#047857]'
                     : 'border-neutral-200 hover:border-neutral-300'
                 }`}
               >
@@ -163,7 +163,7 @@ export default function RegisterPage() {
                 onClick={() => setUserType('BUSINESS_OWNER')}
                 className={`flex-1 flex items-center justify-center gap-3 p-4 rounded-xl border-2 transition-all ${
                   userType === 'BUSINESS_OWNER'
-                    ? 'border-[#006747] bg-[#D1EFE4] text-[#006747]'
+                    ? 'border-[#047857] bg-[#D1FAE5] text-[#047857]'
                     : 'border-neutral-200 hover:border-neutral-300'
                 }`}
               >
@@ -190,7 +190,7 @@ export default function RegisterPage() {
                   value={formData.name}
                   onChange={handleInputChange}
                   required
-                  className="w-full pl-10 pr-4 py-3 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#006747]"
+                  className="w-full pl-10 pr-4 py-3 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#047857]"
                   placeholder="John Doe"
                 />
               </div>
@@ -209,7 +209,7 @@ export default function RegisterPage() {
                   value={formData.email}
                   onChange={handleInputChange}
                   required
-                  className="w-full pl-10 pr-4 py-3 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#006747]"
+                  className="w-full pl-10 pr-4 py-3 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#047857]"
                   placeholder="john@example.com"
                 />
               </div>
@@ -228,7 +228,7 @@ export default function RegisterPage() {
                   value={formData.password}
                   onChange={handleInputChange}
                   required
-                  className="w-full pl-10 pr-12 py-3 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#006747]"
+                  className="w-full pl-10 pr-12 py-3 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#047857]"
                   placeholder="Min. 8 characters"
                 />
                 <button
@@ -254,7 +254,7 @@ export default function RegisterPage() {
                   value={formData.confirmPassword}
                   onChange={handleInputChange}
                   required
-                  className="w-full pl-10 pr-12 py-3 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#006747]"
+                  className="w-full pl-10 pr-12 py-3 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#047857]"
                   placeholder="Confirm password"
                 />
                 <button
@@ -282,15 +282,15 @@ export default function RegisterPage() {
                 type="checkbox"
                 id="terms"
                 required
-                className="mt-1 w-4 h-4 text-[#006747] border-neutral-300 rounded focus:ring-[#006747]"
+                className="mt-1 w-4 h-4 text-[#047857] border-neutral-300 rounded focus:ring-[#047857]"
               />
               <label htmlFor="terms" className="ml-3 text-sm text-neutral-600">
                 I agree to the{' '}
-                <Link href="/terms" className="text-[#006747] hover:text-[#00523A]">
+                <Link href="/terms" className="text-[#047857] hover:text-[#065F46]">
                   Terms of Service
                 </Link>{' '}
                 and{' '}
-                <Link href="/privacy" className="text-[#006747] hover:text-[#00523A]">
+                <Link href="/privacy" className="text-[#047857] hover:text-[#065F46]">
                   Privacy Policy
                 </Link>
               </label>
@@ -300,7 +300,7 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-[#006747] hover:bg-[#00523A] text-white px-6 py-3 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-[#047857] hover:bg-[#065F46] text-white px-6 py-3 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? 'Creating Account...' : 'Create Account'}
             </button>
@@ -308,7 +308,7 @@ export default function RegisterPage() {
             {/* Sign In Link */}
             <p className="text-center text-sm text-neutral-600">
               Already have an account?{' '}
-              <Link href="/auth/login" className="text-[#006747] hover:text-[#00523A] font-medium">
+              <Link href="/auth/login" className="text-[#047857] hover:text-[#065F46] font-medium">
                 Sign In
               </Link>
             </p>
@@ -319,7 +319,7 @@ export default function RegisterPage() {
         <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="text-center">
             <div className="w-12 h-12 bg-[#E6F2ED] rounded-lg flex items-center justify-center mx-auto mb-4">
-              <Building2 className="w-6 h-6 text-[#006747]" />
+              <Building2 className="w-6 h-6 text-[#047857]" />
             </div>
             <h3 className="font-semibold text-neutral-800 mb-2">Reach More Customers</h3>
             <p className="text-sm text-neutral-600">Connect with thousands of customers looking for businesses in Ethiopia</p>
@@ -327,7 +327,7 @@ export default function RegisterPage() {
           
           <div className="text-center">
             <div className="w-12 h-12 bg-[#E6F2ED] rounded-lg flex items-center justify-center mx-auto mb-4">
-              <Star className="w-6 h-6 text-[#006747]" />
+              <Star className="w-6 h-6 text-[#047857]" />
             </div>
             <h3 className="font-semibold text-neutral-800 mb-2">Build Your Reputation</h3>
             <p className="text-sm text-neutral-600">Collect reviews and build trust with Ethiopian customers</p>
@@ -335,7 +335,7 @@ export default function RegisterPage() {
           
           <div className="text-center">
             <div className="w-12 h-12 bg-[#E6F2ED] rounded-lg flex items-center justify-center mx-auto mb-4">
-              <TrendingUp className="w-6 h-6 text-[#006747]" />
+              <TrendingUp className="w-6 h-6 text-[#047857]" />
             </div>
             <h3 className="font-semibold text-neutral-800 mb-2">Grow Your Business</h3>
             <p className="text-sm text-neutral-600">Get insights and analytics to help your business grow</p>

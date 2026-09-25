@@ -241,33 +241,7 @@ export default function HeroSection() {
         ))}
         
         {/* Light Overlays — images stay clearly visible */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/15 to-black/20" />
-        <div className="absolute inset-0 bg-[#006747]/20" />
-        
-        {/* Animated Floating Particles - Ethiopian Stars Effect */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          {[...Array(20)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute w-2 h-2 bg-[#EEF578] rounded-full animate-pulse opacity-30"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 3}s`,
-                animationDuration: `${2 + Math.random() * 2}s`
-              }}
-            />
-          ))}
-        </div>
-        
-        {/* Ethiopian Pattern Overlay - Subtle cultural texture */}
-        <div 
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0L60 30L30 60L0 30L30 0z' fill='none' stroke='%23ffffff' stroke-width='1'/%3E%3C/svg%3E")`,
-            backgroundSize: '60px 60px'
-          }}
-        />
+        <div className="absolute inset-0 bg-black/40" />
       </div>
 
       {/* Background Image Controls */}
@@ -285,7 +259,7 @@ export default function HeroSection() {
             >
               <div className={`w-2 h-2 rounded-full transition-all duration-300 ${
                 currentBgIndex === index 
-                  ? 'bg-[#EEF578] w-8' 
+                  ? 'bg-[#FBBF24] w-8' 
                   : 'bg-white/50 hover:bg-white/80'
               }`}>
                 {currentBgIndex === index && isAutoPlay && (
@@ -330,51 +304,41 @@ export default function HeroSection() {
           <div className="flex flex-col items-center text-center">
             {/* Centered Content */}
             <div className="text-white space-y-6 w-full">
-              {/* Animated Badge */}
-              <div className="inline-flex items-center justify-center gap-2 bg-[#006747]/80 backdrop-blur-sm border border-[#EEF578]/30 rounded-full px-4 py-2 animate-fadeIn">
-                <Sparkles className="w-4 h-4 text-[#EEF578] animate-pulse" />
-                <span className="text-sm font-medium text-white">
-                  {ethiopianLandmarks[currentBgIndex].name}
-                </span>
-              </div>
-
-              {/* Animated Headline */}
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-center">
-                <span className="block animate-slideUp">Discover Ethiopia's</span>
-                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#EEF578] via-[#FFD700] to-[#FFA500] animate-slideUp animation-delay-200">
-                  Finest Places
-                </span>
+              {/* Clean Headline */}
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-center drop-shadow-md">
+                Discover Ethiopia's Finest Places
               </h1>
 
-              {/* Animated Subtitle */}
-              <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto leading-relaxed animate-fadeIn animation-delay-300 text-center">
-                Explore the <span className="text-[#EEF578] font-semibold">land of origins</span> — from ancient rock-hewn churches of Lalibela 
-                to the breathtaking peaks of the Simien Mountains. Find hotels, restaurants, 
-                and experiences across Ethiopia.
+              {/* Clean Subtitle */}
+              <p className="text-lg md:text-xl text-white/95 max-w-2xl mx-auto leading-relaxed text-center drop-shadow-sm font-medium">
+                Find the best hotels, restaurants, and experiences across the land of origins.
               </p>
 
-              {/* Animated Search Bar - Enhanced Glassmorphism */}
-              <div className="bg-white/15 backdrop-blur-lg border border-white/30 rounded-2xl p-2 max-w-2xl w-full mx-auto shadow-2xl animate-fadeIn animation-delay-400 hover:bg-white/20 transition-all duration-300">
-                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+              {/* Professional Search Bar */}
+              <div className="bg-white rounded-xl p-2 max-w-4xl w-full mx-auto shadow-2xl mt-8">
+                <div className="flex flex-col md:flex-row items-stretch md:items-center gap-2">
                   {/* Search Input */}
-                  <div className="flex-1 flex items-center gap-3 px-4 py-3 bg-white/95 rounded-xl shadow-inner">
-                    <Search className="w-5 h-5 text-[#006747] flex-shrink-0" />
+                  <div className="flex-1 flex items-center gap-3 px-4 py-3 bg-white rounded-lg hover:bg-neutral-50 transition-colors border border-transparent hover:border-neutral-200">
+                    <Search className="w-5 h-5 text-neutral-400 flex-shrink-0" />
                     <input
                       type="text"
-                      placeholder="Search hotels, restaurants, places..."
+                      placeholder="What are you looking for?"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="flex-1 outline-none text-neutral-800 placeholder-neutral-500 bg-transparent text-sm font-medium"
+                      className="flex-1 outline-none text-neutral-800 placeholder-neutral-500 bg-transparent text-base"
                     />
                   </div>
                   
+                  {/* Divider */}
+                  <div className="hidden md:block w-px h-8 bg-neutral-200 mx-2"></div>
+
                   {/* Location Dropdown */}
-                  <div className="flex items-center gap-2 px-4 py-3 bg-white/95 rounded-xl shadow-inner">
-                    <MapPin className="w-5 h-5 text-[#006747] flex-shrink-0" />
+                  <div className="flex items-center gap-2 px-4 py-3 bg-white rounded-lg hover:bg-neutral-50 transition-colors border border-transparent hover:border-neutral-200">
+                    <MapPin className="w-5 h-5 text-neutral-400 flex-shrink-0" />
                     <select 
                       value={selectedLocation}
                       onChange={(e) => setSelectedLocation(e.target.value)}
-                      className="outline-none text-neutral-700 bg-transparent text-sm min-w-[120px] cursor-pointer font-medium"
+                      className="outline-none text-neutral-700 bg-transparent text-base min-w-[160px] cursor-pointer"
                     >
                       {ethiopianCities.map((city, index) => (
                         <option key={index} value={city}>
@@ -384,36 +348,29 @@ export default function HeroSection() {
                     </select>
                   </div>
 
-                  {/* Search Button - Ethiopian Green */}
+                  {/* Search Button */}
                   <Link 
                     href={`/businesses?search=${encodeURIComponent(searchQuery)}&city=${encodeURIComponent(selectedLocation)}`}
-                    className="flex items-center justify-center gap-2 bg-gradient-to-r from-[#006747] to-[#00523A] hover:from-[#00523A] hover:to-[#00402C] text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform"
+                    className="flex items-center justify-center bg-[#047857] hover:bg-[#036246] text-white px-8 py-4 md:py-3 rounded-lg font-semibold transition-colors mt-2 md:mt-0"
                   >
-                    <span>Explore</span>
-                    <ChevronRight className="w-4 h-4 animate-bounce" />
+                    <span>Search</span>
                   </Link>
                 </div>
               </div>
 
-              {/* Animated Quick Stats */}
-              <div className="flex flex-wrap items-center justify-center gap-6 text-white/80 text-sm animate-fadeIn animation-delay-500">
-                <div className="flex items-center gap-2 group">
-                  <div className="w-10 h-10 bg-[#EEF578]/20 backdrop-blur-sm rounded-xl flex items-center justify-center group-hover:bg-[#EEF578]/30 transition-all duration-300 group-hover:scale-110">
-                    <Compass className="w-5 h-5 text-[#EEF578]" />
-                  </div>
-                  <span className="font-medium">1000+ Places</span>
+              {/* Clean Quick Stats */}
+              <div className="flex flex-wrap items-center justify-center gap-8 text-white mt-10">
+                <div className="flex items-center gap-2 text-sm font-medium drop-shadow-sm">
+                  <Compass className="w-4 h-4 text-white/80" />
+                  <span>1000+ Verified Places</span>
                 </div>
-                <div className="flex items-center gap-2 group">
-                  <div className="w-10 h-10 bg-[#EEF578]/20 backdrop-blur-sm rounded-xl flex items-center justify-center group-hover:bg-[#EEF578]/30 transition-all duration-300 group-hover:scale-110">
-                    <MapPin className="w-5 h-5 text-[#EEF578]" />
-                  </div>
-                  <span className="font-medium">80+ Cities</span>
+                <div className="flex items-center gap-2 text-sm font-medium drop-shadow-sm">
+                  <MapPin className="w-4 h-4 text-white/80" />
+                  <span>Available in 80+ Cities</span>
                 </div>
-                <div className="flex items-center gap-2 group">
-                  <div className="w-10 h-10 bg-[#EEF578]/20 backdrop-blur-sm rounded-xl flex items-center justify-center group-hover:bg-[#EEF578]/30 transition-all duration-300 group-hover:scale-110">
-                    <Sparkles className="w-5 h-5 text-[#EEF578]" />
-                  </div>
-                  <span className="font-medium">Top Rated</span>
+                <div className="flex items-center gap-2 text-sm font-medium drop-shadow-sm">
+                  <Sparkles className="w-4 h-4 text-white/80" />
+                  <span>Real Customer Reviews</span>
                 </div>
               </div>
             </div>

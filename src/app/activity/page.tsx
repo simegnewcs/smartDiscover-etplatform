@@ -73,14 +73,14 @@ export default function ActivityPage() {
     return (
       <div className="min-h-screen bg-neutral-50 flex items-center justify-center p-4">
         <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-8 max-w-md w-full text-center">
-          <div className="w-16 h-16 bg-[#D1EFE4] rounded-full flex items-center justify-center mx-auto mb-4">
-            <History className="w-8 h-8 text-[#006747]" />
+          <div className="w-16 h-16 bg-[#D1FAE5] rounded-full flex items-center justify-center mx-auto mb-4">
+            <History className="w-8 h-8 text-[#047857]" />
           </div>
           <h2 className="text-xl font-bold text-neutral-800 mb-2">Sign in to see your activity</h2>
           <p className="text-neutral-600 mb-6">Track your reviews, saves, and more</p>
           <Link
             href="/auth/login?callbackUrl=/activity"
-            className="inline-flex items-center gap-2 bg-[#006747] hover:bg-[#00523A] text-white px-6 py-3 rounded-xl font-semibold transition-colors"
+            className="inline-flex items-center gap-2 bg-[#047857] hover:bg-[#065F46] text-white px-6 py-3 rounded-xl font-semibold transition-colors"
           >
             Sign In
           </Link>
@@ -92,7 +92,7 @@ export default function ActivityPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-[#006747]" />
+        <Loader2 className="w-8 h-8 animate-spin text-[#047857]" />
       </div>
     )
   }
@@ -109,7 +109,7 @@ export default function ActivityPage() {
           </Link>
           <div>
             <h1 className="text-2xl font-bold text-neutral-800 flex items-center gap-2">
-              <History className="w-6 h-6 text-[#006747]" />
+              <History className="w-6 h-6 text-[#047857]" />
               Recent Activity
             </h1>
             <p className="text-neutral-600 mt-1">{activities.length} total activities</p>
@@ -128,7 +128,7 @@ export default function ActivityPage() {
               onClick={() => setFilter(f.key as any)}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                 filter === f.key
-                  ? 'bg-[#006747] text-white'
+                  ? 'bg-[#047857] text-white'
                   : 'bg-white border border-neutral-200 text-neutral-600 hover:bg-neutral-50'
               }`}
             >
@@ -140,14 +140,14 @@ export default function ActivityPage() {
         {/* Empty State */}
         {activities.length === 0 && (
           <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-12 text-center">
-            <div className="w-20 h-20 bg-[#D1EFE4] rounded-full flex items-center justify-center mx-auto mb-4">
-              <Clock className="w-10 h-10 text-[#006747]" />
+            <div className="w-20 h-20 bg-[#D1FAE5] rounded-full flex items-center justify-center mx-auto mb-4">
+              <Clock className="w-10 h-10 text-[#047857]" />
             </div>
             <h3 className="text-xl font-bold text-neutral-800 mb-2">No activity yet</h3>
             <p className="text-neutral-600 mb-6">Start exploring businesses and writing reviews</p>
             <Link
               href="/businesses"
-              className="inline-flex items-center gap-2 bg-[#006747] hover:bg-[#00523A] text-white px-6 py-3 rounded-xl font-semibold transition-colors"
+              className="inline-flex items-center gap-2 bg-[#047857] hover:bg-[#065F46] text-white px-6 py-3 rounded-xl font-semibold transition-colors"
             >
               Browse Businesses
             </Link>
@@ -176,12 +176,12 @@ export default function ActivityPage() {
                   <div key={activity.id} className="bg-white rounded-xl border border-neutral-200 p-4 hover:shadow-sm transition-shadow">
                     <div className="flex items-start gap-3">
                       <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
-                        activity.type === 'review' ? 'bg-yellow-50' : 'bg-[#D1EFE4]'
+                        activity.type === 'review' ? 'bg-yellow-50' : 'bg-[#D1FAE5]'
                       }`}>
                         {activity.type === 'review' ? (
                           <Star className="w-5 h-5 text-yellow-500" />
                         ) : (
-                          <Bookmark className="w-5 h-5 text-[#006747]" />
+                          <Bookmark className="w-5 h-5 text-[#047857]" />
                         )}
                       </div>
 
@@ -208,7 +208,7 @@ export default function ActivityPage() {
 
                         <Link
                           href={`/business/${activity.businessSlug}`}
-                          className="inline-flex items-center gap-1 text-sm text-[#006747] hover:underline mt-2"
+                          className="inline-flex items-center gap-1 text-sm text-[#047857] hover:underline mt-2"
                         >
                           View Business <ExternalLink className="w-3 h-3" />
                         </Link>

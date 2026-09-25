@@ -19,11 +19,12 @@ export default function Footer() {
   return (
     <footer className="bg-[#003D2B] text-white">
       {/* Subscribe Banner */}
-      <div className="bg-[#006747] py-10 px-4">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+      <div className="bg-gradient-to-r from-brand-dark via-brand-green to-primary-900 py-12 px-4 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-brand-yellow/10 rounded-full blur-3xl animate-pulse pointer-events-none"></div>
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8 relative z-10">
           <div>
-            <h3 className="text-xl font-bold text-white">Stay Updated with HelloET</h3>
-            <p className="text-white/70 text-sm mt-1">Get the latest businesses, deals and updates from across Ethiopia</p>
+            <h3 className="text-2xl font-bold text-white tracking-wide">Stay Updated with HelloET</h3>
+            <p className="text-white/80 text-sm mt-2 font-medium">Get the latest businesses, deals and updates from across Ethiopia</p>
           </div>
           {subscribed ? (
             <div className="bg-white/10 border border-white/20 rounded-xl px-6 py-3 text-white font-medium">
@@ -41,7 +42,7 @@ export default function Footer() {
               />
               <button
                 type="submit"
-                className="flex items-center gap-2 bg-[#EEF578] hover:bg-yellow-300 text-[#003D2B] px-5 py-3 rounded-xl font-semibold text-sm transition-colors"
+                className="flex items-center gap-2 bg-brand-yellow hover:bg-yellow-400 text-brand-dark px-6 py-3 rounded-xl font-bold text-sm transition-all hover:scale-105 shadow-lg"
               >
                 <Send className="w-4 h-4" />
                 Subscribe
@@ -56,14 +57,14 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
 
           {/* Brand Column */}
-          <div className="space-y-4">
+          <div className="space-y-5">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-[#006747] rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">H</span>
+              <div className="w-12 h-12 bg-gradient-to-br from-brand-green to-brand-dark rounded-xl flex items-center justify-center shadow-lg border border-white/10">
+                <span className="text-white font-bold text-xl">H</span>
               </div>
               <div>
-                <h2 className="text-lg font-bold text-white">HelloET</h2>
-                <p className="text-white/50 text-xs">Ethiopia Business Directory</p>
+                <h2 className="text-xl font-bold text-white tracking-wide">HelloET</h2>
+                <p className="text-brand-yellow text-xs font-semibold uppercase tracking-wider">Ethiopia Business Directory</p>
               </div>
             </div>
             <p className="text-white/60 text-sm leading-relaxed">
@@ -71,16 +72,16 @@ export default function Footer() {
             </p>
             {/* Social Links */}
             <div className="flex items-center gap-3 pt-2">
-              <a href="#" className="w-8 h-8 bg-white/10 hover:bg-[#006747] rounded-lg flex items-center justify-center transition-colors">
+              <a href="#" className="w-8 h-8 bg-white/10 hover:bg-[#047857] rounded-lg flex items-center justify-center transition-colors">
                 <Facebook className="w-4 h-4" />
               </a>
-              <a href="#" className="w-8 h-8 bg-white/10 hover:bg-[#006747] rounded-lg flex items-center justify-center transition-colors">
+              <a href="#" className="w-8 h-8 bg-white/10 hover:bg-[#047857] rounded-lg flex items-center justify-center transition-colors">
                 <Twitter className="w-4 h-4" />
               </a>
-              <a href="#" className="w-8 h-8 bg-white/10 hover:bg-[#006747] rounded-lg flex items-center justify-center transition-colors">
+              <a href="#" className="w-8 h-8 bg-white/10 hover:bg-[#047857] rounded-lg flex items-center justify-center transition-colors">
                 <Instagram className="w-4 h-4" />
               </a>
-              <a href="#" className="w-8 h-8 bg-white/10 hover:bg-[#006747] rounded-lg flex items-center justify-center transition-colors">
+              <a href="#" className="w-8 h-8 bg-white/10 hover:bg-[#047857] rounded-lg flex items-center justify-center transition-colors">
                 <Linkedin className="w-4 h-4" />
               </a>
             </div>
@@ -101,7 +102,7 @@ export default function Footer() {
               ].map(({ icon: Icon, label, href }) => (
                 <li key={label}>
                   <Link href={href} className="flex items-center gap-2 text-white/60 hover:text-white transition-colors">
-                    <Icon className="w-3.5 h-3.5 text-[#EEF578]" />
+                    <Icon className="w-3.5 h-3.5 text-[#FBBF24]" />
                     {label}
                   </Link>
                 </li>
@@ -133,7 +134,7 @@ export default function Footer() {
               {['Addis Ababa', 'Bahir Dar', 'Hawassa', 'Gondar', 'Dire Dawa', 'Mekelle'].map((city) => (
                 <li key={city}>
                   <Link href={`/businesses?city=${encodeURIComponent(city)}`} className="flex items-center gap-2 text-white/60 hover:text-white transition-colors">
-                    <MapPin className="w-3 h-3 text-[#EEF578]" />
+                    <MapPin className="w-3 h-3 text-[#FBBF24]" />
                     {city}
                   </Link>
                 </li>
@@ -147,8 +148,8 @@ export default function Footer() {
             <ul className="space-y-3 text-sm">
               <li>
                 <a href="tel:0940192676" className="flex items-start gap-3 text-white/60 hover:text-white transition-colors group">
-                  <div className="w-8 h-8 bg-white/10 group-hover:bg-[#006747] rounded-lg flex items-center justify-center flex-shrink-0 transition-colors">
-                    <Phone className="w-4 h-4 text-[#EEF578]" />
+                  <div className="w-8 h-8 bg-white/10 group-hover:bg-[#047857] rounded-lg flex items-center justify-center flex-shrink-0 transition-colors">
+                    <Phone className="w-4 h-4 text-[#FBBF24]" />
                   </div>
                   <div>
                     <p className="text-white/40 text-xs">Phone</p>
@@ -158,8 +159,8 @@ export default function Footer() {
               </li>
               <li>
                 <a href="mailto:devvoltztech@gmail.com" className="flex items-start gap-3 text-white/60 hover:text-white transition-colors group">
-                  <div className="w-8 h-8 bg-white/10 group-hover:bg-[#006747] rounded-lg flex items-center justify-center flex-shrink-0 transition-colors">
-                    <Mail className="w-4 h-4 text-[#EEF578]" />
+                  <div className="w-8 h-8 bg-white/10 group-hover:bg-[#047857] rounded-lg flex items-center justify-center flex-shrink-0 transition-colors">
+                    <Mail className="w-4 h-4 text-[#FBBF24]" />
                   </div>
                   <div>
                     <p className="text-white/40 text-xs">Email</p>
@@ -169,7 +170,7 @@ export default function Footer() {
               </li>
               <li className="flex items-start gap-3">
                 <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <MapPin className="w-4 h-4 text-[#EEF578]" />
+                  <MapPin className="w-4 h-4 text-[#FBBF24]" />
                 </div>
                 <div>
                   <p className="text-white/40 text-xs">Location</p>
@@ -187,7 +188,7 @@ export default function Footer() {
           <p>© {new Date().getFullYear()} HelloET. All rights reserved.</p>
           <p className="text-white/50 font-medium">
             Developed by{' '}
-            <a href="mailto:devvoltztech@gmail.com" className="text-[#EEF578] hover:text-yellow-300 transition-colors">
+            <a href="mailto:devvoltztech@gmail.com" className="text-[#FBBF24] hover:text-yellow-300 transition-colors">
               Devvoltz Technology PLC
             </a>
           </p>

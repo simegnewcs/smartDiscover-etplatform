@@ -195,20 +195,22 @@ function AllBusinessesContent() {
   if (loading) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-green"></div>
       </div>
     )
   }
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="bg-gradient-to-br from-primary-50 to-white py-12 px-4">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-neutral-800 mb-4">
+      <div className="bg-gradient-to-br from-brand-mint/40 via-white to-brand-mint/20 py-16 px-4 relative overflow-hidden">
+        {/* Decorative Element */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-brand-yellow/10 rounded-full blur-[80px] pointer-events-none transform translate-x-1/2 -translate-y-1/2"></div>
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="text-center mb-10">
+            <h1 className="text-4xl md:text-5xl font-bold text-neutral-800 mb-6">
               {categoryFromUrl !== 'all' ? `${categoryFromUrl} Businesses` : 'All Businesses in Ethiopia'}
             </h1>
-            <p className="text-lg text-neutral-600 max-w-2xl mx-auto">
+            <p className="text-lg text-neutral-600 max-w-2xl mx-auto leading-relaxed">
               {categoryFromUrl !== 'all' 
                 ? `Discover trusted ${categoryFromUrl.toLowerCase()} businesses across Ethiopia`
                 : 'Discover trusted local businesses across all categories and locations'
@@ -216,22 +218,23 @@ function AllBusinessesContent() {
             </p>
           </div>
           <div className="max-w-3xl mx-auto">
-            <div className="bg-white rounded-2xl shadow-lg p-2 flex items-center gap-2">
-              <div className="flex-1 flex items-center gap-3 px-4">
-                <Search className="w-5 h-5 text-neutral-400" />
+            <div className="bg-white/80 backdrop-blur-md rounded-2xl shadow-xl p-2 flex items-center gap-2 border border-white/40">
+              <div className="flex-1 flex items-center gap-3 px-5">
+                <Search className="w-6 h-6 text-brand-green" />
                 <input
                   type="text"
                   placeholder="Search businesses, categories, or locations..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="flex-1 py-3 outline-none text-neutral-800 placeholder-neutral-400"
+                  className="flex-1 py-4 outline-none text-neutral-800 placeholder-neutral-400 bg-transparent text-lg"
                 />
               </div>
               <button
-                className="flex items-center gap-2 px-4 py-3 border-l border-neutral-200 hover:bg-neutral-50 transition-colors"
+                onClick={() => setShowFilters(!showFilters)}
+                className="flex items-center gap-2 px-6 py-4 rounded-xl bg-brand-green/10 text-brand-green hover:bg-brand-green hover:text-white transition-all font-semibold"
               >
-                <Filter className="w-5 h-5 text-neutral-600" />
-                <span className="text-neutral-600">Filters</span>
+                <Filter className="w-5 h-5" />
+                <span>Filters</span>
               </button>
             </div>
           </div>
@@ -244,7 +247,7 @@ function AllBusinessesContent() {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div>
                 <label className="block text-sm font-medium text-neutral-700 mb-2">Category</label>
-                <select value={selectedCategory} onChange={(e) => handleCategoryChange(e.target.value)} className="w-full px-4 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500">
+                <select value={selectedCategory} onChange={(e) => handleCategoryChange(e.target.value)} className="w-full px-4 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-green">
                   <option value="all">All Categories</option>
                   {categories.map((category) => (
                     <option key={category.id} value={category.name}>{category.name} ({category.businessCount})</option>
@@ -253,7 +256,7 @@ function AllBusinessesContent() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-neutral-700 mb-2">Location</label>
-                <select value={selectedLocation} onChange={(e) => setSelectedLocation(e.target.value)} className="w-full px-4 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500">
+                <select value={selectedLocation} onChange={(e) => setSelectedLocation(e.target.value)} className="w-full px-4 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-green">
                   {locations.map((location) => (
                     <option key={location} value={location}>{location}</option>
                   ))}
@@ -261,7 +264,7 @@ function AllBusinessesContent() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-neutral-700 mb-2">Sort By</label>
-                <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="w-full px-4 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500">
+                <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="w-full px-4 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-green">
                   <option value="name">Name</option>
                   <option value="rating">Rating</option>
                   <option value="reviews">Reviews</option>
@@ -271,10 +274,10 @@ function AllBusinessesContent() {
               <div>
                 <label className="block text-sm font-medium text-neutral-700 mb-2">View Mode</label>
                 <div className="flex gap-2">
-                  <button onClick={() => setViewMode('grid')} className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 border rounded-lg transition-colors ${viewMode === 'grid' ? 'bg-primary-500 text-white border-primary-500' : 'bg-white text-neutral-600 border-neutral-200 hover:bg-neutral-50'}`}>
+                  <button onClick={() => setViewMode('grid')} className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 border rounded-lg transition-colors ${viewMode === 'grid' ? 'bg-brand-green text-white border-brand-green' : 'bg-white text-neutral-600 border-neutral-200 hover:bg-neutral-50'}`}>
                     <Grid className="w-4 h-4" /><span>Grid</span>
                   </button>
-                  <button onClick={() => setViewMode('list')} className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 border rounded-lg transition-colors ${viewMode === 'list' ? 'bg-primary-500 text-white border-primary-500' : 'bg-white text-neutral-600 border-neutral-200 hover:bg-neutral-50'}`}>
+                  <button onClick={() => setViewMode('list')} className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 border rounded-lg transition-colors ${viewMode === 'list' ? 'bg-brand-green text-white border-brand-green' : 'bg-white text-neutral-600 border-neutral-200 hover:bg-neutral-50'}`}>
                     <List className="w-4 h-4" /><span>List</span>
                   </button>
                 </div>
@@ -300,12 +303,12 @@ function AllBusinessesContent() {
       <div className="max-w-7xl mx-auto px-4 pb-12">
         {filteredBusinesses.length > 0 ? (
           viewMode === 'grid' ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {filteredBusinesses.map((business) => {
                 const CategoryIcon = getCategoryIcon(business.category)
                 return (
-                  <Link key={business.id} href={`/business/${business.slug}`} className="group bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden hover:shadow-md transition-shadow">
-                    <div className="relative h-48 overflow-hidden">
+                  <Link key={business.id} href={`/business/${business.slug}`} className="group bg-white rounded-[2rem] shadow-sm border border-neutral-100 overflow-hidden hover:shadow-premium transition-all duration-500 hover:-translate-y-2">
+                    <div className="relative h-56 overflow-hidden">
                       {business.image ? (
                         <img src={business.image} alt={business.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                       ) : (
@@ -320,26 +323,28 @@ function AllBusinessesContent() {
                         disabled={savingId === business.id}
                         className={`absolute top-3 right-3 p-2 rounded-full shadow-sm transition-colors ${
                           savedIds.has(business.id)
-                            ? 'bg-[#006747] text-white hover:bg-[#00523A]'
-                            : 'bg-white/90 text-neutral-600 hover:bg-white hover:text-[#006747]'
+                            ? 'bg-[#047857] text-white hover:bg-[#065F46]'
+                            : 'bg-white/90 text-neutral-600 hover:bg-white hover:text-[#047857]'
                         }`}
                         title={savedIds.has(business.id) ? 'Remove from saved' : 'Save business'}
                       >
                         <Bookmark className={`w-4 h-4 ${savedIds.has(business.id) ? 'fill-white' : ''}`} />
                       </button>
                     </div>
-                    <div className="p-5">
-                      <h3 className="font-semibold text-lg text-neutral-800 mb-2 group-hover:text-primary-600 transition-colors">{business.name}</h3>
-                      <div className="flex items-center gap-1 mb-2">
-                        <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                        <span className="text-sm font-medium text-neutral-700">{business.rating.toFixed(1)}</span>
+                    <div className="p-6">
+                      <h3 className="font-bold text-xl text-neutral-800 mb-3 group-hover:text-brand-green transition-colors">{business.name}</h3>
+                      <div className="flex items-center gap-2 mb-3">
+                        <div className="flex items-center gap-1 bg-brand-yellow/10 px-2 py-1 rounded-lg">
+                          <Star className="w-4 h-4 fill-brand-yellow text-brand-yellow" />
+                          <span className="text-sm font-bold text-neutral-800">{business.rating.toFixed(1)}</span>
+                        </div>
                         <span className="text-sm text-neutral-500">({business.reviewCount} reviews)</span>
                       </div>
-                      <div className="flex items-center gap-1 text-sm text-neutral-600 mb-3">
-                        <MapPin className="w-4 h-4" /><span>{business.location}</span>
+                      <div className="flex items-center gap-2 text-sm text-neutral-600 mb-4">
+                        <MapPin className="w-4 h-4 text-brand-green" /><span>{business.location}</span>
                       </div>
-                      {business.description && <p className="text-sm text-neutral-600 line-clamp-2 mb-3">{business.description}</p>}
-                      <span className="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">View Details</span>
+                      {business.description && <p className="text-sm text-neutral-500 line-clamp-2 mb-5">{business.description}</p>}
+                      <span className="inline-flex items-center gap-2 bg-gradient-to-r from-brand-green to-primary-800 hover:from-primary-800 hover:to-brand-dark text-white px-5 py-2.5 rounded-xl text-sm font-bold transition-all w-full justify-center shadow-md">View Details</span>
                     </div>
                   </Link>
                 )
@@ -366,7 +371,7 @@ function AllBusinessesContent() {
                           {business.verified && <div className="flex items-center space-x-1 bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-medium"><span>✓</span><span>Verified</span></div>}
                         </div>
                         <div className="flex items-center space-x-4 text-sm text-neutral-600 mb-2">
-                          <span className="bg-primary-100 text-primary-700 px-2 py-1 rounded-full text-xs font-medium">{business.category}</span>
+                          <span className="bg-brand-mint text-brand-green px-2 py-1 rounded-full text-xs font-medium">{business.category}</span>
                           <div className="flex items-center space-x-1"><MapPin className="w-3 h-3" /><span>{business.location}</span></div>
                           <div className="flex items-center space-x-1"><Star className="w-3 h-3 fill-yellow-400 text-yellow-400" /><span>{business.rating.toFixed(1)}</span><span className="text-neutral-500">({business.reviewCount})</span></div>
                         </div>
@@ -379,17 +384,17 @@ function AllBusinessesContent() {
                             disabled={savingId === business.id}
                             className={`p-2 rounded-lg transition-colors ${
                               savedIds.has(business.id)
-                                ? 'bg-[#006747] text-white hover:bg-[#00523A]'
-                                : 'bg-neutral-100 text-neutral-500 hover:bg-[#D1EFE4] hover:text-[#006747]'
+                                ? 'bg-[#047857] text-white hover:bg-[#065F46]'
+                                : 'bg-neutral-100 text-neutral-500 hover:bg-[#D1FAE5] hover:text-[#047857]'
                             }`}
                             title={savedIds.has(business.id) ? 'Remove from saved' : 'Save business'}
                           >
                             <Bookmark className={`w-4 h-4 ${savedIds.has(business.id) ? 'fill-white' : ''}`} />
                           </button>
-                          <span className="inline-flex items-center gap-1 bg-primary-500 hover:bg-primary-600 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors">View Details</span>
+                          <span className="inline-flex items-center gap-1 bg-brand-green hover:bg-primary-800 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors">View Details</span>
                         </div>
                         {business.phone && <div className="flex items-center space-x-1 text-sm text-neutral-600"><Phone className="w-3 h-3" /><span>{business.phone}</span></div>}
-                        {business.website && <div className="flex items-center space-x-1 text-sm text-primary-600"><Globe className="w-3 h-3" /><span>Website</span></div>}
+                        {business.website && <div className="flex items-center space-x-1 text-sm text-primary-800"><Globe className="w-3 h-3" /><span>Website</span></div>}
                       </div>
                     </div>
                   </Link>
@@ -406,7 +411,7 @@ function AllBusinessesContent() {
             <p className="text-neutral-600 mb-6">
               {categoryFromUrl !== 'all' ? 'Try selecting a different category or clearing filters' : 'Try adjusting your search criteria or filters'}
             </p>
-            <button onClick={() => { setSearchTerm(''); setSelectedLocation('all'); handleCategoryChange('all') }} className="bg-primary-500 hover:bg-primary-600 text-white px-6 py-2 rounded-lg transition-colors">
+            <button onClick={() => { setSearchTerm(''); setSelectedLocation('all'); handleCategoryChange('all') }} className="bg-brand-green hover:bg-primary-800 text-white px-6 py-2 rounded-lg transition-colors">
               {categoryFromUrl !== 'all' ? 'Show All Businesses' : 'Clear Filters'}
             </button>
           </div>
@@ -420,7 +425,7 @@ export default function AllBusinessesPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-green"></div>
       </div>
     }>
       <AllBusinessesContent />

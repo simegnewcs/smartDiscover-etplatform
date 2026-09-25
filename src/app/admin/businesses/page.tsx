@@ -87,13 +87,13 @@ export default function AdminBusinessesPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-white flex items-center gap-2">
-            <Building2 className="w-6 h-6 text-[#EEF578]" /> Businesses
+            <Building2 className="w-6 h-6 text-[#FBBF24]" /> Businesses
           </h1>
           <p className="text-neutral-400 mt-1">{total} total businesses</p>
         </div>
         <Link
           href="/dashboard/businesses/new"
-          className="flex items-center gap-2 px-4 py-2 bg-[#EEF578] text-neutral-900 rounded-lg font-medium hover:bg-[#d8dc5e] transition-colors text-sm"
+          className="flex items-center gap-2 px-4 py-2 bg-[#FBBF24] text-neutral-900 rounded-lg font-medium hover:bg-[#d8dc5e] transition-colors text-sm"
         >
           <Plus className="w-4 h-4" /> Add Business
         </Link>
@@ -108,13 +108,13 @@ export default function AdminBusinessesPage() {
             placeholder="Search businesses..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 bg-neutral-900 border border-neutral-700 rounded-lg text-white placeholder-neutral-500 focus:outline-none focus:border-[#EEF578]/50 text-sm"
+            className="w-full pl-10 pr-4 py-2.5 bg-neutral-900 border border-neutral-700 rounded-lg text-white placeholder-neutral-500 focus:outline-none focus:border-[#FBBF24]/50 text-sm"
           />
         </div>
         <select
           value={verifiedFilter}
           onChange={e => { setVerifiedFilter(e.target.value); setPage(1) }}
-          className="px-3 py-2.5 bg-neutral-900 border border-neutral-700 rounded-lg text-white focus:outline-none focus:border-[#EEF578]/50 text-sm"
+          className="px-3 py-2.5 bg-neutral-900 border border-neutral-700 rounded-lg text-white focus:outline-none focus:border-[#FBBF24]/50 text-sm"
         >
           <option value="">All Status</option>
           <option value="true">Verified</option>
@@ -189,7 +189,7 @@ export default function AdminBusinessesPage() {
                           href={`/admin/businesses/preview/${biz.slug}`}
                           className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                             !biz.verified
-                              ? 'bg-[#EEF578] text-neutral-900 hover:bg-[#d8dc5e]'
+                              ? 'bg-[#FBBF24] text-neutral-900 hover:bg-[#d8dc5e]'
                               : 'bg-neutral-700 text-neutral-200 hover:bg-neutral-600'
                           }`}
                           title="View business"

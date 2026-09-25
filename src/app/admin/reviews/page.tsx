@@ -74,7 +74,7 @@ export default function AdminReviewsPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-white flex items-center gap-2">
-          <Star className="w-6 h-6 text-[#EEF578]" /> Reviews
+          <Star className="w-6 h-6 text-[#FBBF24]" /> Reviews
         </h1>
         <p className="text-neutral-400 mt-1">{total} total reviews</p>
       </div>
@@ -88,13 +88,13 @@ export default function AdminReviewsPage() {
             placeholder="Search by comment, business, or user..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 bg-neutral-900 border border-neutral-700 rounded-lg text-white placeholder-neutral-500 focus:outline-none focus:border-[#EEF578]/50 text-sm"
+            className="w-full pl-10 pr-4 py-2.5 bg-neutral-900 border border-neutral-700 rounded-lg text-white placeholder-neutral-500 focus:outline-none focus:border-[#FBBF24]/50 text-sm"
           />
         </div>
         <select
           value={ratingFilter}
           onChange={e => { setRatingFilter(e.target.value); setPage(1) }}
-          className="px-3 py-2.5 bg-neutral-900 border border-neutral-700 rounded-lg text-white focus:outline-none focus:border-[#EEF578]/50 text-sm"
+          className="px-3 py-2.5 bg-neutral-900 border border-neutral-700 rounded-lg text-white focus:outline-none focus:border-[#FBBF24]/50 text-sm"
         >
           <option value="">All Ratings</option>
           {[5, 4, 3, 2, 1].map(r => <option key={r} value={String(r)}>{r} Stars</option>)}
@@ -126,7 +126,7 @@ export default function AdminReviewsPage() {
                     <td className="px-5 py-3.5">
                       <div className="flex items-center gap-2">
                         <span className="font-medium text-white">{review.business.name}</span>
-                        <Link href={`/business/${review.business.slug}`} target="_blank" className="text-neutral-500 hover:text-[#EEF578]">
+                        <Link href={`/business/${review.business.slug}`} target="_blank" className="text-neutral-500 hover:text-[#FBBF24]">
                           <ExternalLink className="w-3.5 h-3.5" />
                         </Link>
                       </div>

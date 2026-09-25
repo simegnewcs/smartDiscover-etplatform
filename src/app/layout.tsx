@@ -1,10 +1,14 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Outfit } from 'next/font/google'
 import ConditionalLayout from '@/components/providers/ConditionalLayout'
 import { SessionProvider } from '@/components/providers/SessionProvider'
 
-const inter = Inter({ subsets: ['latin'] })
+const outfit = Outfit({ 
+  subsets: ['latin'],
+  variable: '--font-outfit',
+  display: 'swap',
+})
 
 const siteUrl = process.env.NEXTAUTH_URL || 'https://helloet.devvoltz.com'
 
@@ -207,7 +211,7 @@ export const metadata: Metadata = {
     'revisit-after': '3 days',
     'language': 'English',
     'copyright': 'HelloET',
-    'theme-color': '#006747',
+    'theme-color': '#047857',
   },
 }
 
@@ -222,7 +226,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
       </head>
-      <body className={inter.className}>
+      <body className={`${outfit.variable} font-sans antialiased text-neutral-800 selection:bg-brand-green/20 selection:text-brand-green`}>
         <SessionProvider>
           <ConditionalLayout>
             {children}

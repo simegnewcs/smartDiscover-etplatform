@@ -129,7 +129,7 @@ export default function HelpPage() {
   return (
     <div className="space-y-6 max-w-4xl">
       {/* Header */}
-      <div className="bg-gradient-to-r from-[#006747] to-[#00523A] rounded-2xl p-8 text-white">
+      <div className="bg-gradient-to-r from-[#047857] to-[#065F46] rounded-2xl p-8 text-white">
         <div className="flex items-center gap-3 mb-2">
           <HelpCircle className="w-8 h-8" />
           <h1 className="text-2xl font-bold">Help & Support</h1>
@@ -161,8 +161,8 @@ export default function HelpPage() {
                 href={link.href}
                 className="bg-white rounded-xl border border-neutral-200 p-4 hover:shadow-md transition-all group"
               >
-                <div className="w-10 h-10 bg-[#D1EFE4] rounded-lg flex items-center justify-center mb-3 group-hover:bg-[#006747] transition-colors">
-                  <Icon className="w-5 h-5 text-[#006747] group-hover:text-white transition-colors" />
+                <div className="w-10 h-10 bg-[#D1FAE5] rounded-lg flex items-center justify-center mb-3 group-hover:bg-[#047857] transition-colors">
+                  <Icon className="w-5 h-5 text-[#047857] group-hover:text-white transition-colors" />
                 </div>
                 <div className="font-medium text-neutral-800 text-sm">{link.name}</div>
                 <div className="text-xs text-neutral-500 mt-0.5">{link.desc}</div>
@@ -179,7 +179,7 @@ export default function HelpPage() {
           <button
             onClick={() => { setActiveCategory(null); setSearchQuery('') }}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              !activeCategory ? 'bg-[#006747] text-white' : 'bg-white border border-neutral-200 text-neutral-600 hover:bg-neutral-50'
+              !activeCategory ? 'bg-[#047857] text-white' : 'bg-white border border-neutral-200 text-neutral-600 hover:bg-neutral-50'
             }`}
           >
             All Topics
@@ -192,7 +192,7 @@ export default function HelpPage() {
                 onClick={() => { setActiveCategory(cat.name); setSearchQuery('') }}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   activeCategory === cat.name
-                    ? 'bg-[#006747] text-white'
+                    ? 'bg-[#047857] text-white'
                     : 'bg-white border border-neutral-200 text-neutral-600 hover:bg-neutral-50'
                 }`}
               >
@@ -221,7 +221,7 @@ export default function HelpPage() {
             <p className="text-neutral-600">No results found for your search</p>
             <button
               onClick={() => { setSearchQuery(''); setActiveCategory(null) }}
-              className="text-sm text-[#006747] hover:underline mt-2"
+              className="text-sm text-[#047857] hover:underline mt-2"
             >
               Clear filters
             </button>
@@ -271,7 +271,7 @@ export default function HelpPage() {
       {/* Contact Section */}
       <div className="bg-white rounded-xl border border-neutral-200 p-6">
         <h2 className="text-lg font-semibold text-neutral-800 mb-4 flex items-center gap-2">
-          <MessageSquare className="w-5 h-5 text-[#006747]" />
+          <MessageSquare className="w-5 h-5 text-[#047857]" />
           Still need help?
         </h2>
         <p className="text-neutral-600 mb-4">
@@ -280,10 +280,10 @@ export default function HelpPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <a
             href="mailto:support@helloet.com"
-            className="flex items-center gap-3 p-4 bg-neutral-50 rounded-lg hover:bg-[#D1EFE4] transition-colors group"
+            className="flex items-center gap-3 p-4 bg-neutral-50 rounded-lg hover:bg-[#D1FAE5] transition-colors group"
           >
             <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">
-              <Mail className="w-5 h-5 text-[#006747]" />
+              <Mail className="w-5 h-5 text-[#047857]" />
             </div>
             <div>
               <div className="font-medium text-neutral-800">Email Support</div>
@@ -292,7 +292,7 @@ export default function HelpPage() {
           </a>
           <div className="flex items-center gap-3 p-4 bg-neutral-50 rounded-lg">
             <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">
-              <MessageSquare className="w-5 h-5 text-[#006747]" />
+              <MessageSquare className="w-5 h-5 text-[#047857]" />
             </div>
             <div>
               <div className="font-medium text-neutral-800">Live Chat</div>
@@ -307,21 +307,21 @@ export default function HelpPage() {
         <h3 className="text-sm font-semibold text-neutral-500 uppercase tracking-wider mb-3">About HelloET</h3>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
           <div className="flex items-start gap-3">
-            <Users className="w-5 h-5 text-[#006747] mt-0.5 flex-shrink-0" />
+            <Users className="w-5 h-5 text-[#047857] mt-0.5 flex-shrink-0" />
             <div>
               <div className="font-medium text-neutral-800">Community Driven</div>
               <div className="text-neutral-500 mt-0.5">Real reviews from real people help you find the best businesses</div>
             </div>
           </div>
           <div className="flex items-start gap-3">
-            <Shield className="w-5 h-5 text-[#006747] mt-0.5 flex-shrink-0" />
+            <Shield className="w-5 h-5 text-[#047857] mt-0.5 flex-shrink-0" />
             <div>
               <div className="font-medium text-neutral-800">Verified Businesses</div>
               <div className="text-neutral-500 mt-0.5">Verified badges indicate businesses that have confirmed their details</div>
             </div>
           </div>
           <div className="flex items-start gap-3">
-            <TrendingUp className="w-5 h-5 text-[#006747] mt-0.5 flex-shrink-0" />
+            <TrendingUp className="w-5 h-5 text-[#047857] mt-0.5 flex-shrink-0" />
             <div>
               <div className="font-medium text-neutral-800">Business Growth</div>
               <div className="text-neutral-500 mt-0.5">Tools and analytics to help business owners grow their presence</div>

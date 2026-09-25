@@ -90,13 +90,13 @@ export default function AdminCategoriesPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-white flex items-center gap-2">
-            <Tags className="w-6 h-6 text-[#EEF578]" /> Categories
+            <Tags className="w-6 h-6 text-[#FBBF24]" /> Categories
           </h1>
           <p className="text-neutral-400 mt-1">{categories.length} categories</p>
         </div>
         <button
           onClick={openNew}
-          className="flex items-center gap-2 px-4 py-2 bg-[#EEF578] text-neutral-900 rounded-lg font-medium hover:bg-[#d8dc5e] transition-colors text-sm"
+          className="flex items-center gap-2 px-4 py-2 bg-[#FBBF24] text-neutral-900 rounded-lg font-medium hover:bg-[#d8dc5e] transition-colors text-sm"
         >
           <Plus className="w-4 h-4" /> Add Category
         </button>
@@ -164,7 +164,7 @@ export default function AdminCategoriesPage() {
                   type="text"
                   value={formData.name}
                   onChange={e => setFormData(p => ({ ...p, name: e.target.value }))}
-                  className="w-full px-3 py-2.5 bg-neutral-800 border border-neutral-600 rounded-lg text-white focus:outline-none focus:border-[#EEF578]/50 text-sm"
+                  className="w-full px-3 py-2.5 bg-neutral-800 border border-neutral-600 rounded-lg text-white focus:outline-none focus:border-[#FBBF24]/50 text-sm"
                   placeholder="e.g. Restaurants"
                 />
               </div>
@@ -174,7 +174,7 @@ export default function AdminCategoriesPage() {
                   type="text"
                   value={formData.description}
                   onChange={e => setFormData(p => ({ ...p, description: e.target.value }))}
-                  className="w-full px-3 py-2.5 bg-neutral-800 border border-neutral-600 rounded-lg text-white focus:outline-none focus:border-[#EEF578]/50 text-sm"
+                  className="w-full px-3 py-2.5 bg-neutral-800 border border-neutral-600 rounded-lg text-white focus:outline-none focus:border-[#FBBF24]/50 text-sm"
                   placeholder="Short description"
                 />
               </div>
@@ -184,7 +184,7 @@ export default function AdminCategoriesPage() {
                   type="text"
                   value={formData.icon}
                   onChange={e => setFormData(p => ({ ...p, icon: e.target.value }))}
-                  className="w-full px-3 py-2.5 bg-neutral-800 border border-neutral-600 rounded-lg text-white focus:outline-none focus:border-[#EEF578]/50 text-sm"
+                  className="w-full px-3 py-2.5 bg-neutral-800 border border-neutral-600 rounded-lg text-white focus:outline-none focus:border-[#FBBF24]/50 text-sm"
                   placeholder="e.g. 🍽️ or utensils"
                 />
               </div>
@@ -198,7 +198,7 @@ export default function AdminCategoriesPage() {
               <button
                 onClick={handleSave}
                 disabled={saving}
-                className="flex-1 px-4 py-2 rounded-lg bg-[#EEF578] text-neutral-900 hover:bg-[#d8dc5e] font-medium transition-colors text-sm disabled:opacity-60"
+                className="flex-1 px-4 py-2 rounded-lg bg-[#FBBF24] text-neutral-900 hover:bg-[#d8dc5e] font-medium transition-colors text-sm disabled:opacity-60"
               >
                 {saving ? 'Saving...' : editingCat ? 'Update' : 'Create'}
               </button>

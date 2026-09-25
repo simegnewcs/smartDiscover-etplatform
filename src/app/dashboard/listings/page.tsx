@@ -107,7 +107,7 @@ export default function BusinessListings() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-green"></div>
       </div>
     )
   }
@@ -122,7 +122,7 @@ export default function BusinessListings() {
         </div>
         <Link
           href="/dashboard/listings/new"
-          className="flex items-center space-x-2 bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-lg transition-colors"
+          className="flex items-center space-x-2 bg-brand-green hover:bg-primary-800 text-white px-4 py-2 rounded-lg transition-colors"
         >
           <Plus className="w-4 h-4" />
           <span>Add New Business</span>
@@ -200,7 +200,7 @@ export default function BusinessListings() {
                 placeholder="Search businesses..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full pl-10 pr-4 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-green"
               />
             </div>
           </div>
@@ -210,7 +210,7 @@ export default function BusinessListings() {
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="px-4 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="px-4 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-green"
             >
               <option value="all">All Listings</option>
               <option value="verified">Verified</option>
@@ -263,7 +263,7 @@ export default function BusinessListings() {
                       </div>
                       
                       <div className="flex items-center space-x-4 text-sm text-neutral-600 mb-2">
-                        <span className="bg-primary-100 text-primary-700 px-2 py-1 rounded-full text-xs font-medium">
+                        <span className="bg-brand-mint text-brand-green px-2 py-1 rounded-full text-xs font-medium">
                           {business.category}
                         </span>
                         <div className="flex items-center space-x-1">
@@ -303,14 +303,14 @@ export default function BusinessListings() {
                     <Link
                       href={`/business/${business.slug}`}
                       target="_blank"
-                      className="p-2 text-neutral-600 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
+                      className="p-2 text-neutral-600 hover:text-primary-800 hover:bg-primary-50 rounded-lg transition-colors"
                       title="View Public Page"
                     >
                       <Eye className="w-4 h-4" />
                     </Link>
                     <Link
                       href={`/dashboard/listings/${business.id}/edit`}
-                      className="p-2 text-neutral-600 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
+                      className="p-2 text-neutral-600 hover:text-primary-800 hover:bg-primary-50 rounded-lg transition-colors"
                       title="Edit Listing"
                     >
                       <Edit className="w-4 h-4" />
@@ -340,7 +340,7 @@ export default function BusinessListings() {
             {!searchTerm && filterStatus === 'all' && (
               <Link
                 href="/dashboard/listings/new"
-                className="inline-flex items-center space-x-2 bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-lg transition-colors"
+                className="inline-flex items-center space-x-2 bg-brand-green hover:bg-primary-800 text-white px-4 py-2 rounded-lg transition-colors"
               >
                 <Plus className="w-4 h-4" />
                 <span>Add Your First Business</span>

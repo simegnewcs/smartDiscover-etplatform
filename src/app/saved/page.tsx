@@ -109,14 +109,14 @@ export default function SavedPage() {
     return (
       <div className="min-h-screen bg-neutral-50 flex items-center justify-center p-4">
         <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-8 max-w-md w-full text-center">
-          <div className="w-16 h-16 bg-[#D1EFE4] rounded-full flex items-center justify-center mx-auto mb-4">
-            <Bookmark className="w-8 h-8 text-[#006747]" />
+          <div className="w-16 h-16 bg-[#D1FAE5] rounded-full flex items-center justify-center mx-auto mb-4">
+            <Bookmark className="w-8 h-8 text-[#047857]" />
           </div>
           <h2 className="text-xl font-bold text-neutral-800 mb-2">Sign in to see saved places</h2>
           <p className="text-neutral-600 mb-6">Save your favorite businesses and access them anytime</p>
           <Link
             href="/auth/login?callbackUrl=/saved"
-            className="inline-flex items-center gap-2 bg-[#006747] hover:bg-[#00523A] text-white px-6 py-3 rounded-xl font-semibold transition-colors"
+            className="inline-flex items-center gap-2 bg-[#047857] hover:bg-[#065F46] text-white px-6 py-3 rounded-xl font-semibold transition-colors"
           >
             Sign In
           </Link>
@@ -128,7 +128,7 @@ export default function SavedPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-[#006747]" />
+        <Loader2 className="w-8 h-8 animate-spin text-[#047857]" />
       </div>
     )
   }
@@ -144,7 +144,7 @@ export default function SavedPage() {
             </Link>
             <div>
               <h1 className="text-2xl font-bold text-neutral-800 flex items-center gap-2">
-                <Bookmark className="w-6 h-6 text-[#006747]" />
+                <Bookmark className="w-6 h-6 text-[#047857]" />
                 Saved Places
               </h1>
               <p className="text-neutral-600 mt-1">
@@ -155,13 +155,13 @@ export default function SavedPage() {
           <div className="flex items-center gap-2">
             <button
               onClick={() => setViewMode('grid')}
-              className={`p-2 rounded-lg transition-colors ${viewMode === 'grid' ? 'bg-[#006747] text-white' : 'bg-white text-neutral-600 hover:bg-neutral-100 border border-neutral-200'}`}
+              className={`p-2 rounded-lg transition-colors ${viewMode === 'grid' ? 'bg-[#047857] text-white' : 'bg-white text-neutral-600 hover:bg-neutral-100 border border-neutral-200'}`}
             >
               <Grid3X3 className="w-4 h-4" />
             </button>
             <button
               onClick={() => setViewMode('list')}
-              className={`p-2 rounded-lg transition-colors ${viewMode === 'list' ? 'bg-[#006747] text-white' : 'bg-white text-neutral-600 hover:bg-neutral-100 border border-neutral-200'}`}
+              className={`p-2 rounded-lg transition-colors ${viewMode === 'list' ? 'bg-[#047857] text-white' : 'bg-white text-neutral-600 hover:bg-neutral-100 border border-neutral-200'}`}
             >
               <List className="w-4 h-4" />
             </button>
@@ -177,7 +177,7 @@ export default function SavedPage() {
               placeholder="Search saved businesses..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-white border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#006747] focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2.5 bg-white border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#047857] focus:border-transparent"
             />
           </div>
           <div className="relative">
@@ -185,7 +185,7 @@ export default function SavedPage() {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as 'recent' | 'rating' | 'name')}
-              className="pl-10 pr-8 py-2.5 bg-white border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#006747] appearance-none cursor-pointer"
+              className="pl-10 pr-8 py-2.5 bg-white border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#047857] appearance-none cursor-pointer"
             >
               <option value="recent">Recently Saved</option>
               <option value="rating">Highest Rated</option>
@@ -197,8 +197,8 @@ export default function SavedPage() {
         {/* Empty State */}
         {savedItems.length === 0 && (
           <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-12 text-center">
-            <div className="w-20 h-20 bg-[#D1EFE4] rounded-full flex items-center justify-center mx-auto mb-4">
-              <Heart className="w-10 h-10 text-[#006747]" />
+            <div className="w-20 h-20 bg-[#D1FAE5] rounded-full flex items-center justify-center mx-auto mb-4">
+              <Heart className="w-10 h-10 text-[#047857]" />
             </div>
             <h3 className="text-xl font-bold text-neutral-800 mb-2">No saved businesses yet</h3>
             <p className="text-neutral-600 mb-6 max-w-md mx-auto">
@@ -206,7 +206,7 @@ export default function SavedPage() {
             </p>
             <Link
               href="/businesses"
-              className="inline-flex items-center gap-2 bg-[#006747] hover:bg-[#00523A] text-white px-6 py-3 rounded-xl font-semibold transition-colors"
+              className="inline-flex items-center gap-2 bg-[#047857] hover:bg-[#065F46] text-white px-6 py-3 rounded-xl font-semibold transition-colors"
             >
               Browse Businesses
             </Link>
@@ -235,8 +235,8 @@ export default function SavedPage() {
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#D1EFE4] to-[#EEF578]/30">
-                      <Bookmark className="w-12 h-12 text-[#006747]/30" />
+                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#D1FAE5] to-[#FBBF24]/30">
+                      <Bookmark className="w-12 h-12 text-[#047857]/30" />
                     </div>
                   )}
                   <button
@@ -260,9 +260,9 @@ export default function SavedPage() {
                 {/* Content */}
                 <div className="p-4">
                   <Link href={`/business/${item.business.slug}`}>
-                    <h3 className="font-semibold text-neutral-800 hover:text-[#006747] transition-colors flex items-center gap-1.5">
+                    <h3 className="font-semibold text-neutral-800 hover:text-[#047857] transition-colors flex items-center gap-1.5">
                       {item.business.name}
-                      {item.business.verified && <BadgeCheck className="w-4 h-4 text-[#006747]" />}
+                      {item.business.verified && <BadgeCheck className="w-4 h-4 text-[#047857]" />}
                     </h3>
                   </Link>
 
@@ -303,7 +303,7 @@ export default function SavedPage() {
                     </span>
                     <Link
                       href={`/business/${item.business.slug}`}
-                      className="inline-flex items-center gap-1 bg-[#006747] hover:bg-[#00523A] text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
+                      className="inline-flex items-center gap-1 bg-[#047857] hover:bg-[#065F46] text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
                     >
                       View Details
                     </Link>
@@ -329,8 +329,8 @@ export default function SavedPage() {
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#D1EFE4] to-[#EEF578]/30">
-                        <Bookmark className="w-6 h-6 text-[#006747]/30" />
+                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#D1FAE5] to-[#FBBF24]/30">
+                        <Bookmark className="w-6 h-6 text-[#047857]/30" />
                       </div>
                     )}
                   </div>
@@ -338,9 +338,9 @@ export default function SavedPage() {
                   {/* Info */}
                   <div className="flex-1 min-w-0">
                     <Link href={`/business/${item.business.slug}`}>
-                      <h3 className="font-semibold text-neutral-800 hover:text-[#006747] transition-colors flex items-center gap-1.5">
+                      <h3 className="font-semibold text-neutral-800 hover:text-[#047857] transition-colors flex items-center gap-1.5">
                         {item.business.name}
-                        {item.business.verified && <BadgeCheck className="w-4 h-4 text-[#006747]" />}
+                        {item.business.verified && <BadgeCheck className="w-4 h-4 text-[#047857]" />}
                       </h3>
                     </Link>
                     <div className="flex items-center gap-3 mt-1">
@@ -367,7 +367,7 @@ export default function SavedPage() {
                     </span>
                     <Link
                       href={`/business/${item.business.slug}`}
-                      className="inline-flex items-center gap-1 bg-[#006747] hover:bg-[#00523A] text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
+                      className="inline-flex items-center gap-1 bg-[#047857] hover:bg-[#065F46] text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
                     >
                       View Details
                     </Link>

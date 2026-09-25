@@ -57,7 +57,7 @@ export default function MessagesPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <Loader2 className="w-8 h-8 animate-spin text-[#006747]" />
+        <Loader2 className="w-8 h-8 animate-spin text-[#047857]" />
       </div>
     )
   }
@@ -114,7 +114,7 @@ export default function MessagesPage() {
             placeholder="Search messages..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#006747]"
+            className="w-full pl-10 pr-4 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#047857]"
           />
         </div>
       </div>
@@ -126,8 +126,8 @@ export default function MessagesPage() {
             {messages.map((message: any) => (
               <div key={message.id} className="p-6 hover:bg-neutral-50 transition-colors cursor-pointer">
                 <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 bg-[#D1EFE4] rounded-full flex items-center justify-center flex-shrink-0">
-                    <MessageSquare className="w-5 h-5 text-[#006747]" />
+                  <div className="w-10 h-10 bg-[#D1FAE5] rounded-full flex items-center justify-center flex-shrink-0">
+                    <MessageSquare className="w-5 h-5 text-[#047857]" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between">
@@ -151,8 +151,8 @@ export default function MessagesPage() {
                 ? 'When customers send inquiries about your businesses, they will appear here.'
                 : 'Your conversation history will appear here.'}
             </p>
-            <div className="mt-6 p-4 bg-[#D1EFE4]/50 rounded-xl max-w-md mx-auto">
-              <div className="flex items-center gap-3 text-sm text-[#006747]">
+            <div className="mt-6 p-4 bg-[#D1FAE5]/50 rounded-xl max-w-md mx-auto">
+              <div className="flex items-center gap-3 text-sm text-[#047857]">
                 <Clock className="w-5 h-5 flex-shrink-0" />
                 <span>The messaging feature is coming soon! You'll be able to communicate directly with {isBusinessOwner ? 'customers' : 'businesses'}.</span>
               </div>
@@ -165,15 +165,15 @@ export default function MessagesPage() {
       {isBusinessOwner && businesses.length > 0 && (
         <div className="bg-white rounded-xl border border-neutral-200 p-6">
           <h3 className="text-lg font-semibold text-neutral-800 mb-4 flex items-center gap-2">
-            <Building2 className="w-5 h-5 text-[#006747]" />
+            <Building2 className="w-5 h-5 text-[#047857]" />
             Your Businesses
           </h3>
           <p className="text-sm text-neutral-500 mb-4">Messages will be organized by business when available</p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {businesses.map((biz: any) => (
               <div key={biz.id} className="flex items-center gap-3 p-3 bg-neutral-50 rounded-lg">
-                <div className="w-8 h-8 bg-[#D1EFE4] rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Building2 className="w-4 h-4 text-[#006747]" />
+                <div className="w-8 h-8 bg-[#D1FAE5] rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Building2 className="w-4 h-4 text-[#047857]" />
                 </div>
                 <span className="text-sm font-medium text-neutral-700 truncate">{biz.name}</span>
               </div>

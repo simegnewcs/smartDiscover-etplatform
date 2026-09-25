@@ -1,4 +1,4 @@
-import { Star, MapPin, Clock, Phone } from 'lucide-react'
+import { Star, MapPin, Phone } from 'lucide-react'
 
 export default function FeaturedListings() {
   const featuredBusinesses = [
@@ -6,7 +6,7 @@ export default function FeaturedListings() {
       id: 1,
       name: 'Kuriftu Resort & Spa',
       category: 'Hotel',
-      image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400',
+      image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&q=80',
       location: 'Addis Ababa, Bole',
       rating: 4.8,
       reviews: 324,
@@ -18,7 +18,7 @@ export default function FeaturedListings() {
       id: 2,
       name: 'Tomoca Coffee',
       category: 'Café',
-      image: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=400',
+      image: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=600&q=80',
       location: 'Addis Ababa, Piassa',
       rating: 4.6,
       reviews: 189,
@@ -30,7 +30,7 @@ export default function FeaturedListings() {
       id: 3,
       name: 'Yod Abyssinia',
       category: 'Restaurant',
-      image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400',
+      image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&q=80',
       location: 'Addis Ababa, Bole',
       rating: 4.7,
       reviews: 456,
@@ -42,7 +42,7 @@ export default function FeaturedListings() {
       id: 4,
       name: 'Aster Pharmacy',
       category: 'Pharmacy',
-      image: 'https://images.unsplash.com/photo-1585435557343-3b092031d4c1?w=400',
+      image: 'https://images.unsplash.com/photo-1585435557343-3b092031d4c1?w=600&q=80',
       location: 'Addis Ababa, Mekanisa',
       rating: 4.5,
       reviews: 98,
@@ -54,7 +54,7 @@ export default function FeaturedListings() {
       id: 5,
       name: 'Shoa Supermarket',
       category: 'Supermarket',
-      image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=400',
+      image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=600&q=80',
       location: 'Addis Ababa, Bole',
       rating: 4.4,
       reviews: 267,
@@ -66,7 +66,7 @@ export default function FeaturedListings() {
       id: 6,
       name: 'National Museum of Ethiopia',
       category: 'Tourist Attraction',
-      image: 'https://images.unsplash.com/photo-1572004476178-6132bae9b5de?w=400',
+      image: 'https://images.unsplash.com/photo-1572004476178-6132bae9b5de?w=600&q=80',
       location: 'Addis Ababa, Arada',
       rating: 4.9,
       reviews: 523,
@@ -77,78 +77,87 @@ export default function FeaturedListings() {
   ]
 
   return (
-    <div className="py-16 px-4 bg-neutral-50">
-      <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-neutral-800 mb-4">
-            Featured Businesses
-          </h2>
-          <p className="text-lg text-neutral-600">
-            Discover top-rated places in your area
-          </p>
+    <div className="py-24 px-4 bg-neutral-50 relative overflow-hidden">
+      <div className="max-w-7xl mx-auto relative z-10">
+        <div className="flex flex-col md:flex-row justify-between items-end mb-12">
+          <div>
+            <h2 className="text-3xl font-bold text-neutral-800 mb-2">
+              Featured Businesses
+            </h2>
+            <p className="text-neutral-500">
+              Discover the most highly-rated places in your area.
+            </p>
+          </div>
+          <a href="/businesses" className="hidden md:inline-flex text-[#047857] hover:text-[#036246] font-medium mt-4 md:mt-0">
+            View All Top Businesses &rarr;
+          </a>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {featuredBusinesses.map((business) => (
             <div
               key={business.id}
-              className="bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden hover:shadow-md transition-shadow cursor-pointer group"
+              className="group bg-white rounded-xl border border-neutral-200 overflow-hidden hover:shadow-lg hover:border-neutral-300 transition-all duration-300 flex flex-col cursor-pointer"
             >
-              <div className="relative h-48 overflow-hidden">
+              <div className="relative h-60 overflow-hidden bg-neutral-100">
                 <img
                   src={business.image}
                   alt={business.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                 />
-                <div className="absolute top-3 left-3 bg-white px-2 py-1 rounded-full text-xs font-medium text-neutral-700">
-                  {business.category}
+                
+                {/* Badges */}
+                <div className="absolute top-4 left-4">
+                  <div className="bg-white px-3 py-1 rounded-full text-xs font-semibold text-neutral-700 shadow-sm">
+                    {business.category}
+                  </div>
                 </div>
                 {business.isOpen && (
-                  <div className="absolute top-3 right-3 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-medium">
-                    Open Now
+                  <div className="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-xs font-semibold shadow-sm">
+                    Open
                   </div>
                 )}
               </div>
               
-              <div className="p-5">
-                <h3 className="font-semibold text-lg text-neutral-800 mb-2 group-hover:text-[#00523A] transition-colors">
-                  {business.name}
-                </h3>
-                
-                <div className="flex items-center gap-1 mb-2">
-                  <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                  <span className="text-sm font-medium text-neutral-700">
-                    {business.rating}
-                  </span>
-                  <span className="text-sm text-neutral-500">
-                    ({business.reviews} reviews)
-                  </span>
+              <div className="p-6 flex-1 flex flex-col">
+                <div className="flex justify-between items-start mb-2">
+                  <h3 className="font-bold text-xl text-neutral-800 group-hover:text-[#047857] transition-colors line-clamp-1">
+                    {business.name}
+                  </h3>
+                  <div className="flex items-center gap-1 bg-yellow-50 px-2 py-1 rounded-md">
+                    <Star className="w-3.5 h-3.5 fill-yellow-500 text-yellow-500" />
+                    <span className="font-bold text-sm text-neutral-800">{business.rating}</span>
+                  </div>
                 </div>
                 
-                <div className="flex items-center gap-1 text-sm text-neutral-600 mb-2">
-                  <MapPin className="w-4 h-4" />
-                  <span>{business.location}</span>
-                </div>
-                
-                <div className="flex items-center gap-1 text-sm text-neutral-600 mb-3">
-                  <Phone className="w-4 h-4" />
-                  <span>{business.phone}</span>
-                </div>
-                
-                <p className="text-sm text-neutral-600 line-clamp-2">
+                <p className="text-neutral-500 text-sm mb-4 line-clamp-2 flex-1">
                   {business.description}
                 </p>
+                
+                <div className="space-y-2 pt-4 border-t border-neutral-100">
+                  <div className="flex items-center gap-2 text-sm text-neutral-600">
+                    <MapPin className="w-4 h-4 text-neutral-400" />
+                    <span className="font-medium">{business.location}</span>
+                  </div>
+                  
+                  <div className="flex items-center gap-2 text-sm text-neutral-600">
+                    <Phone className="w-4 h-4 text-neutral-400" />
+                    <span className="font-medium">{business.phone}</span>
+                  </div>
+                </div>
               </div>
             </div>
           ))}
         </div>
         
-        <div className="text-center mt-12">
-          <button className="bg-[#006747] text-white px-8 py-3 rounded-xl font-medium hover:bg-[#00523A] transition-colors">
-            View All Businesses
-          </button>
+        {/* Mobile View All */}
+        <div className="text-center mt-8 md:hidden">
+          <a href="/businesses" className="inline-flex text-[#047857] font-medium">
+            View All Top Businesses &rarr;
+          </a>
         </div>
       </div>
     </div>
   )
 }
+

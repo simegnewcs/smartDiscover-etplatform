@@ -30,10 +30,10 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero */}
-      <div className="bg-gradient-to-br from-[#006747] to-[#004D35] py-20 px-4 text-white text-center">
+      <div className="bg-gradient-to-br from-[#047857] to-[#004D35] py-20 px-4 text-white text-center">
         <div className="max-w-3xl mx-auto">
           <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-2 mb-6">
-            <Sparkles className="w-4 h-4 text-[#EEF578]" />
+            <Sparkles className="w-4 h-4 text-[#FBBF24]" />
             <span className="text-sm font-medium">Ethiopia&apos;s #1 Business Directory</span>
           </div>
           <h1 className="text-4xl md:text-5xl font-bold mb-4">About HelloET</h1>
@@ -49,10 +49,10 @@ export default function AboutPage() {
         <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6">
           {stats.map(({ icon: Icon, value, label }) => (
             <div key={label} className="text-center bg-white rounded-2xl p-6 shadow-sm border border-neutral-100">
-              <div className="w-12 h-12 bg-[#D1EFE4] rounded-xl flex items-center justify-center mx-auto mb-3">
-                <Icon className="w-6 h-6 text-[#006747]" />
+              <div className="w-12 h-12 bg-[#D1FAE5] rounded-xl flex items-center justify-center mx-auto mb-3">
+                <Icon className="w-6 h-6 text-[#047857]" />
               </div>
-              <p className="text-3xl font-bold text-[#006747]">{value}</p>
+              <p className="text-3xl font-bold text-[#047857]">{value}</p>
               <p className="text-sm text-neutral-500 mt-1">{label}</p>
             </div>
           ))}
@@ -80,20 +80,20 @@ export default function AboutPage() {
               'All categories — restaurants to healthcare',
             ].map((point) => (
               <li key={point} className="flex items-center gap-3 text-neutral-700">
-                <CheckCircle className="w-5 h-5 text-[#006747] flex-shrink-0" />
+                <CheckCircle className="w-5 h-5 text-[#047857] flex-shrink-0" />
                 {point}
               </li>
             ))}
           </ul>
         </div>
-        <div className="bg-gradient-to-br from-[#D1EFE4] to-[#F5FBF8] rounded-3xl p-8">
+        <div className="bg-gradient-to-br from-[#D1FAE5] to-[#F5FBF8] rounded-3xl p-8">
           <h3 className="text-xl font-bold text-neutral-800 mb-4">Categories We Cover</h3>
           <div className="flex flex-wrap gap-2">
             {categories.map((cat) => (
               <Link
                 key={cat}
                 href={`/businesses?category=${encodeURIComponent(cat)}`}
-                className="bg-white text-[#006747] border border-[#006747]/20 hover:bg-[#006747] hover:text-white px-3 py-1.5 rounded-full text-sm font-medium transition-colors"
+                className="bg-white text-[#047857] border border-[#047857]/20 hover:bg-[#047857] hover:text-white px-3 py-1.5 rounded-full text-sm font-medium transition-colors"
               >
                 {cat}
               </Link>
@@ -105,8 +105,8 @@ export default function AboutPage() {
       {/* Developer */}
       <div className="bg-[#003D2B] text-white py-16 px-4">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="w-16 h-16 bg-[#006747] rounded-2xl flex items-center justify-center mx-auto mb-6">
-            <Globe className="w-8 h-8 text-[#EEF578]" />
+          <div className="w-16 h-16 bg-[#047857] rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <Globe className="w-8 h-8 text-[#FBBF24]" />
           </div>
           <h2 className="text-3xl font-bold mb-3">Developed by Devvoltz Technology PLC</h2>
           <p className="text-white/70 text-lg mb-8 max-w-2xl mx-auto">
@@ -116,9 +116,9 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-2xl mx-auto">
             <a
               href="tel:0940192676"
-              className="flex items-center justify-center gap-3 bg-white/10 hover:bg-[#006747] border border-white/20 rounded-xl px-4 py-4 transition-colors group"
+              className="flex items-center justify-center gap-3 bg-white/10 hover:bg-[#047857] border border-white/20 rounded-xl px-4 py-4 transition-colors group"
             >
-              <Phone className="w-5 h-5 text-[#EEF578]" />
+              <Phone className="w-5 h-5 text-[#FBBF24]" />
               <div className="text-left">
                 <p className="text-white/50 text-xs">Phone</p>
                 <p className="text-white font-semibold">0940192676</p>
@@ -126,16 +126,16 @@ export default function AboutPage() {
             </a>
             <a
               href="mailto:devvoltztech@gmail.com"
-              className="flex items-center justify-center gap-3 bg-white/10 hover:bg-[#006747] border border-white/20 rounded-xl px-4 py-4 transition-colors group"
+              className="flex items-center justify-center gap-3 bg-white/10 hover:bg-[#047857] border border-white/20 rounded-xl px-4 py-4 transition-colors group"
             >
-              <Mail className="w-5 h-5 text-[#EEF578]" />
+              <Mail className="w-5 h-5 text-[#FBBF24]" />
               <div className="text-left">
                 <p className="text-white/50 text-xs">Email</p>
                 <p className="text-white font-semibold text-sm">devvoltztech@gmail.com</p>
               </div>
             </a>
             <div className="flex items-center justify-center gap-3 bg-white/10 border border-white/20 rounded-xl px-4 py-4">
-              <MapPin className="w-5 h-5 text-[#EEF578]" />
+              <MapPin className="w-5 h-5 text-[#FBBF24]" />
               <div className="text-left">
                 <p className="text-white/50 text-xs">Location</p>
                 <p className="text-white font-semibold">Addis Ababa, Ethiopia</p>
@@ -155,13 +155,13 @@ export default function AboutPage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/businesses"
-              className="bg-[#006747] hover:bg-[#00523A] text-white px-8 py-3 rounded-xl font-semibold transition-colors"
+              className="bg-[#047857] hover:bg-[#065F46] text-white px-8 py-3 rounded-xl font-semibold transition-colors"
             >
               Browse Businesses
             </Link>
             <Link
               href="/auth/register"
-              className="border-2 border-[#006747] text-[#006747] hover:bg-[#006747] hover:text-white px-8 py-3 rounded-xl font-semibold transition-colors"
+              className="border-2 border-[#047857] text-[#047857] hover:bg-[#047857] hover:text-white px-8 py-3 rounded-xl font-semibold transition-colors"
             >
               List Your Business
             </Link>

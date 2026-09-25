@@ -2,25 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-
 :root {
-  /* Brand Colors */
-  --brand-green: #006747;
-  --brand-yellow: #EEF578;
-  --brand-mint: #D1EFE4;
+  /* Premium Brand Colors */
+  --brand-green: #047857;
+  --brand-yellow: #FBBF24;
+  --brand-mint: #D1FAE5;
+  --brand-dark: #022C22;
   
-  /* Background */
-  --foreground-rgb: 17, 24, 39;
-  --background-start-rgb: 209, 239, 228;
-  --background-end-rgb: 245, 251, 248;
+  --foreground-rgb: 15, 23, 42;
+  --background-start-rgb: 248, 250, 252;
+  --background-end-rgb: 255, 255, 255;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    --foreground-rgb: 248, 250, 252;
+    --background-start-rgb: 2, 6, 23;
+    --background-end-rgb: 15, 23, 42;
   }
 }
 
@@ -32,112 +30,75 @@ body {
       rgb(var(--background-end-rgb))
     );
   min-height: 100vh;
+  scroll-behavior: smooth;
 }
 
-/* Brand Color Utilities */
-@layer utilities {
-  .bg-brand-green { background-color: var(--brand-green); }
-  .bg-brand-yellow { background-color: var(--brand-yellow); }
-  .bg-brand-mint { background-color: var(--brand-mint); }
-  .text-brand-green { color: var(--brand-green); }
-  .text-brand-yellow { color: var(--brand-yellow); }
-  .border-brand-green { border-color: var(--brand-green); }
+/* Glassmorphism Utilities */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-/* Custom Animations for Hero Section */
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes progress {
-  from {
-    transform: scaleX(0);
-  }
-  to {
-    transform: scaleX(1);
-  }
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-.animate-slideUp {
-  animation: slideUp 0.8s ease-out forwards;
-}
-
-.animate-fadeIn {
-  animation: fadeIn 0.6s ease-out forwards;
-}
-
-.animate-float {
-  animation: float 3s ease-in-out infinite;
-}
-
-.animation-delay-200 {
-  animation-delay: 200ms;
-}
-
-.animation-delay-300 {
-  animation-delay: 300ms;
-}
-
-.animation-delay-400 {
-  animation-delay: 400ms;
-}
-
-.animation-delay-500 {
-  animation-delay: 500ms;
-}
-
-.animation-delay-600 {
-  animation-delay: 600ms;
-}
-
-.animation-delay-1000 {
-  animation-delay: 1000ms;
-}
-
-.duration-1500 {
-  transition-duration: 1500ms;
+.glass-dark {
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* Custom Scrollbar */
-.scrollbar-thin {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+::-webkit-scrollbar {
+  width: 8px;
 }
 
-.scrollbar-thin::-webkit-scrollbar {
-  width: 4px;
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.02);
 }
 
-.scrollbar-thin::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.scrollbar-thin::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 255, 255, 0.2);
+::-webkit-scrollbar-thumb {
+  background-color: rgba(4, 120, 87, 0.3);
   border-radius: 20px;
 }
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(4, 120, 87, 0.6);
+}
+
+/* Base text rendering optimizations */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Smooth images */
+img {
+  content-visibility: auto;
+}
+
+/* Custom Animations for Hero Section - Retained */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+.animate-slideUp { animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.animate-fadeIn { animation: fadeIn 0.6s ease-out forwards; }
+.animation-delay-200 { animation-delay: 200ms; }
+.animation-delay-300 { animation-delay: 300ms; }
+.animation-delay-400 { animation-delay: 400ms; }
+.animation-delay-500 { animation-delay: 500ms; }
+.animation-delay-600 { animation-delay: 600ms; }
+.animation-delay-1000 { animation-delay: 1000ms; }
+.duration-1500 { transition-duration: 1500ms; }

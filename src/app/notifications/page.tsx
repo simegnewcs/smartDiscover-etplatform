@@ -92,14 +92,14 @@ export default function NotificationsPage() {
     return (
       <div className="min-h-screen bg-neutral-50 flex items-center justify-center p-4">
         <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-8 max-w-md w-full text-center">
-          <div className="w-16 h-16 bg-[#D1EFE4] rounded-full flex items-center justify-center mx-auto mb-4">
-            <Bell className="w-8 h-8 text-[#006747]" />
+          <div className="w-16 h-16 bg-[#D1FAE5] rounded-full flex items-center justify-center mx-auto mb-4">
+            <Bell className="w-8 h-8 text-[#047857]" />
           </div>
           <h2 className="text-xl font-bold text-neutral-800 mb-2">Sign in to see notifications</h2>
           <p className="text-neutral-600 mb-6">Stay updated on reviews and activity</p>
           <Link
             href="/auth/login?callbackUrl=/notifications"
-            className="inline-flex items-center gap-2 bg-[#006747] hover:bg-[#00523A] text-white px-6 py-3 rounded-xl font-semibold transition-colors"
+            className="inline-flex items-center gap-2 bg-[#047857] hover:bg-[#065F46] text-white px-6 py-3 rounded-xl font-semibold transition-colors"
           >
             Sign In
           </Link>
@@ -111,7 +111,7 @@ export default function NotificationsPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-[#006747]" />
+        <Loader2 className="w-8 h-8 animate-spin text-[#047857]" />
       </div>
     )
   }
@@ -127,7 +127,7 @@ export default function NotificationsPage() {
             </Link>
             <div>
               <h1 className="text-2xl font-bold text-neutral-800 flex items-center gap-2">
-                <Bell className="w-6 h-6 text-[#006747]" />
+                <Bell className="w-6 h-6 text-[#047857]" />
                 Notifications
                 {unreadCount > 0 && (
                   <span className="text-sm bg-red-500 text-white px-2 py-0.5 rounded-full font-medium">
@@ -144,7 +144,7 @@ export default function NotificationsPage() {
               onClick={() => setFilter('all')}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                 filter === 'all'
-                  ? 'bg-[#006747] text-white'
+                  ? 'bg-[#047857] text-white'
                   : 'bg-white border border-neutral-200 text-neutral-600 hover:bg-neutral-50'
               }`}
             >
@@ -154,7 +154,7 @@ export default function NotificationsPage() {
               onClick={() => setFilter('unread')}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                 filter === 'unread'
-                  ? 'bg-[#006747] text-white'
+                  ? 'bg-[#047857] text-white'
                   : 'bg-white border border-neutral-200 text-neutral-600 hover:bg-neutral-50'
               }`}
             >
@@ -166,8 +166,8 @@ export default function NotificationsPage() {
         {/* Empty State */}
         {notifications.length === 0 && (
           <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-12 text-center">
-            <div className="w-20 h-20 bg-[#D1EFE4] rounded-full flex items-center justify-center mx-auto mb-4">
-              <Bell className="w-10 h-10 text-[#006747]" />
+            <div className="w-20 h-20 bg-[#D1FAE5] rounded-full flex items-center justify-center mx-auto mb-4">
+              <Bell className="w-10 h-10 text-[#047857]" />
             </div>
             <h3 className="text-xl font-bold text-neutral-800 mb-2">No notifications yet</h3>
             <p className="text-neutral-600 mb-6">You'll receive notifications for reviews and activity</p>
@@ -189,7 +189,7 @@ export default function NotificationsPage() {
               <div
                 key={notification.id}
                 className={`bg-white rounded-xl border p-4 hover:shadow-sm transition-shadow ${
-                  !notification.read ? 'border-[#006747]/30 bg-[#D1EFE4]/10' : 'border-neutral-200'
+                  !notification.read ? 'border-[#047857]/30 bg-[#D1FAE5]/10' : 'border-neutral-200'
                 }`}
               >
                 <div className="flex items-start gap-3">
@@ -203,7 +203,7 @@ export default function NotificationsPage() {
                         <h4 className={`font-medium ${!notification.read ? 'text-neutral-900' : 'text-neutral-700'}`}>
                           {notification.title}
                           {!notification.read && (
-                            <span className="inline-block w-2 h-2 bg-[#006747] rounded-full ml-2 align-middle" />
+                            <span className="inline-block w-2 h-2 bg-[#047857] rounded-full ml-2 align-middle" />
                           )}
                         </h4>
                       </div>
@@ -228,7 +228,7 @@ export default function NotificationsPage() {
                     {notification.businessSlug && (
                       <Link
                         href={`/business/${notification.businessSlug}`}
-                        className="inline-flex items-center gap-1 text-sm text-[#006747] hover:underline mt-2"
+                        className="inline-flex items-center gap-1 text-sm text-[#047857] hover:underline mt-2"
                       >
                         View Business <ExternalLink className="w-3 h-3" />
                       </Link>

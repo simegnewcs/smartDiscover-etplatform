@@ -101,7 +101,7 @@ export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
           {/* Header */}
           <div className="flex items-center justify-between p-4 border-b border-neutral-200">
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-[#006747] rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-[#047857] rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-lg">H</span>
               </div>
               <span className="text-xl font-bold text-neutral-800">HelloET</span>
@@ -121,7 +121,7 @@ export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
               <Link
                 href="/"
                 onClick={onClose}
-                className="flex items-center space-x-3 px-3 py-2.5 rounded-lg bg-[#D1EFE4] text-[#006747] border-l-2 border-[#006747]"
+                className="flex items-center space-x-3 px-3 py-2.5 rounded-lg bg-[#D1FAE5] text-[#047857] border-l-2 border-[#047857]"
               >
                 <Home className="w-5 h-5" />
                 <span className="font-medium">Home</span>
@@ -246,7 +246,7 @@ export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
               <Link
                 href="/dashboard/listings/new"
                 onClick={onClose}
-                className="w-full flex items-center justify-center space-x-2 bg-[#006747] hover:bg-[#00523A] text-white px-4 py-3 rounded-lg transition-colors"
+                className="w-full flex items-center justify-center space-x-2 bg-[#047857] hover:bg-[#065F46] text-white px-4 py-3 rounded-lg transition-colors"
               >
                 <Plus className="w-5 h-5" />
                 <span className="font-medium">Add Your Business</span>

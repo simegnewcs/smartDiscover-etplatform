@@ -215,7 +215,7 @@ export default function SettingsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <Loader2 className="w-8 h-8 animate-spin text-[#006747]" />
+        <Loader2 className="w-8 h-8 animate-spin text-[#047857]" />
       </div>
     )
   }
@@ -231,7 +231,7 @@ export default function SettingsPage() {
       {/* Profile Photo Section */}
       <div className="bg-white rounded-xl border border-neutral-200 p-6">
         <h3 className="text-lg font-semibold text-neutral-800 mb-4 flex items-center gap-2">
-          <Camera className="w-5 h-5 text-[#006747]" />
+          <Camera className="w-5 h-5 text-[#047857]" />
           Profile Photo
         </h3>
         <div className="flex items-center gap-6">
@@ -240,10 +240,10 @@ export default function SettingsPage() {
               <img
                 src={profileImage}
                 alt="Profile"
-                className="w-24 h-24 rounded-full object-cover border-4 border-[#D1EFE4]"
+                className="w-24 h-24 rounded-full object-cover border-4 border-[#D1FAE5]"
               />
             ) : (
-              <div className="w-24 h-24 bg-[#006747] rounded-full flex items-center justify-center border-4 border-[#D1EFE4]">
+              <div className="w-24 h-24 bg-[#047857] rounded-full flex items-center justify-center border-4 border-[#D1FAE5]">
                 <span className="text-white font-bold text-2xl">
                   {name?.split(' ').map(n => n[0]).join('').toUpperCase() || 'U'}
                 </span>
@@ -260,7 +260,7 @@ export default function SettingsPage() {
               <button
                 onClick={() => fileInputRef.current?.click()}
                 disabled={uploadingImage}
-                className="flex items-center gap-2 px-4 py-2 bg-[#006747] hover:bg-[#00523A] text-white rounded-lg transition-colors text-sm disabled:opacity-50"
+                className="flex items-center gap-2 px-4 py-2 bg-[#047857] hover:bg-[#065F46] text-white rounded-lg transition-colors text-sm disabled:opacity-50"
               >
                 <ImagePlus className="w-4 h-4" />
                 {profileImage ? 'Change Photo' : 'Upload Photo'}
@@ -294,7 +294,7 @@ export default function SettingsPage() {
           {profileImage ? (
             <img src={profileImage} alt="Profile" className="w-14 h-14 rounded-full object-cover" />
           ) : (
-            <div className="w-14 h-14 bg-[#006747] rounded-full flex items-center justify-center">
+            <div className="w-14 h-14 bg-[#047857] rounded-full flex items-center justify-center">
               <span className="text-white font-bold text-lg">
                 {name?.split(' ').map(n => n[0]).join('').toUpperCase() || 'U'}
               </span>
@@ -319,7 +319,7 @@ export default function SettingsPage() {
       {/* Profile Form */}
       <div className="bg-white rounded-xl border border-neutral-200 p-6">
         <h3 className="text-lg font-semibold text-neutral-800 mb-4 flex items-center gap-2">
-          <User className="w-5 h-5 text-[#006747]" />
+          <User className="w-5 h-5 text-[#047857]" />
           Profile Information
         </h3>
 
@@ -346,7 +346,7 @@ export default function SettingsPage() {
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#006747] focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2.5 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#047857] focus:border-transparent"
                 required
               />
             </div>
@@ -360,7 +360,7 @@ export default function SettingsPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#006747] focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2.5 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#047857] focus:border-transparent"
                 required
               />
             </div>
@@ -370,7 +370,7 @@ export default function SettingsPage() {
             <button
               type="submit"
               disabled={saving}
-              className="flex items-center gap-2 bg-[#006747] hover:bg-[#00523A] text-white px-6 py-2.5 rounded-lg transition-colors disabled:opacity-50"
+              className="flex items-center gap-2 bg-[#047857] hover:bg-[#065F46] text-white px-6 py-2.5 rounded-lg transition-colors disabled:opacity-50"
             >
               {saving ? (
                 <>
@@ -391,7 +391,7 @@ export default function SettingsPage() {
       {/* Password Form */}
       <div className="bg-white rounded-xl border border-neutral-200 p-6">
         <h3 className="text-lg font-semibold text-neutral-800 mb-4 flex items-center gap-2">
-          <Lock className="w-5 h-5 text-[#006747]" />
+          <Lock className="w-5 h-5 text-[#047857]" />
           Change Password
         </h3>
 
@@ -418,7 +418,7 @@ export default function SettingsPage() {
                 type="password"
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#006747] focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2.5 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#047857] focus:border-transparent"
                 required
               />
             </div>
@@ -432,7 +432,7 @@ export default function SettingsPage() {
                 type="password"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#006747] focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2.5 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#047857] focus:border-transparent"
                 placeholder="At least 6 characters"
                 required
               />
@@ -447,7 +447,7 @@ export default function SettingsPage() {
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#006747] focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2.5 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#047857] focus:border-transparent"
                 required
               />
             </div>
@@ -457,7 +457,7 @@ export default function SettingsPage() {
             <button
               type="submit"
               disabled={passwordSaving}
-              className="flex items-center gap-2 bg-[#006747] hover:bg-[#00523A] text-white px-6 py-2.5 rounded-lg transition-colors disabled:opacity-50"
+              className="flex items-center gap-2 bg-[#047857] hover:bg-[#065F46] text-white px-6 py-2.5 rounded-lg transition-colors disabled:opacity-50"
             >
               {passwordSaving ? (
                 <>

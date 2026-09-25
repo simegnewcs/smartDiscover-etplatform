@@ -75,17 +75,17 @@ function LoginForm() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#D1EFE4] to-[#F5FBF8] py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-[#D1FAE5] to-[#F5FBF8] py-12 px-4">
       <div className="max-w-md mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center space-x-2 text-[#006747] hover:text-[#00523A] transition-colors mb-4">
+          <Link href="/" className="inline-flex items-center space-x-2 text-[#047857] hover:text-[#065F46] transition-colors mb-4">
             <ArrowLeft className="w-5 h-5" />
             <span>Back to Home</span>
           </Link>
           
           <div className="flex items-center justify-center space-x-3 mb-4">
-            <div className="w-12 h-12 bg-[#006747] rounded-lg flex items-center justify-center">
+            <div className="w-12 h-12 bg-[#047857] rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-xl">H</span>
             </div>
             <div>
@@ -129,7 +129,7 @@ function LoginForm() {
                   value={formData.email}
                   onChange={handleInputChange}
                   required
-                  className="w-full pl-10 pr-4 py-3 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#006747]"
+                  className="w-full pl-10 pr-4 py-3 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#047857]"
                   placeholder="your@email.com"
                 />
               </div>
@@ -147,7 +147,7 @@ function LoginForm() {
                   value={formData.password}
                   onChange={handleInputChange}
                   required
-                  className="w-full pl-10 pr-12 py-3 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#006747]"
+                  className="w-full pl-10 pr-12 py-3 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#047857]"
                   placeholder="Enter your password"
                 />
                 <button
@@ -165,13 +165,13 @@ function LoginForm() {
                 <input
                   type="checkbox"
                   id="remember"
-                  className="w-4 h-4 text-[#006747] border-neutral-300 rounded focus:ring-[#006747]"
+                  className="w-4 h-4 text-[#047857] border-neutral-300 rounded focus:ring-[#047857]"
                 />
                 <label htmlFor="remember" className="ml-2 text-sm text-neutral-600">
                   Remember me
                 </label>
               </div>
-              <Link href="/auth/forgot-password" className="text-sm text-[#006747] hover:text-[#00523A]">
+              <Link href="/auth/forgot-password" className="text-sm text-[#047857] hover:text-[#065F46]">
                 Forgot password?
               </Link>
             </div>
@@ -179,7 +179,7 @@ function LoginForm() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-[#006747] hover:bg-[#00523A] text-white px-6 py-3 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-[#047857] hover:bg-[#065F46] text-white px-6 py-3 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? 'Signing In...' : 'Sign In'}
             </button>
@@ -188,7 +188,7 @@ function LoginForm() {
           <div className="mt-6 text-center">
             <p className="text-sm text-neutral-600">
               Don't have an account?{' '}
-              <Link href="/auth/register" className="text-[#006747] hover:text-[#00523A] font-medium">
+              <Link href="/auth/register" className="text-[#047857] hover:text-[#065F46] font-medium">
                 Sign up here
               </Link>
             </p>
@@ -199,7 +199,7 @@ function LoginForm() {
         <div className="mt-8 grid grid-cols-1 gap-4">
           <div className="bg-white rounded-lg border border-neutral-200 p-4">
             <div className="flex items-center space-x-3">
-              <User className="w-8 h-8 text-[#006747]" />
+              <User className="w-8 h-8 text-[#047857]" />
               <div>
                 <h4 className="font-semibold text-neutral-800">Personal Account</h4>
                 <p className="text-sm text-neutral-600">Browse businesses and leave reviews</p>
@@ -209,7 +209,7 @@ function LoginForm() {
           
           <div className="bg-white rounded-lg border border-neutral-200 p-4">
             <div className="flex items-center space-x-3">
-              <Building2 className="w-8 h-8 text-[#006747]" />
+              <Building2 className="w-8 h-8 text-[#047857]" />
               <div>
                 <h4 className="font-semibold text-neutral-800">Business Account</h4>
                 <p className="text-sm text-neutral-600">Manage your business listings</p>
@@ -225,9 +225,9 @@ function LoginForm() {
 export default function LoginPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-gradient-to-br from-[#D1EFE4] to-[#F5FBF8] py-12 px-4">
+      <div className="min-h-screen bg-gradient-to-br from-[#D1FAE5] to-[#F5FBF8] py-12 px-4">
         <div className="max-w-md mx-auto text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#006747] mx-auto"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#047857] mx-auto"></div>
           <p className="mt-4 text-neutral-600">Loading...</p>
         </div>
       </div>

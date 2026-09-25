@@ -90,7 +90,7 @@ export default function AnalyticsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <Loader2 className="w-8 h-8 animate-spin text-[#006747]" />
+        <Loader2 className="w-8 h-8 animate-spin text-[#047857]" />
       </div>
     )
   }
@@ -107,8 +107,8 @@ export default function AnalyticsPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-white rounded-xl border border-neutral-200 p-6">
           <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 bg-[#D1EFE4] rounded-lg flex items-center justify-center">
-              <Building2 className="w-5 h-5 text-[#006747]" />
+            <div className="w-10 h-10 bg-[#D1FAE5] rounded-lg flex items-center justify-center">
+              <Building2 className="w-5 h-5 text-[#047857]" />
             </div>
           </div>
           <div className="text-2xl font-bold text-neutral-800">{overview.totalBusinesses}</div>
@@ -150,7 +150,7 @@ export default function AnalyticsPage() {
         {/* Review Trend (Last 6 Months) */}
         <div className="bg-white rounded-xl border border-neutral-200 p-6">
           <h3 className="text-lg font-semibold text-neutral-800 mb-1 flex items-center gap-2">
-            <BarChart3 className="w-5 h-5 text-[#006747]" />
+            <BarChart3 className="w-5 h-5 text-[#047857]" />
             Reviews Over Time
           </h3>
           <p className="text-sm text-neutral-500 mb-6">Last 6 months</p>
@@ -163,7 +163,7 @@ export default function AnalyticsPage() {
                     <span className="text-xs font-medium text-neutral-700">{item.reviews}</span>
                     <div className="w-full bg-neutral-100 rounded-t-lg relative" style={{ height: '100%' }}>
                       <div
-                        className="absolute bottom-0 w-full bg-[#006747] rounded-t-lg transition-all duration-500"
+                        className="absolute bottom-0 w-full bg-[#047857] rounded-t-lg transition-all duration-500"
                         style={{ height: `${(item.reviews / maxTrendReviews) * 100}%`, minHeight: item.reviews > 0 ? '8px' : '0px' }}
                       />
                     </div>
@@ -230,14 +230,14 @@ export default function AnalyticsPage() {
         <div className="flex items-center justify-between mb-4">
           <div>
             <h3 className="text-lg font-semibold text-neutral-800 flex items-center gap-2">
-              <TrendingUp className="w-5 h-5 text-[#006747]" />
+              <TrendingUp className="w-5 h-5 text-[#047857]" />
               Business Performance
             </h3>
             <p className="text-sm text-neutral-500">Ranked by average rating</p>
           </div>
           <Link
             href="/dashboard/listings"
-            className="text-sm text-[#006747] hover:text-[#00523A] flex items-center gap-1"
+            className="text-sm text-[#047857] hover:text-[#065F46] flex items-center gap-1"
           >
             View All <ArrowUpRight className="w-3 h-3" />
           </Link>
@@ -283,7 +283,7 @@ export default function AnalyticsPage() {
                         <div>
                           <Link
                             href={`/business/${biz.slug}`}
-                            className="font-medium text-neutral-800 hover:text-[#006747] transition-colors"
+                            className="font-medium text-neutral-800 hover:text-[#047857] transition-colors"
                           >
                             {biz.name}
                           </Link>
@@ -331,7 +331,7 @@ export default function AnalyticsPage() {
       {categoryBreakdown.length > 0 && (
         <div className="bg-white rounded-xl border border-neutral-200 p-6">
           <h3 className="text-lg font-semibold text-neutral-800 mb-4 flex items-center gap-2">
-            <Tag className="w-5 h-5 text-[#006747]" />
+            <Tag className="w-5 h-5 text-[#047857]" />
             Category Breakdown
           </h3>
 

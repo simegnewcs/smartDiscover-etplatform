@@ -67,7 +67,7 @@ function UserDashboard({ session }: { session: any }) {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <Loader2 className="w-8 h-8 text-[#006747] animate-spin" />
+        <Loader2 className="w-8 h-8 text-[#047857] animate-spin" />
         <span className="ml-2 text-neutral-600">Loading your dashboard...</span>
       </div>
     )
@@ -83,7 +83,7 @@ function UserDashboard({ session }: { session: any }) {
         </div>
         <Link 
           href="/businesses"
-          className="flex items-center gap-2 bg-[#006747] hover:bg-[#00523A] text-white px-4 py-2 rounded-lg transition-colors"
+          className="flex items-center gap-2 bg-[#047857] hover:bg-[#065F46] text-white px-4 py-2 rounded-lg transition-colors"
         >
           <Search className="w-4 h-4" />
           Explore Businesses
@@ -94,8 +94,8 @@ function UserDashboard({ session }: { session: any }) {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="bg-white rounded-xl shadow-sm border border-neutral-200 p-6">
           <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-[#D1EFE4] rounded-lg flex items-center justify-center">
-              <Star className="w-6 h-6 text-[#006747]" />
+            <div className="w-12 h-12 bg-[#D1FAE5] rounded-lg flex items-center justify-center">
+              <Star className="w-6 h-6 text-[#047857]" />
             </div>
           </div>
           <div className="text-2xl font-bold text-neutral-800">{userStats.totalReviews}</div>
@@ -104,8 +104,8 @@ function UserDashboard({ session }: { session: any }) {
 
         <div className="bg-white rounded-xl shadow-sm border border-neutral-200 p-6">
           <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-[#EEF578] rounded-lg flex items-center justify-center">
-              <Heart className="w-6 h-6 text-[#006747]" />
+            <div className="w-12 h-12 bg-[#FBBF24] rounded-lg flex items-center justify-center">
+              <Heart className="w-6 h-6 text-[#047857]" />
             </div>
           </div>
           <div className="text-2xl font-bold text-neutral-800">{userStats.savedBusinesses}</div>
@@ -114,8 +114,8 @@ function UserDashboard({ session }: { session: any }) {
 
         <div className="bg-white rounded-xl shadow-sm border border-neutral-200 p-6">
           <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-[#D1EFE4] rounded-lg flex items-center justify-center">
-              <History className="w-6 h-6 text-[#006747]" />
+            <div className="w-12 h-12 bg-[#D1FAE5] rounded-lg flex items-center justify-center">
+              <History className="w-6 h-6 text-[#047857]" />
             </div>
           </div>
           <div className="text-2xl font-bold text-neutral-800">{userStats.recentSearches}</div>
@@ -124,8 +124,8 @@ function UserDashboard({ session }: { session: any }) {
 
         <div className="bg-white rounded-xl shadow-sm border border-neutral-200 p-6">
           <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-[#EEF578] rounded-lg flex items-center justify-center">
-              <Award className="w-6 h-6 text-[#006747]" />
+            <div className="w-12 h-12 bg-[#FBBF24] rounded-lg flex items-center justify-center">
+              <Award className="w-6 h-6 text-[#047857]" />
             </div>
           </div>
           <div className="text-2xl font-bold text-neutral-800">{userStats.memberLevel}</div>
@@ -138,7 +138,7 @@ function UserDashboard({ session }: { session: any }) {
         <div className="bg-white rounded-xl shadow-sm border border-neutral-200 p-6">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-neutral-800">My Reviews</h3>
-            <Link href="/my-reviews" className="text-sm text-[#006747] hover:text-[#00523A] transition-colors">
+            <Link href="/my-reviews" className="text-sm text-[#047857] hover:text-[#065F46] transition-colors">
               View All
             </Link>
           </div>
@@ -149,7 +149,7 @@ function UserDashboard({ session }: { session: any }) {
               <p className="text-neutral-600 mb-3">No reviews yet</p>
               <Link 
                 href="/businesses"
-                className="inline-flex items-center gap-2 bg-[#006747] hover:bg-[#00523A] text-white px-4 py-2 rounded-lg transition-colors"
+                className="inline-flex items-center gap-2 bg-[#047857] hover:bg-[#065F46] text-white px-4 py-2 rounded-lg transition-colors"
               >
                 <Search className="w-4 h-4" />
                 Find Businesses to Review
@@ -169,7 +169,7 @@ function UserDashboard({ session }: { session: any }) {
                   </div>
                   <p className="text-sm text-neutral-700 line-clamp-2">{review.comment || 'No comment'}</p>
                   <div className="flex items-center justify-between mt-2">
-                    <Link href={`/business/${review.business?.slug || ''}`} className="text-xs text-[#006747] hover:underline">{review.business?.name || 'Unknown Business'}</Link>
+                    <Link href={`/business/${review.business?.slug || ''}`} className="text-xs text-[#047857] hover:underline">{review.business?.name || 'Unknown Business'}</Link>
                     <span className="text-xs text-neutral-400">
                       {new Date(review.createdAt).toLocaleDateString()}
                     </span>
@@ -181,12 +181,12 @@ function UserDashboard({ session }: { session: any }) {
         </div>
 
         {/* Quick Actions */}
-        <div className="bg-gradient-to-r from-[#D1EFE4] to-white rounded-xl shadow-sm border border-[#D1EFE4] p-6">
+        <div className="bg-gradient-to-r from-[#D1FAE5] to-white rounded-xl shadow-sm border border-[#D1FAE5] p-6">
           <h3 className="text-lg font-semibold text-neutral-800 mb-4">Quick Actions</h3>
           <div className="grid grid-cols-1 gap-4">
             <Link href="/businesses" className="flex items-center space-x-3 p-4 bg-white border border-neutral-200 rounded-lg hover:shadow-md transition-all">
-              <div className="w-10 h-10 bg-[#D1EFE4] rounded-lg flex items-center justify-center">
-                <Search className="w-5 h-5 text-[#006747]" />
+              <div className="w-10 h-10 bg-[#D1FAE5] rounded-lg flex items-center justify-center">
+                <Search className="w-5 h-5 text-[#047857]" />
               </div>
               <div className="text-left">
                 <div className="font-medium text-neutral-800">Find Businesses</div>
@@ -195,8 +195,8 @@ function UserDashboard({ session }: { session: any }) {
             </Link>
             
             <Link href="/saved" className="flex items-center space-x-3 p-4 bg-white border border-neutral-200 rounded-lg hover:shadow-md transition-all">
-              <div className="w-10 h-10 bg-[#EEF578] rounded-lg flex items-center justify-center">
-                <Bookmark className="w-5 h-5 text-[#006747]" />
+              <div className="w-10 h-10 bg-[#FBBF24] rounded-lg flex items-center justify-center">
+                <Bookmark className="w-5 h-5 text-[#047857]" />
               </div>
               <div className="text-left">
                 <div className="font-medium text-neutral-800">Saved Places</div>
@@ -205,8 +205,8 @@ function UserDashboard({ session }: { session: any }) {
             </Link>
             
             <Link href="/profile" className="flex items-center space-x-3 p-4 bg-white border border-neutral-200 rounded-lg hover:shadow-md transition-all">
-              <div className="w-10 h-10 bg-[#D1EFE4] rounded-lg flex items-center justify-center">
-                <Settings className="w-5 h-5 text-[#006747]" />
+              <div className="w-10 h-10 bg-[#D1FAE5] rounded-lg flex items-center justify-center">
+                <Settings className="w-5 h-5 text-[#047857]" />
               </div>
               <div className="text-left">
                 <div className="font-medium text-neutral-800">Profile Settings</div>
@@ -269,7 +269,7 @@ function BusinessOwnerDashboard({ session }: { session: any }) {
       change: 'Total',
       changeType: 'neutral' as const,
       icon: Building2,
-      color: 'bg-[#006747]',
+      color: 'bg-[#047857]',
       href: '/dashboard/listings'
     },
     {
@@ -309,7 +309,7 @@ function BusinessOwnerDashboard({ session }: { session: any }) {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <Loader2 className="w-8 h-8 text-[#006747] animate-spin" />
+        <Loader2 className="w-8 h-8 text-[#047857] animate-spin" />
         <span className="ml-2 text-neutral-600">Loading dashboard...</span>
       </div>
     )
@@ -325,7 +325,7 @@ function BusinessOwnerDashboard({ session }: { session: any }) {
         </div>
         <Link 
           href="/dashboard/businesses/new"
-          className="flex items-center gap-2 bg-[#006747] hover:bg-[#00523A] text-white px-4 py-2 rounded-lg transition-colors"
+          className="flex items-center gap-2 bg-[#047857] hover:bg-[#065F46] text-white px-4 py-2 rounded-lg transition-colors"
         >
           <Plus className="w-4 h-4" />
           Add Business
@@ -368,7 +368,7 @@ function BusinessOwnerDashboard({ session }: { session: any }) {
         <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-neutral-200 p-6">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-neutral-800">My Businesses</h3>
-            <Link href="/dashboard/listings" className="text-sm text-[#006747] hover:text-[#00523A] transition-colors flex items-center gap-1">
+            <Link href="/dashboard/listings" className="text-sm text-[#047857] hover:text-[#065F46] transition-colors flex items-center gap-1">
               View All <ArrowUpRight className="w-3 h-3" />
             </Link>
           </div>
@@ -379,7 +379,7 @@ function BusinessOwnerDashboard({ session }: { session: any }) {
               <p className="text-neutral-600 mb-3">No businesses yet</p>
               <Link 
                 href="/dashboard/businesses/new"
-                className="inline-flex items-center gap-2 bg-[#006747] hover:bg-[#00523A] text-white px-4 py-2 rounded-lg transition-colors"
+                className="inline-flex items-center gap-2 bg-[#047857] hover:bg-[#065F46] text-white px-4 py-2 rounded-lg transition-colors"
               >
                 <Plus className="w-4 h-4" />
                 Add Your First Business
@@ -465,7 +465,7 @@ function BusinessOwnerDashboard({ session }: { session: any }) {
                     </span>
                   </div>
                   {review.business && (
-                    <Link href={`/business/${review.business.slug}`} className="text-xs text-[#006747] hover:underline mt-1 inline-block">
+                    <Link href={`/business/${review.business.slug}`} className="text-xs text-[#047857] hover:underline mt-1 inline-block">
                       {review.business.name}
                     </Link>
                   )}
@@ -477,12 +477,12 @@ function BusinessOwnerDashboard({ session }: { session: any }) {
       </div>
 
       {/* Quick Actions */}
-      <div className="bg-gradient-to-r from-[#D1EFE4] to-white rounded-xl shadow-sm border border-[#D1EFE4] p-6">
+      <div className="bg-gradient-to-r from-[#D1FAE5] to-white rounded-xl shadow-sm border border-[#D1FAE5] p-6">
         <h3 className="text-lg font-semibold text-neutral-800 mb-4">Quick Actions</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Link href="/dashboard/businesses/new" className="flex items-center space-x-3 p-4 bg-white border border-neutral-200 rounded-lg hover:shadow-md transition-all">
-            <div className="w-10 h-10 bg-[#D1EFE4] rounded-lg flex items-center justify-center">
-              <Building2 className="w-5 h-5 text-[#006747]" />
+            <div className="w-10 h-10 bg-[#D1FAE5] rounded-lg flex items-center justify-center">
+              <Building2 className="w-5 h-5 text-[#047857]" />
             </div>
             <div className="text-left">
               <div className="font-medium text-neutral-800">Add New Listing</div>
@@ -520,7 +520,7 @@ export default function DashboardOverview() {
   if (status === 'loading') {
     return (
       <div className="flex items-center justify-center h-64">
-        <Loader2 className="w-8 h-8 text-[#006747] animate-spin" />
+        <Loader2 className="w-8 h-8 text-[#047857] animate-spin" />
         <span className="ml-2 text-neutral-600">Loading...</span>
       </div>
     )

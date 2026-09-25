@@ -90,7 +90,7 @@ export default function AdminUsersPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-white flex items-center gap-2">
-          <Users className="w-6 h-6 text-[#EEF578]" /> Users
+          <Users className="w-6 h-6 text-[#FBBF24]" /> Users
         </h1>
         <p className="text-neutral-400 mt-1">{total} total users</p>
       </div>
@@ -104,13 +104,13 @@ export default function AdminUsersPage() {
             placeholder="Search by name or email..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 bg-neutral-900 border border-neutral-700 rounded-lg text-white placeholder-neutral-500 focus:outline-none focus:border-[#EEF578]/50 text-sm"
+            className="w-full pl-10 pr-4 py-2.5 bg-neutral-900 border border-neutral-700 rounded-lg text-white placeholder-neutral-500 focus:outline-none focus:border-[#FBBF24]/50 text-sm"
           />
         </div>
         <select
           value={roleFilter}
           onChange={e => { setRoleFilter(e.target.value); setPage(1) }}
-          className="px-3 py-2.5 bg-neutral-900 border border-neutral-700 rounded-lg text-white focus:outline-none focus:border-[#EEF578]/50 text-sm"
+          className="px-3 py-2.5 bg-neutral-900 border border-neutral-700 rounded-lg text-white focus:outline-none focus:border-[#FBBF24]/50 text-sm"
         >
           <option value="">All Roles</option>
           <option value="USER">User</option>
@@ -226,7 +226,7 @@ export default function AdminUsersPage() {
             <select
               value={newRole}
               onChange={e => setNewRole(e.target.value)}
-              className="w-full px-3 py-2.5 bg-neutral-800 border border-neutral-600 rounded-lg text-white focus:outline-none focus:border-[#EEF578]/50 mb-4"
+              className="w-full px-3 py-2.5 bg-neutral-800 border border-neutral-600 rounded-lg text-white focus:outline-none focus:border-[#FBBF24]/50 mb-4"
             >
               <option value="USER">USER</option>
               <option value="BUSINESS_OWNER">BUSINESS_OWNER</option>
@@ -239,7 +239,7 @@ export default function AdminUsersPage() {
               <button
                 onClick={handleRoleSave}
                 disabled={saving}
-                className="flex-1 px-4 py-2 rounded-lg bg-[#EEF578] text-neutral-900 hover:bg-[#d8dc5e] font-medium transition-colors text-sm disabled:opacity-60"
+                className="flex-1 px-4 py-2 rounded-lg bg-[#FBBF24] text-neutral-900 hover:bg-[#d8dc5e] font-medium transition-colors text-sm disabled:opacity-60"
               >
                 {saving ? 'Saving...' : 'Save'}
               </button>

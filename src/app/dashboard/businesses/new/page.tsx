@@ -250,7 +250,7 @@ export default function NewBusinessPage() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-12 h-12 border-4 border-[#006747] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <div className="w-12 h-12 border-4 border-[#047857] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
           <p className="text-neutral-600">Loading...</p>
         </div>
       </div>
@@ -280,7 +280,7 @@ export default function NewBusinessPage() {
         {userData && (
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 bg-[#006747] rounded-full flex items-center justify-center flex-shrink-0">
+              <div className="w-12 h-12 bg-[#047857] rounded-full flex items-center justify-center flex-shrink-0">
                 <User className="w-6 h-6 text-white" />
               </div>
               <div className="flex-1">
@@ -333,7 +333,7 @@ export default function NewBusinessPage() {
                 onClick={() => setActiveSection(id)}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   activeSection === id
-                    ? 'bg-[#006747] text-white'
+                    ? 'bg-[#047857] text-white'
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
               >
@@ -367,7 +367,7 @@ export default function NewBusinessPage() {
                       value={formData.name}
                       onChange={handleInputChange}
                       required
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-green"
                       placeholder="Enter business name"
                     />
                   </div>
@@ -382,7 +382,7 @@ export default function NewBusinessPage() {
                     value={formData.description}
                     onChange={handleInputChange}
                     rows={4}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-green"
                     placeholder="Describe your business, services, and what makes you special"
                   />
                 </div>
@@ -396,7 +396,7 @@ export default function NewBusinessPage() {
                     value={formData.category}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-green"
                   >
                     <option value="">Select category</option>
                     {businessTypes.map((type) => (
@@ -416,7 +416,7 @@ export default function NewBusinessPage() {
                     value={formData.city}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-green"
                   >
                     <option value="">Select city</option>
                     {ethiopianCities.map((city) => (
@@ -435,7 +435,7 @@ export default function NewBusinessPage() {
                     name="subcity"
                     value={formData.subcity}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-green"
                   >
                     <option value="">Select subcity</option>
                     {ethiopianCities.find(c => c.name === formData.city)?.subcities.map((subcity) => (
@@ -457,7 +457,7 @@ export default function NewBusinessPage() {
                       name="mapUrl"
                       value={formData.mapUrl}
                       onChange={handleInputChange}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-green"
                       placeholder="https://maps.google.com/?q=... or https://maps.app.goo.gl/..."
                     />
                   </div>
@@ -485,7 +485,7 @@ export default function NewBusinessPage() {
                     }}
                     className={`flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all ${
                       formData.features.includes(id)
-                        ? 'border-[#006747] bg-[#D1EFE4] text-[#006747]'
+                        ? 'border-[#047857] bg-[#D1FAE5] text-[#047857]'
                         : 'border-gray-200 hover:border-gray-300 bg-white text-gray-600'
                     }`}
                   >
@@ -513,7 +513,7 @@ export default function NewBusinessPage() {
                     />
                     <label
                       htmlFor="image-upload"
-                      className="cursor-pointer inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                      className="cursor-pointer inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-green"
                     >
                       {isUploading ? 'Uploading...' : 'Choose Images'}
                     </label>
@@ -561,7 +561,7 @@ export default function NewBusinessPage() {
                       name="address"
                       value={formData.address}
                       onChange={handleInputChange}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-green"
                       placeholder="Street address or landmark"
                     />
                   </div>
@@ -579,7 +579,7 @@ export default function NewBusinessPage() {
                       value={formData.phone}
                       onChange={handleInputChange}
                       required
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-green"
                       placeholder="+251 9XX XXX XXX"
                     />
                   </div>
@@ -596,7 +596,7 @@ export default function NewBusinessPage() {
                       name="email"
                       value={formData.email}
                       onChange={handleInputChange}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-green"
                       placeholder="business@email.com"
                     />
                   </div>
@@ -613,7 +613,7 @@ export default function NewBusinessPage() {
                       name="website"
                       value={formData.website}
                       onChange={handleInputChange}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-green"
                       placeholder="https://www.example.com"
                     />
                   </div>
@@ -632,7 +632,7 @@ export default function NewBusinessPage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="flex items-center space-x-2 bg-primary-500 hover:bg-primary-600 text-white px-6 py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex items-center space-x-2 bg-brand-green hover:bg-primary-800 text-white px-6 py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Save className="w-5 h-5" />
                 <span>{isLoading ? 'Creating Business...' : 'Create Business'}</span>

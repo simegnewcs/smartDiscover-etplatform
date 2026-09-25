@@ -203,7 +203,7 @@ export default function BusinessDetail({ slug }: { slug: string }) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-green mx-auto mb-4"></div>
           <p className="text-neutral-600">Loading business details...</p>
         </div>
       </div>
@@ -216,7 +216,7 @@ export default function BusinessDetail({ slug }: { slug: string }) {
         <div className="text-center">
           <h1 className="text-2xl font-bold text-neutral-800 mb-4">Business Not Found</h1>
           <p className="text-neutral-600 mb-6">{error || 'The business you are looking for could not be found.'}</p>
-          <a href="/" className="bg-primary-500 text-white px-6 py-2 rounded-lg hover:bg-primary-600 transition-colors">
+          <a href="/" className="bg-brand-green text-white px-6 py-2 rounded-lg hover:bg-primary-800 transition-colors">
             Back to Home
           </a>
         </div>
@@ -309,17 +309,17 @@ export default function BusinessDetail({ slug }: { slug: string }) {
         )}
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 py-8 -mt-20 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="max-w-7xl mx-auto px-4 py-8 -mt-24 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
           {/* Main Content */}
           <div className="lg:col-span-2">
             {/* Business Info Card */}
-            <div className="bg-white rounded-2xl shadow-xl border border-neutral-100 p-8 mb-6">
-              <div className="flex items-start justify-between mb-6">
+            <div className="bg-white/95 backdrop-blur-xl rounded-[2rem] shadow-premium border border-white/50 p-10 mb-8">
+              <div className="flex items-start justify-between mb-8">
                 <div className="flex-1">
                   <h1 className="text-3xl lg:text-4xl font-bold text-neutral-800 mb-3">{business.name}</h1>
                   <div className="flex flex-wrap items-center gap-3">
-                    <span className="bg-gradient-to-r from-primary-500 to-primary-600 text-white px-4 py-1.5 rounded-full text-sm font-semibold shadow-md">
+                    <span className="bg-gradient-to-r from-brand-green to-primary-800 text-white px-4 py-1.5 rounded-full text-sm font-semibold shadow-md">
                       {business.category.name}
                     </span>
                     <div className="flex items-center gap-1 bg-yellow-50 px-3 py-1.5 rounded-full">
@@ -332,7 +332,7 @@ export default function BusinessDetail({ slug }: { slug: string }) {
               </div>
 
               <div className="flex items-start gap-3 text-neutral-600 bg-neutral-50 p-4 rounded-xl mb-6">
-                <MapPin className="w-5 h-5 text-primary-500 mt-0.5 flex-shrink-0" />
+                <MapPin className="w-5 h-5 text-brand-green mt-0.5 flex-shrink-0" />
                 <span className="text-lg">
                   {business.city.name}
                   {business.subcity && `, ${business.subcity.name}`}
@@ -343,8 +343,8 @@ export default function BusinessDetail({ slug }: { slug: string }) {
               {business.description && (
                 <div className="border-t border-neutral-100 pt-6">
                   <h2 className="text-xl font-bold text-neutral-800 mb-4 flex items-center gap-2">
-                    <span className="w-8 h-8 bg-primary-100 rounded-lg flex items-center justify-center">
-                      <span className="text-primary-600 text-sm">ℹ</span>
+                    <span className="w-8 h-8 bg-brand-mint rounded-lg flex items-center justify-center">
+                      <span className="text-primary-800 text-sm">ℹ</span>
                     </span>
                     About
                   </h2>
@@ -356,8 +356,8 @@ export default function BusinessDetail({ slug }: { slug: string }) {
               {business.features && business.features.length > 0 && (
                 <div className="border-t border-neutral-100 pt-6 mt-6">
                   <h2 className="text-xl font-bold text-neutral-800 mb-4 flex items-center gap-2">
-                    <span className="w-8 h-8 bg-[#D1EFE4] rounded-lg flex items-center justify-center">
-                      <span className="text-[#006747]">✓</span>
+                    <span className="w-8 h-8 bg-[#D1FAE5] rounded-lg flex items-center justify-center">
+                      <span className="text-[#047857]">✓</span>
                     </span>
                     Features
                   </h2>
@@ -365,7 +365,7 @@ export default function BusinessDetail({ slug }: { slug: string }) {
                     {business.features.map((feature, index) => (
                       <span
                         key={index}
-                        className="px-4 py-2 bg-[#D1EFE4] text-[#006747] rounded-full text-sm font-medium"
+                        className="px-4 py-2 bg-[#D1FAE5] text-[#047857] rounded-full text-sm font-medium"
                       >
                         {featureLabels[feature] || feature}
                       </span>
@@ -376,10 +376,10 @@ export default function BusinessDetail({ slug }: { slug: string }) {
             </div>
 
             {/* Contact Information Card */}
-            <div className="bg-white rounded-2xl shadow-xl border border-neutral-100 p-8 mb-6">
-              <h2 className="text-xl font-bold text-neutral-800 mb-6 flex items-center gap-2">
-                <span className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-                  <Phone className="w-4 h-4 text-green-600" />
+            <div className="bg-white rounded-[2rem] shadow-premium border border-neutral-100 p-10 mb-8">
+              <h2 className="text-2xl font-bold text-neutral-800 mb-8 flex items-center gap-3">
+                <span className="w-12 h-12 bg-green-100 rounded-2xl flex items-center justify-center">
+                  <Phone className="w-6 h-6 text-green-600" />
                 </span>
                 Contact Information
               </h2>
@@ -433,10 +433,10 @@ export default function BusinessDetail({ slug }: { slug: string }) {
 
             {/* Business Hours Card */}
             {business.hours.length > 0 && (
-              <div className="bg-white rounded-2xl shadow-xl border border-neutral-100 p-8 mb-6">
-                <h2 className="text-xl font-bold text-neutral-800 mb-6 flex items-center gap-2">
-                  <span className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
-                    <Clock className="w-4 h-4 text-orange-600" />
+              <div className="bg-white rounded-[2rem] shadow-premium border border-neutral-100 p-10 mb-8">
+                <h2 className="text-2xl font-bold text-neutral-800 mb-8 flex items-center gap-3">
+                  <span className="w-12 h-12 bg-orange-100 rounded-2xl flex items-center justify-center">
+                    <Clock className="w-6 h-6 text-orange-600" />
                   </span>
                   Business Hours
                 </h2>
@@ -461,10 +461,10 @@ export default function BusinessDetail({ slug }: { slug: string }) {
 
             {/* Map Card */}
             {business.mapUrl && (
-              <div className="bg-white rounded-2xl shadow-xl border border-neutral-100 p-8 mb-6">
-                <h2 className="text-xl font-bold text-neutral-800 mb-6 flex items-center gap-2">
-                  <span className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <MapPin className="w-4 h-4 text-blue-600" />
+              <div className="bg-white rounded-[2rem] shadow-premium border border-neutral-100 p-10 mb-8">
+                <h2 className="text-2xl font-bold text-neutral-800 mb-8 flex items-center gap-3">
+                  <span className="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center">
+                    <MapPin className="w-6 h-6 text-blue-600" />
                   </span>
                   Location Map
                 </h2>
@@ -484,7 +484,7 @@ export default function BusinessDetail({ slug }: { slug: string }) {
                   href={business.mapUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-4 inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 font-medium"
+                  className="mt-4 inline-flex items-center gap-2 text-primary-800 hover:text-brand-green font-medium"
                 >
                   <MapPin className="w-4 h-4" />
                   View on Google Maps
@@ -493,10 +493,10 @@ export default function BusinessDetail({ slug }: { slug: string }) {
             )}
 
             {/* Reviews Section Card */}
-            <div className="bg-white rounded-2xl shadow-xl border border-neutral-100 p-8">
-              <h2 className="text-xl font-bold text-neutral-800 mb-6 flex items-center gap-2">
-                <span className="w-8 h-8 bg-yellow-100 rounded-lg flex items-center justify-center">
-                  <Star className="w-4 h-4 text-yellow-600" />
+            <div className="bg-white rounded-[2rem] shadow-premium border border-neutral-100 p-10">
+              <h2 className="text-2xl font-bold text-neutral-800 mb-8 flex items-center gap-3">
+                <span className="w-12 h-12 bg-yellow-100 rounded-2xl flex items-center justify-center">
+                  <Star className="w-6 h-6 text-yellow-600" />
                 </span>
                 Reviews
                 <span className="ml-auto bg-neutral-100 text-neutral-600 px-3 py-1 rounded-full text-sm font-semibold">
@@ -505,7 +505,7 @@ export default function BusinessDetail({ slug }: { slug: string }) {
               </h2>
               {/* Review Form */}
               {session?.user && (
-                <div className="bg-gradient-to-br from-primary-50 to-white rounded-xl p-6 border border-primary-100 mb-6">
+                <div className="bg-gradient-to-br from-primary-50 to-white rounded-xl p-6 border border-brand-mint mb-6">
                   <h3 className="text-lg font-bold text-neutral-800 mb-4">Write a Review</h3>
                   
                   {reviewSuccess ? (
@@ -551,7 +551,7 @@ export default function BusinessDetail({ slug }: { slug: string }) {
                           onChange={(e) => setReviewComment(e.target.value)}
                           placeholder="Share your experience with this business..."
                           rows={4}
-                          className="w-full px-4 py-3 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
+                          className="w-full px-4 py-3 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-green focus:border-transparent resize-none"
                         />
                       </div>
 
@@ -564,7 +564,7 @@ export default function BusinessDetail({ slug }: { slug: string }) {
                       <button
                         type="submit"
                         disabled={reviewRating === 0 || submittingReview}
-                        className="w-full bg-primary-500 hover:bg-primary-600 disabled:bg-neutral-300 disabled:cursor-not-allowed text-white py-3 rounded-xl font-semibold transition-colors shadow-md"
+                        className="w-full bg-brand-green hover:bg-primary-800 disabled:bg-neutral-300 disabled:cursor-not-allowed text-white py-3 rounded-xl font-semibold transition-colors shadow-md"
                       >
                         {submittingReview ? 'Submitting...' : 'Submit Review'}
                       </button>
@@ -574,7 +574,7 @@ export default function BusinessDetail({ slug }: { slug: string }) {
               )}
 
               {!session?.user && (
-                <div className="bg-gradient-to-br from-primary-50 to-white rounded-xl p-6 border border-primary-100 mb-6">
+                <div className="bg-gradient-to-br from-primary-50 to-white rounded-xl p-6 border border-brand-mint mb-6">
                   <h3 className="text-lg font-bold text-neutral-800 mb-4">Write a Review</h3>
                   
                   {/* Star Rating - Clickable to save */}
@@ -629,7 +629,7 @@ export default function BusinessDetail({ slug }: { slug: string }) {
                       }}
                       placeholder="Share your experience with this business..."
                       rows={4}
-                      className="w-full px-4 py-3 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
+                      className="w-full px-4 py-3 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-green focus:border-transparent resize-none"
                     />
                   </div>
 
@@ -638,7 +638,7 @@ export default function BusinessDetail({ slug }: { slug: string }) {
                   </p>
                   <a 
                     href={`/auth/login?callbackUrl=${encodeURIComponent(`/business/${slug}`)}`}
-                    className="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white px-6 py-3 rounded-xl font-semibold transition-colors w-full justify-center"
+                    className="inline-flex items-center gap-2 bg-brand-green hover:bg-primary-800 text-white px-6 py-3 rounded-xl font-semibold transition-colors w-full justify-center"
                   >
                     Sign In to Submit
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -655,7 +655,7 @@ export default function BusinessDetail({ slug }: { slug: string }) {
                     <div key={review.id} className="bg-neutral-50 rounded-xl p-6 border border-neutral-100">
                       <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center gap-4">
-                          <div className="w-12 h-12 bg-gradient-to-br from-primary-500 to-primary-600 rounded-full flex items-center justify-center shadow-md">
+                          <div className="w-12 h-12 bg-gradient-to-br from-brand-green to-primary-800 rounded-full flex items-center justify-center shadow-md">
                             <span className="text-white font-bold text-lg">
                               {review.user.name.charAt(0).toUpperCase()}
                             </span>
@@ -698,8 +698,8 @@ export default function BusinessDetail({ slug }: { slug: string }) {
           {/* Sidebar */}
           <div className="lg:col-span-1">
             {/* Quick Actions Card */}
-            <div className="bg-white rounded-2xl shadow-xl border border-neutral-100 p-6 mb-6">
-              <h3 className="text-lg font-bold text-neutral-800 mb-4">Quick Actions</h3>
+            <div className="bg-white rounded-[2rem] shadow-premium border border-neutral-100 p-8 mb-8 sticky top-24">
+              <h3 className="text-xl font-bold text-neutral-800 mb-6">Quick Actions</h3>
               <div className="space-y-3">
                 {business.phone && (
                   <a 
@@ -712,7 +712,7 @@ export default function BusinessDetail({ slug }: { slug: string }) {
                 )}
                 <a 
                   href={`/businesses?category=${encodeURIComponent(business.category.name)}`}
-                  className="flex items-center justify-center gap-2 w-full bg-primary-500 hover:bg-primary-600 text-white py-3 rounded-xl font-semibold transition-colors shadow-md"
+                  className="flex items-center justify-center gap-2 w-full bg-brand-green hover:bg-primary-800 text-white py-3 rounded-xl font-semibold transition-colors shadow-md"
                 >
                   <MapPin className="w-5 h-5" />
                   Similar Businesses
@@ -724,7 +724,7 @@ export default function BusinessDetail({ slug }: { slug: string }) {
             {business.latitude && business.longitude && (
               <div className="bg-white rounded-2xl shadow-xl border border-neutral-100 p-6 mb-6">
                 <h3 className="text-lg font-bold text-neutral-800 mb-4 flex items-center gap-2">
-                  <Navigation className="w-5 h-5 text-primary-500" />
+                  <Navigation className="w-5 h-5 text-brand-green" />
                   Location
                 </h3>
                 <div className="h-64 rounded-xl overflow-hidden border border-neutral-200">
@@ -750,7 +750,7 @@ export default function BusinessDetail({ slug }: { slug: string }) {
             {business.nearbyBusinesses.length > 0 && (
               <div className="bg-white rounded-2xl shadow-xl border border-neutral-100 p-6">
                 <h3 className="text-lg font-bold text-neutral-800 mb-4 flex items-center gap-2">
-                  <MapPin className="w-5 h-5 text-primary-500" />
+                  <MapPin className="w-5 h-5 text-brand-green" />
                   Nearby Businesses
                 </h3>
                 <div className="space-y-4">
@@ -774,7 +774,7 @@ export default function BusinessDetail({ slug }: { slug: string }) {
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="font-bold text-neutral-800 group-hover:text-primary-600 transition-colors truncate">
+                        <div className="font-bold text-neutral-800 group-hover:text-primary-800 transition-colors truncate">
                           {nearby.name}
                         </div>
                         <div className="text-sm text-neutral-500 mb-1">{nearby.category}</div>

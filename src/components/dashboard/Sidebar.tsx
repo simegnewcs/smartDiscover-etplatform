@@ -165,7 +165,7 @@ export default function Sidebar() {
       {/* Logo Section */}
       <div className="p-6 border-b border-neutral-200">
         <Link href="/dashboard" className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-[#006747] rounded-lg flex items-center justify-center">
+          <div className="w-10 h-10 bg-[#047857] rounded-lg flex items-center justify-center">
             <span className="text-white font-bold text-lg">H</span>
           </div>
           <div>
@@ -188,7 +188,7 @@ export default function Sidebar() {
                 href={item.href}
                 className={`flex items-center justify-between px-3 py-2.5 rounded-lg transition-colors group ${
                   active
-                    ? 'bg-[#D1EFE4] text-[#006747] border-l-2 border-[#006747]'
+                    ? 'bg-[#D1FAE5] text-[#047857] border-l-2 border-[#047857]'
                     : 'text-neutral-600 hover:bg-neutral-50 hover:text-neutral-800'
                 }`}
                 onClick={() => {
@@ -198,13 +198,13 @@ export default function Sidebar() {
                 }}
               >
                 <div className="flex items-center space-x-3">
-                  <Icon className={`w-5 h-5 ${active ? "text-[#006747]" : "text-neutral-400 group-hover:text-neutral-600"}`} />
+                  <Icon className={`w-5 h-5 ${active ? "text-[#047857]" : "text-neutral-400 group-hover:text-neutral-600"}`} />
                   <span className="font-medium">{item.name}</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   {item.badge && (
                     <span className={`px-2 py-0.5 text-xs rounded-full ${
-                      active ? "bg-[#006747] text-white" : "bg-neutral-200 text-neutral-600"
+                      active ? "bg-[#047857] text-white" : "bg-neutral-200 text-neutral-600"
                     }`}>
                       {item.badge}
                     </span>
@@ -232,8 +232,8 @@ export default function Sidebar() {
                         href={child.href}
                         className={`flex items-center justify-between px-3 py-2 rounded-lg transition-colors ${
                           childActive
-                            ? 'bg-[#D1EFE4] text-[#006747]'
-                            : 'text-neutral-600 hover:bg-[#D1EFE4] hover:text-[#006747]'
+                            ? 'bg-[#D1FAE5] text-[#047857]'
+                            : 'text-neutral-600 hover:bg-[#D1FAE5] hover:text-[#047857]'
                         }`}
                       >
                         <div className="flex items-center space-x-3">
@@ -242,7 +242,7 @@ export default function Sidebar() {
                         </div>
                         {child.badge && (
                           <span className={`px-2 py-0.5 text-xs rounded-full ${
-                            childActive ? "bg-[#006747] text-white" : "bg-neutral-200 text-neutral-600"
+                            childActive ? "bg-[#047857] text-white" : "bg-neutral-200 text-neutral-600"
                           }`}>
                             {child.badge}
                           </span>
@@ -262,7 +262,7 @@ export default function Sidebar() {
         <div className="space-y-2">
           <Link
             href="/dashboard/help"
-            className="flex items-center space-x-3 px-3 py-2 text-neutral-600 hover:bg-[#D1EFE4] hover:text-[#006747] rounded-lg transition-colors"
+            className="flex items-center space-x-3 px-3 py-2 text-neutral-600 hover:bg-[#D1FAE5] hover:text-[#047857] rounded-lg transition-colors"
           >
             <FileText className="w-5 h-5 text-neutral-400" />
             <span className="font-medium">Help & Support</span>
@@ -271,7 +271,7 @@ export default function Sidebar() {
           {session?.user?.role === 'ADMIN' && (
             <Link
               href="/admin"
-              className="flex items-center space-x-3 px-3 py-2 bg-neutral-900 text-[#EEF578] hover:bg-neutral-800 rounded-lg transition-colors"
+              className="flex items-center space-x-3 px-3 py-2 bg-neutral-900 text-[#FBBF24] hover:bg-neutral-800 rounded-lg transition-colors"
             >
               <ShieldCheck className="w-5 h-5" />
               <span className="font-medium">Admin Panel</span>
@@ -288,12 +288,12 @@ export default function Sidebar() {
         </div>
 
         {/* User Info */}
-        <div className="mt-4 p-3 bg-[#D1EFE4]/50 rounded-lg">
+        <div className="mt-4 p-3 bg-[#D1FAE5]/50 rounded-lg">
           <div className="flex items-center space-x-3">
             {session?.user?.image ? (
               <img src={session.user.image} alt="" className="w-8 h-8 rounded-full object-cover flex-shrink-0" />
             ) : (
-              <div className="w-8 h-8 bg-[#006747] rounded-full flex items-center justify-center flex-shrink-0">
+              <div className="w-8 h-8 bg-[#047857] rounded-full flex items-center justify-center flex-shrink-0">
                 <span className="text-white font-medium text-sm">
                   {session?.user?.name?.split(' ').map((n: string) => n[0]).join('').toUpperCase() || 'U'}
                 </span>

@@ -17,7 +17,7 @@ interface Stats {
 const roleColors: Record<string, string> = {
   USER: 'bg-blue-500/20 text-blue-300',
   BUSINESS_OWNER: 'bg-purple-500/20 text-purple-300',
-  ADMIN: 'bg-[#EEF578]/20 text-[#EEF578]'
+  ADMIN: 'bg-[#FBBF24]/20 text-[#FBBF24]'
 }
 
 export default function AdminDashboard() {
@@ -34,7 +34,7 @@ export default function AdminDashboard() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="w-8 h-8 border-2 border-[#EEF578] border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-[#FBBF24] border-t-transparent rounded-full animate-spin" />
       </div>
     )
   }
@@ -51,7 +51,7 @@ export default function AdminDashboard() {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-white flex items-center gap-2">
-          <ShieldCheck className="w-7 h-7 text-[#EEF578]" />
+          <ShieldCheck className="w-7 h-7 text-[#FBBF24]" />
           Admin Overview
         </h1>
         <p className="text-neutral-400 mt-1">Manage users, businesses, and platform content</p>
@@ -91,7 +91,7 @@ export default function AdminDashboard() {
                     <span className="text-neutral-300 font-medium">{count}</span>
                   </div>
                   <div className="h-1.5 bg-neutral-800 rounded-full overflow-hidden">
-                    <div className="h-full bg-[#EEF578]/60 rounded-full" style={{ width: `${pct}%` }} />
+                    <div className="h-full bg-[#FBBF24]/60 rounded-full" style={{ width: `${pct}%` }} />
                   </div>
                 </div>
               )
@@ -103,7 +103,7 @@ export default function AdminDashboard() {
         <div className="bg-neutral-900 border border-neutral-800 rounded-xl p-5">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-sm font-semibold text-neutral-300 uppercase tracking-wider">Recent Users</h3>
-            <Link href="/admin/users" className="text-xs text-[#EEF578] hover:underline">View all</Link>
+            <Link href="/admin/users" className="text-xs text-[#FBBF24] hover:underline">View all</Link>
           </div>
           <div className="space-y-3">
             {stats?.recentUsers.map(user => (
@@ -125,7 +125,7 @@ export default function AdminDashboard() {
         <div className="bg-neutral-900 border border-neutral-800 rounded-xl p-5">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-sm font-semibold text-neutral-300 uppercase tracking-wider">Recent Businesses</h3>
-            <Link href="/admin/businesses" className="text-xs text-[#EEF578] hover:underline">View all</Link>
+            <Link href="/admin/businesses" className="text-xs text-[#FBBF24] hover:underline">View all</Link>
           </div>
           <div className="space-y-3">
             {stats?.recentBusinesses.map(biz => (
