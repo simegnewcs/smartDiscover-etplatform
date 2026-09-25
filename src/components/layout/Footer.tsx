@@ -88,7 +88,7 @@ export default function Footer() {
           </div>
 
           {/* Categories */}
-          <div className="space-y-4">
+          <div className="hidden md:block space-y-4">
             <h3 className="text-white font-semibold text-sm uppercase tracking-wider">Browse Categories</h3>
             <ul className="space-y-2 text-sm">
               {[
@@ -111,7 +111,7 @@ export default function Footer() {
           </div>
 
           {/* Quick Links */}
-          <div className="space-y-4">
+          <div className="hidden md:block space-y-4">
             <h3 className="text-white font-semibold text-sm uppercase tracking-wider">Quick Links</h3>
             <ul className="space-y-2 text-sm">
               {[

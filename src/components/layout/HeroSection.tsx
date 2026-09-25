@@ -7,9 +7,9 @@ import { Search, MapPin, ChevronRight, Compass, Sparkles, Play, Pause } from 'lu
 // Ethiopian landmarks with better quality images
 const ethiopianLandmarks = [
   {
-    name: 'Lalibela Rock Churches',
-    image: 'https://images.unsplash.com/photo-1611348524140-53c9a25263d6?w=1920&q=80',
-    description: 'Ancient UNESCO World Heritage rock-hewn churches'
+    name: 'Addis Ababa Skyline',
+    image: 'https://images.unsplash.com/photo-1522818610486-48c665f80fc2?w=1920&q=80',
+    description: 'The vibrant and modern capital of Ethiopia'
   },
   {
     name: 'Gondar — Fasilides Castle',
