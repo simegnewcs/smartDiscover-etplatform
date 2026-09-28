@@ -2,7 +2,7 @@
 
 import { useSession } from 'next-auth/react'
 import { useRouter, usePathname } from 'next/navigation'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import {
   LayoutDashboard,
@@ -13,7 +13,10 @@ import {
   LogOut,
   ShieldCheck,
   ChevronRight,
-  Settings
+  Settings,
+  Menu,
+  X,
+  Home
 } from 'lucide-react'
 import { signOut } from 'next-auth/react'
 
@@ -29,6 +32,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const { data: session, status } = useSession()
   const router = useRouter()
   const pathname = usePathname()
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -38,10 +42,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     }
   }, [status, session, router])
 
+  // Close mobile menu on route change
+  useEffect(() => {
+    setIsMobileMenuOpen(false)
+  }, [pathname])
+
   if (status === 'loading') {
     return (
-      <div className="min-h-screen bg-neutral-950 flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-[#FBBF24] border-t-transparent rounded-full animate-spin" />
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-[#16A34A] border-t-transparent rounded-full animate-spin" />
       </div>
     )
   }
@@ -52,20 +61,34 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     item.exact ? pathname === item.href : pathname.startsWith(item.href)
 
   return (
-    <div className="min-h-screen flex bg-neutral-950 text-white">
+    <div className="min-h-screen flex bg-gray-50 text-gray-900">
+      {/* Mobile Menu Overlay */}
+      {isMobileMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <aside className="w-64 bg-neutral-900 border-r border-neutral-800 flex flex-col fixed inset-y-0 left-0 z-30">
+      <aside className={`w-64 bg-[#16A34A] flex flex-col fixed inset-y-0 left-0 z-50 transform transition-transform duration-300 lg:translate-x-0 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         {/* Logo */}
-        <div className="px-6 py-5 border-b border-neutral-800">
+        <div className="px-6 py-5 border-b border-white/20 flex justify-between items-center">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-[#FBBF24] rounded-lg flex items-center justify-center">
-              <ShieldCheck className="w-5 h-5 text-neutral-900" />
+            <div className="w-9 h-9 bg-white rounded-lg flex items-center justify-center">
+              <ShieldCheck className="w-5 h-5 text-[#16A34A]" />
             </div>
             <div>
               <div className="font-bold text-white text-sm">Super Admin</div>
-              <div className="text-xs text-neutral-400">HelloET Platform</div>
+              <div className="text-xs text-green-100">HelloET Platform</div>
             </div>
           </div>
+          <button 
+            className="lg:hidden text-green-100 hover:text-white"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            <X className="w-6 h-6" />
+          </button>
         </div>
 
         {/* Nav */}
@@ -79,8 +102,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 href={item.href}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-sm font-medium ${
                   active
-                    ? 'bg-[#FBBF24] text-neutral-900'
-                    : 'text-neutral-400 hover:bg-neutral-800 hover:text-white'
+                    ? 'bg-white text-[#16A34A] shadow-sm'
+                    : 'text-green-100 hover:bg-white/10 hover:text-white'
                 }`}
               >
                 <Icon className="w-4 h-4 flex-shrink-0" />
@@ -92,22 +115,22 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </nav>
 
         {/* User info + logout */}
-        <div className="px-3 py-4 border-t border-neutral-800 space-y-1">
-          <div className="px-3 py-2 rounded-lg bg-neutral-800">
-            <div className="text-xs text-neutral-400">Signed in as</div>
+        <div className="px-3 py-4 border-t border-white/20 space-y-1">
+          <div className="px-3 py-2 rounded-lg bg-white/10">
+            <div className="text-xs text-green-100">Signed in as</div>
             <div className="text-sm font-medium text-white truncate">{session.user.name}</div>
-            <div className="text-xs text-[#FBBF24] font-medium">SUPER ADMIN</div>
+            <div className="text-xs text-green-200 font-medium mt-0.5">SUPER ADMIN</div>
           </div>
           <Link
             href="/dashboard"
-            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-neutral-400 hover:bg-neutral-800 hover:text-white transition-colors text-sm"
+            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-green-100 hover:bg-white/10 hover:text-white transition-colors text-sm"
           >
             <Settings className="w-4 h-4" />
             User Dashboard
           </Link>
           <button
             onClick={() => signOut({ callbackUrl: '/auth/login' })}
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-neutral-400 hover:bg-red-900/40 hover:text-red-400 transition-colors text-sm"
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-green-100 hover:bg-red-500/20 hover:text-red-100 transition-colors text-sm"
           >
             <LogOut className="w-4 h-4" />
             Sign Out
@@ -116,11 +139,45 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </aside>
 
       {/* Main content */}
-      <main className="flex-1 ml-64 min-h-screen bg-neutral-950">
-        <div className="p-8">
+      <main className="flex-1 lg:ml-64 min-h-screen bg-gray-50 flex flex-col">
+        {/* Top Navbar */}
+        <header className="sticky top-0 z-30 flex items-center justify-between px-4 sm:px-6 py-3 bg-white border-b border-gray-200 shadow-sm">
+          {/* Mobile Left Side */}
+          <div className="flex items-center gap-3 lg:hidden">
+            <button
+              onClick={() => setIsMobileMenuOpen(true)}
+              className="p-2 -ml-2 text-gray-500 hover:text-gray-900 rounded-lg hover:bg-gray-100"
+            >
+              <Menu className="w-6 h-6" />
+            </button>
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-[#16A34A] rounded-lg flex items-center justify-center">
+                <ShieldCheck className="w-4 h-4 text-white" />
+              </div>
+              <span className="font-bold text-gray-900">Super Admin</span>
+            </div>
+          </div>
+          
+          {/* Desktop Left Side Spacer */}
+          <div className="hidden lg:block"></div>
+
+          {/* Right Side Actions */}
+          <div className="flex items-center ml-auto">
+            <Link
+              href="/"
+              className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-600 bg-gray-50 border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors"
+            >
+              <Home className="w-4 h-4" />
+              <span className="hidden sm:inline">Back to Home</span>
+            </Link>
+          </div>
+        </header>
+
+        <div className="p-4 sm:p-6 lg:p-8 flex-1 overflow-x-hidden w-full max-w-full">
           {children}
         </div>
       </main>
     </div>
   )
 }
+

@@ -149,7 +149,7 @@ export default function FeaturedListings() {
             <Link
               href={`/business/${business.slug}`}
               key={business.id}
-              className="group bg-white rounded-xl border border-neutral-200 overflow-hidden hover:shadow-lg hover:border-neutral-300 transition-all duration-300 flex flex-col cursor-pointer"
+              className="group bg-white rounded-2xl border-2 border-[#047857] overflow-hidden hover:shadow-[0_8px_30px_rgb(4,120,87,0.15)] transition-all duration-300 flex flex-col cursor-pointer hover:-translate-y-1"
             >
               <div className="relative h-60 overflow-hidden bg-neutral-100">
                 <img

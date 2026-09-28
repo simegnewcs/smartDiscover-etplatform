@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useEffect, useState } from 'react'
 import { Users, Search, Trash2, Edit2, Loader2, ChevronLeft, ChevronRight, X } from 'lucide-react'
@@ -13,8 +13,8 @@ interface User {
 }
 
 const roleColors: Record<string, string> = {
-  USER: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
-  BUSINESS_OWNER: 'bg-purple-500/20 text-purple-300 border-purple-500/30',
+  USER: 'bg-blue-100 text-blue-700 border-blue-500/30',
+  BUSINESS_OWNER: 'bg-purple-100 text-purple-700 border-purple-500/30',
   ADMIN: 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30'
 }
 
@@ -89,28 +89,28 @@ export default function AdminUsersPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-white flex items-center gap-2">
-          <Users className="w-6 h-6 text-[#FBBF24]" /> Users
+        <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+          <Users className="w-6 h-6 text-[#16A34A]" /> Users
         </h1>
-        <p className="text-neutral-400 mt-1">{total} total users</p>
+        <p className="text-gray-500 mt-1">{total} total users</p>
       </div>
 
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
           <input
             type="text"
             placeholder="Search by name or email..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 bg-neutral-900 border border-neutral-700 rounded-lg text-white placeholder-neutral-500 focus:outline-none focus:border-[#FBBF24]/50 text-sm"
+            className="w-full pl-10 pr-4 py-2.5 bg-white shadow-sm border border-gray-300 rounded-lg text-gray-900 placeholder-neutral-500 focus:outline-none focus:border-[#16A34A]/50 text-sm"
           />
         </div>
         <select
           value={roleFilter}
           onChange={e => { setRoleFilter(e.target.value); setPage(1) }}
-          className="px-3 py-2.5 bg-neutral-900 border border-neutral-700 rounded-lg text-white focus:outline-none focus:border-[#FBBF24]/50 text-sm"
+          className="px-3 py-2.5 bg-white shadow-sm border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-[#16A34A]/50 text-sm"
         >
           <option value="">All Roles</option>
           <option value="USER">User</option>
@@ -120,35 +120,35 @@ export default function AdminUsersPage() {
       </div>
 
       {/* Table */}
-      <div className="bg-neutral-900 border border-neutral-800 rounded-xl overflow-hidden">
+      <div className="bg-white shadow-sm border border-gray-200 rounded-xl overflow-hidden">
         {loading ? (
           <div className="flex items-center justify-center h-48">
-            <Loader2 className="w-6 h-6 animate-spin text-neutral-400" />
+            <Loader2 className="w-6 h-6 animate-spin text-gray-500" />
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-neutral-800">
-                  <th className="text-left px-5 py-3 text-neutral-400 font-medium">User</th>
-                  <th className="text-left px-5 py-3 text-neutral-400 font-medium">Role</th>
-                  <th className="text-left px-5 py-3 text-neutral-400 font-medium hidden md:table-cell">Reviews</th>
-                  <th className="text-left px-5 py-3 text-neutral-400 font-medium hidden md:table-cell">Businesses</th>
-                  <th className="text-left px-5 py-3 text-neutral-400 font-medium hidden lg:table-cell">Joined</th>
-                  <th className="px-5 py-3 text-neutral-400 font-medium text-right">Actions</th>
+                <tr className="border-b border-gray-200">
+                  <th className="text-left px-5 py-3 text-gray-500 font-medium">User</th>
+                  <th className="text-left px-5 py-3 text-gray-500 font-medium">Role</th>
+                  <th className="text-left px-5 py-3 text-gray-500 font-medium hidden md:table-cell">Reviews</th>
+                  <th className="text-left px-5 py-3 text-gray-500 font-medium hidden md:table-cell">Businesses</th>
+                  <th className="text-left px-5 py-3 text-gray-500 font-medium hidden lg:table-cell">Joined</th>
+                  <th className="px-5 py-3 text-gray-500 font-medium text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-neutral-800">
+              <tbody className="divide-y divide-gray-200">
                 {users.map(user => (
-                  <tr key={user.id} className="hover:bg-neutral-800/50 transition-colors">
+                  <tr key={user.id} className="hover:bg-gray-100/50 transition-colors">
                     <td className="px-5 py-3.5">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 bg-neutral-800 rounded-full flex items-center justify-center flex-shrink-0">
-                          <span className="text-xs font-bold text-neutral-300">{user.name.charAt(0).toUpperCase()}</span>
+                        <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
+                          <span className="text-xs font-bold text-gray-700">{user.name.charAt(0).toUpperCase()}</span>
                         </div>
                         <div>
-                          <div className="font-medium text-white">{user.name}</div>
-                          <div className="text-xs text-neutral-500">{user.email}</div>
+                          <div className="font-medium text-gray-900">{user.name}</div>
+                          <div className="text-xs text-gray-500">{user.email}</div>
                         </div>
                       </div>
                     </td>
@@ -157,16 +157,16 @@ export default function AdminUsersPage() {
                         {user.role}
                       </span>
                     </td>
-                    <td className="px-5 py-3.5 text-neutral-300 hidden md:table-cell">{user._count.reviews}</td>
-                    <td className="px-5 py-3.5 text-neutral-300 hidden md:table-cell">{user._count.ownedBusinesses}</td>
-                    <td className="px-5 py-3.5 text-neutral-500 hidden lg:table-cell">
+                    <td className="px-5 py-3.5 text-gray-700 hidden md:table-cell">{user._count.reviews}</td>
+                    <td className="px-5 py-3.5 text-gray-700 hidden md:table-cell">{user._count.ownedBusinesses}</td>
+                    <td className="px-5 py-3.5 text-gray-500 hidden lg:table-cell">
                       {new Date(user.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                     </td>
                     <td className="px-5 py-3.5">
                       <div className="flex items-center justify-end gap-2">
                         <button
                           onClick={() => { setEditingUser(user); setNewRole(user.role) }}
-                          className="p-1.5 rounded-lg text-neutral-400 hover:bg-neutral-700 hover:text-white transition-colors"
+                          className="p-1.5 rounded-lg text-gray-500 hover:bg-neutral-700 hover:text-gray-900 transition-colors"
                           title="Edit role"
                         >
                           <Edit2 className="w-4 h-4" />
@@ -174,7 +174,7 @@ export default function AdminUsersPage() {
                         <button
                           onClick={() => handleDelete(user.id)}
                           disabled={deletingId === user.id}
-                          className="p-1.5 rounded-lg text-neutral-400 hover:bg-red-900/40 hover:text-red-400 transition-colors"
+                          className="p-1.5 rounded-lg text-gray-500 hover:bg-red-900/40 hover:text-red-400 transition-colors"
                           title="Delete user"
                         >
                           {deletingId === user.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
@@ -192,19 +192,19 @@ export default function AdminUsersPage() {
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex items-center justify-between">
-          <span className="text-sm text-neutral-500">Page {page} of {totalPages}</span>
+          <span className="text-sm text-gray-500">Page {page} of {totalPages}</span>
           <div className="flex gap-2">
             <button
               disabled={page === 1}
               onClick={() => setPage(p => p - 1)}
-              className="p-2 rounded-lg bg-neutral-900 border border-neutral-700 text-neutral-400 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed"
+              className="p-2 rounded-lg bg-white shadow-sm border border-gray-300 text-gray-500 hover:text-gray-900 disabled:opacity-40 disabled:cursor-not-allowed"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
             <button
               disabled={page === totalPages}
               onClick={() => setPage(p => p + 1)}
-              className="p-2 rounded-lg bg-neutral-900 border border-neutral-700 text-neutral-400 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed"
+              className="p-2 rounded-lg bg-white shadow-sm border border-gray-300 text-gray-500 hover:text-gray-900 disabled:opacity-40 disabled:cursor-not-allowed"
             >
               <ChevronRight className="w-4 h-4" />
             </button>
@@ -215,31 +215,31 @@ export default function AdminUsersPage() {
       {/* Edit Role Modal */}
       {editingUser && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-          <div className="bg-neutral-900 border border-neutral-700 rounded-2xl p-6 w-full max-w-sm">
+          <div className="bg-white shadow-sm border border-gray-300 rounded-2xl p-6 w-full max-w-sm">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-white">Change Role</h3>
-              <button onClick={() => setEditingUser(null)} className="text-neutral-400 hover:text-white">
+              <h3 className="font-semibold text-gray-900">Change Role</h3>
+              <button onClick={() => setEditingUser(null)} className="text-gray-500 hover:text-gray-900">
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <p className="text-sm text-neutral-400 mb-4">{editingUser.name} · {editingUser.email}</p>
+            <p className="text-sm text-gray-500 mb-4">{editingUser.name} Â· {editingUser.email}</p>
             <select
               value={newRole}
               onChange={e => setNewRole(e.target.value)}
-              className="w-full px-3 py-2.5 bg-neutral-800 border border-neutral-600 rounded-lg text-white focus:outline-none focus:border-[#FBBF24]/50 mb-4"
+              className="w-full px-3 py-2.5 bg-gray-100 border border-neutral-600 rounded-lg text-gray-900 focus:outline-none focus:border-[#16A34A]/50 mb-4"
             >
               <option value="USER">USER</option>
               <option value="BUSINESS_OWNER">BUSINESS_OWNER</option>
               <option value="ADMIN">ADMIN</option>
             </select>
             <div className="flex gap-3">
-              <button onClick={() => setEditingUser(null)} className="flex-1 px-4 py-2 rounded-lg bg-neutral-800 text-neutral-300 hover:bg-neutral-700 transition-colors text-sm">
+              <button onClick={() => setEditingUser(null)} className="flex-1 px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-neutral-700 transition-colors text-sm">
                 Cancel
               </button>
               <button
                 onClick={handleRoleSave}
                 disabled={saving}
-                className="flex-1 px-4 py-2 rounded-lg bg-[#FBBF24] text-neutral-900 hover:bg-[#d8dc5e] font-medium transition-colors text-sm disabled:opacity-60"
+                className="flex-1 px-4 py-2 rounded-lg bg-[#16A34A] text-gray-900 hover:bg-[#d8dc5e] font-medium transition-colors text-sm disabled:opacity-60"
               >
                 {saving ? 'Saving...' : 'Save'}
               </button>
@@ -250,3 +250,4 @@ export default function AdminUsersPage() {
     </div>
   )
 }
+

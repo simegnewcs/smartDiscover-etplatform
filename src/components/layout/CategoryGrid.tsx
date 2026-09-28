@@ -99,7 +99,7 @@ export default function CategoryGrid() {
             <Link
               key={index}
               href={category.href}
-              className="group bg-white rounded-xl p-6 hover:shadow-lg transition-all duration-300 border border-neutral-200 hover:border-[#047857]"
+              className="group bg-white rounded-2xl p-6 shadow-sm hover:shadow-[0_8px_30px_rgb(4,120,87,0.15)] transition-all duration-300 border-2 border-[#047857] hover:-translate-y-1"
             >
               <div className="flex items-center gap-4 mb-4">
                 <div className="w-12 h-12 bg-neutral-50 rounded-lg flex items-center justify-center border border-neutral-100 group-hover:bg-[#F2FBF7] group-hover:border-[#047857]/20 transition-colors">

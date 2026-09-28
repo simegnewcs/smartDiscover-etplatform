@@ -76,8 +76,8 @@ export default function AdminBusinessPreviewPage() {
   if (notFound || !business) {
     return (
       <div className="text-center py-20">
-        <Building2 className="w-12 h-12 text-neutral-600 mx-auto mb-4" />
-        <h2 className="text-lg font-semibold text-white mb-2">Business not found</h2>
+        <Building2 className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+        <h2 className="text-lg font-semibold text-gray-900 mb-2">Business not found</h2>
         <Link href="/admin/businesses" className="text-[#EEF578] hover:underline text-sm">
           ← Back to businesses
         </Link>
@@ -89,7 +89,7 @@ export default function AdminBusinessPreviewPage() {
     <div className="space-y-6 max-w-4xl">
       {/* Back + status bar */}
       <div className="flex items-center justify-between">
-        <Link href="/admin/businesses" className="flex items-center gap-2 text-neutral-400 hover:text-white transition-colors text-sm">
+        <Link href="/admin/businesses" className="flex items-center gap-2 text-gray-500 hover:text-gray-900 transition-colors text-sm">
           <ArrowLeft className="w-4 h-4" /> Back to Businesses
         </Link>
         <div className="flex items-center gap-3">
@@ -117,15 +117,15 @@ export default function AdminBusinessPreviewPage() {
       )}
 
       {/* Main card */}
-      <div className="bg-neutral-900 border border-neutral-800 rounded-2xl overflow-hidden">
+      <div className="bg-white shadow-sm border border-gray-200 rounded-2xl overflow-hidden">
         {/* Cover image */}
         {business.images && business.images.length > 0 ? (
           <div className="h-56 overflow-hidden">
             <img src={business.images[0].imageUrl} alt={business.name} className="w-full h-full object-cover" />
           </div>
         ) : (
-          <div className="h-40 bg-neutral-800 flex items-center justify-center">
-            <Building2 className="w-12 h-12 text-neutral-600" />
+          <div className="h-40 bg-gray-100 flex items-center justify-center">
+            <Building2 className="w-12 h-12 text-gray-400" />
           </div>
         )}
 
@@ -133,9 +133,9 @@ export default function AdminBusinessPreviewPage() {
           {/* Name + rating */}
           <div className="flex items-start justify-between gap-4">
             <div>
-              <h1 className="text-2xl font-bold text-white">{business.name}</h1>
-              <div className="flex items-center gap-2 mt-1 text-sm text-neutral-400">
-                {business.category?.name && <span className="px-2 py-0.5 bg-neutral-800 rounded-full">{business.category.name}</span>}
+              <h1 className="text-2xl font-bold text-gray-900">{business.name}</h1>
+              <div className="flex items-center gap-2 mt-1 text-sm text-gray-500">
+                {business.category?.name && <span className="px-2 py-0.5 bg-gray-100 rounded-full">{business.category.name}</span>}
                 {business.city?.name && (
                   <span className="flex items-center gap-1">
                     <MapPin className="w-3.5 h-3.5" /> {business.city.name}
@@ -146,41 +146,41 @@ export default function AdminBusinessPreviewPage() {
             </div>
             <div className="flex items-center gap-1.5 flex-shrink-0">
               <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-              <span className="text-white font-medium">{business.averageRating.toFixed(1)}</span>
-              <span className="text-neutral-500 text-sm">({business.totalReviews})</span>
+              <span className="text-gray-900 font-medium">{business.averageRating.toFixed(1)}</span>
+              <span className="text-gray-500 text-sm">({business.totalReviews})</span>
             </div>
           </div>
 
           {/* Description */}
           {business.description && (
-            <p className="text-neutral-400 text-sm leading-relaxed">{business.description}</p>
+            <p className="text-gray-500 text-sm leading-relaxed">{business.description}</p>
           )}
 
           {/* Contact info */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {business.phone && (
-              <div className="flex items-center gap-2 text-sm text-neutral-300">
-                <Phone className="w-4 h-4 text-neutral-500 flex-shrink-0" />
+              <div className="flex items-center gap-2 text-sm text-gray-700">
+                <Phone className="w-4 h-4 text-gray-500 flex-shrink-0" />
                 {business.phone}
               </div>
             )}
             {business.email && (
-              <div className="flex items-center gap-2 text-sm text-neutral-300">
-                <Mail className="w-4 h-4 text-neutral-500 flex-shrink-0" />
+              <div className="flex items-center gap-2 text-sm text-gray-700">
+                <Mail className="w-4 h-4 text-gray-500 flex-shrink-0" />
                 {business.email}
               </div>
             )}
             {business.website && (
-              <div className="flex items-center gap-2 text-sm text-neutral-300">
-                <Globe className="w-4 h-4 text-neutral-500 flex-shrink-0" />
+              <div className="flex items-center gap-2 text-sm text-gray-700">
+                <Globe className="w-4 h-4 text-gray-500 flex-shrink-0" />
                 <a href={business.website} target="_blank" rel="noopener noreferrer" className="text-[#EEF578] hover:underline truncate">
                   {business.website}
                 </a>
               </div>
             )}
             {business.address && (
-              <div className="flex items-center gap-2 text-sm text-neutral-300">
-                <MapPin className="w-4 h-4 text-neutral-500 flex-shrink-0" />
+              <div className="flex items-center gap-2 text-sm text-gray-700">
+                <MapPin className="w-4 h-4 text-gray-500 flex-shrink-0" />
                 {business.address}
               </div>
             )}
@@ -189,10 +189,10 @@ export default function AdminBusinessPreviewPage() {
           {/* Features */}
           {business.features && business.features.length > 0 && (
             <div>
-              <p className="text-xs text-neutral-500 uppercase tracking-wider mb-2">Features</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wider mb-2">Features</p>
               <div className="flex flex-wrap gap-2">
                 {business.features.map((f: string) => (
-                  <span key={f} className="px-2.5 py-1 bg-neutral-800 rounded-full text-xs text-neutral-300">{f}</span>
+                  <span key={f} className="px-2.5 py-1 bg-gray-100 rounded-full text-xs text-gray-700">{f}</span>
                 ))}
               </div>
             </div>
@@ -200,15 +200,15 @@ export default function AdminBusinessPreviewPage() {
 
           {/* Owner info */}
           {business.owner && (
-            <div className="pt-4 border-t border-neutral-800">
-              <p className="text-xs text-neutral-500 uppercase tracking-wider mb-2">Submitted by</p>
+            <div className="pt-4 border-t border-gray-200">
+              <p className="text-xs text-gray-500 uppercase tracking-wider mb-2">Submitted by</p>
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-neutral-800 rounded-full flex items-center justify-center">
-                  <span className="text-xs font-bold text-neutral-300">{business.owner.name.charAt(0).toUpperCase()}</span>
+                <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                  <span className="text-xs font-bold text-gray-700">{business.owner.name.charAt(0).toUpperCase()}</span>
                 </div>
                 <div>
-                  <div className="text-sm font-medium text-white">{business.owner.name}</div>
-                  <div className="text-xs text-neutral-500">{business.owner.email}</div>
+                  <div className="text-sm font-medium text-gray-900">{business.owner.name}</div>
+                  <div className="text-xs text-gray-500">{business.owner.email}</div>
                 </div>
               </div>
             </div>
@@ -223,14 +223,14 @@ export default function AdminBusinessPreviewPage() {
             <button
               onClick={() => handleVerify(true)}
               disabled={verifying}
-              className="flex items-center gap-2 px-6 py-3 bg-green-500 hover:bg-green-600 text-white rounded-xl font-medium transition-colors disabled:opacity-60"
+              className="flex items-center gap-2 px-6 py-3 bg-green-500 hover:bg-green-600 text-gray-900 rounded-xl font-medium transition-colors disabled:opacity-60"
             >
               {verifying ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle2 className="w-4 h-4" />}
               Approve & Verify
             </button>
             <button
               onClick={() => router.push('/admin/businesses')}
-              className="flex items-center gap-2 px-6 py-3 bg-neutral-800 hover:bg-neutral-700 text-neutral-300 rounded-xl font-medium transition-colors"
+              className="flex items-center gap-2 px-6 py-3 bg-gray-100 hover:bg-neutral-700 text-gray-700 rounded-xl font-medium transition-colors"
             >
               Review Later
             </button>

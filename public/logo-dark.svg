@@ -1,0 +1,30 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 100" width="380" height="100" fill="none">
+  <!-- Badge Background -->
+  <rect x="0" y="0" width="100" height="100" rx="22" ry="22" fill="#16A34A"/>
+  
+  <!-- H letter parts -->
+  <g mask="url(#slash-mask)">
+    <rect x="22" y="22" width="22" height="56" fill="white"/>
+    <polygon points="22,22 33,22 33,78 22,78" fill="#4ade80"/>
+    
+    <rect x="56" y="22" width="22" height="56" fill="white"/>
+    <polygon points="56,22 67,22 67,78 56,78" fill="#4ade80"/>
+
+    <rect x="44" y="42" width="12" height="16" fill="white"/>
+  </g>
+
+  <!-- Mask for diagonal slash -->
+  <defs>
+    <mask id="slash-mask">
+      <rect x="0" y="0" width="100" height="100" fill="white"/>
+      <polygon points="10,75 100,30 100,38 10,83" fill="black"/>
+    </mask>
+  </defs>
+
+  <!-- Wordmark (White for dark mode) -->
+  <text x="120" y="64" font-family="'Inter', 'Segoe UI', Arial, sans-serif" font-size="46" letter-spacing="-1">
+    <tspan font-weight="300" fill="white">Hello</tspan><tspan font-weight="800" fill="#4ade80">ET</tspan>
+  </text>
+  
+  <text x="122" y="82" font-family="'Inter', 'Segoe UI', Arial, sans-serif" font-size="11" font-weight="600" fill="#4ade80" letter-spacing="4" opacity="0.8">DISCOVER LOCAL</text>
+</svg>

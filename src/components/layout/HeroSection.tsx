@@ -315,8 +315,13 @@ export default function HeroSection() {
               </p>
 
               {/* Professional Search Bar */}
-              <div className="bg-white rounded-xl p-2 max-w-4xl w-full mx-auto shadow-2xl mt-8">
-                <div className="flex flex-col md:flex-row items-stretch md:items-center gap-2">
+              <div className="relative max-w-4xl w-full mx-auto mt-12 group">
+                {/* Colorful Animated Glow */}
+                <div className="absolute -inset-1 bg-gradient-to-r from-yellow-400 via-[#047857] to-emerald-400 rounded-2xl blur-lg opacity-70 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-pulse"></div>
+                
+                {/* Search Bar Container */}
+                <div className="relative bg-white/95 backdrop-blur-xl rounded-2xl p-2.5 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.8)] border border-white/30">
+                  <div className="flex flex-col md:flex-row items-stretch md:items-center gap-2">
                   {/* Search Input */}
                   <div className="flex-1 flex items-center gap-3 px-4 py-3 bg-white rounded-lg hover:bg-neutral-50 transition-colors border border-transparent hover:border-neutral-200">
                     <Search className="w-5 h-5 text-neutral-400 flex-shrink-0" />
@@ -357,20 +362,21 @@ export default function HeroSection() {
                   </Link>
                 </div>
               </div>
+            </div>
 
               {/* Clean Quick Stats */}
-              <div className="flex flex-wrap items-center justify-center gap-8 text-white mt-10">
-                <div className="flex items-center gap-2 text-sm font-medium drop-shadow-sm">
-                  <Compass className="w-4 h-4 text-white/80" />
-                  <span> Verified Places</span>
+              <div className="flex flex-wrap items-center justify-center gap-6 text-white mt-12">
+                <div className="flex items-center gap-3 px-6 py-3 rounded-full bg-black/40 backdrop-blur-md border border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.6)] hover:bg-black/60 hover:-translate-y-1 transition-all duration-300">
+                  <Compass className="w-5 h-5 text-yellow-400" />
+                  <span className="font-semibold tracking-wide text-sm">Verified Places</span>
                 </div>
-                <div className="flex items-center gap-2 text-sm font-medium drop-shadow-sm">
-                  <MapPin className="w-4 h-4 text-white/80" />
-                  <span>Available in Ethiopia</span>
+                <div className="flex items-center gap-3 px-6 py-3 rounded-full bg-black/40 backdrop-blur-md border border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.6)] hover:bg-black/60 hover:-translate-y-1 transition-all duration-300">
+                  <MapPin className="w-5 h-5 text-emerald-400" />
+                  <span className="font-semibold tracking-wide text-sm">Available in Ethiopia</span>
                 </div>
-                <div className="flex items-center gap-2 text-sm font-medium drop-shadow-sm">
-                  <Sparkles className="w-4 h-4 text-white/80" />
-                  <span>Real Customer Reviews</span>
+                <div className="flex items-center gap-3 px-6 py-3 rounded-full bg-black/40 backdrop-blur-md border border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.6)] hover:bg-black/60 hover:-translate-y-1 transition-all duration-300">
+                  <Sparkles className="w-5 h-5 text-blue-400" />
+                  <span className="font-semibold tracking-wide text-sm">Real Customer Reviews</span>
                 </div>
               </div>
             </div>
