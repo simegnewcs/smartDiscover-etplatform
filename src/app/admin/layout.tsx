@@ -4,6 +4,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter, usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import {
   LayoutDashboard,
   Users,
@@ -75,12 +76,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         {/* Logo */}
         <div className="px-6 py-5 border-b border-white/20 flex justify-between items-center">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-white rounded-lg flex items-center justify-center">
-              <ShieldCheck className="w-5 h-5 text-[#16A34A]" />
+            <div className="relative w-11 h-11 bg-white rounded-full p-0.5 overflow-hidden shadow-sm">
+              <Image src="/HELLOTLOGO.png" alt="HelloET Logo" fill className="object-cover rounded-full" priority />
             </div>
             <div>
-              <div className="font-bold text-white text-sm">Super Admin</div>
-              <div className="text-xs text-green-100">HelloET Platform</div>
+              <div className="font-bold text-white text-sm">HelloET</div>
+              <div className="text-xs text-green-100 font-medium flex items-center gap-1 mt-0.5">
+                <ShieldCheck className="w-3.5 h-3.5" /> Super Admin
+              </div>
             </div>
           </div>
           <button 

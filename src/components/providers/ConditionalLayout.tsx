@@ -8,13 +8,15 @@ import ChatWidget from '@/components/layout/ChatWidget'
 export default function ConditionalLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const isAdminRoute = pathname?.startsWith('/admin')
+  const isDashboardRoute = pathname?.startsWith('/dashboard')
+  const shouldHideLayout = isAdminRoute || isDashboardRoute
 
   return (
     <>
-      {!isAdminRoute && <Navbar />}
+      {!shouldHideLayout && <Navbar />}
       {children}
-      {!isAdminRoute && <Footer />}
-      {!isAdminRoute && <ChatWidget />}
+      {!shouldHideLayout && <Footer />}
+      {!shouldHideLayout && <ChatWidget />}
     </>
   )
 }

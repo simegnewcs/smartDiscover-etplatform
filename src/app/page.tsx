@@ -59,7 +59,7 @@ const jsonLdOrganization = {
   '@type': 'Organization',
   name: 'HelloET',
   url: siteUrl,
-  logo: `${siteUrl}/logo.png`,
+  logo: `${siteUrl}/HELLOTLOGO.png`,
   description: 'Ethiopia\'s #1 trusted local business discovery platform connecting users with verified local businesses across Ethiopia.',
   address: {
     '@type': 'PostalAddress',

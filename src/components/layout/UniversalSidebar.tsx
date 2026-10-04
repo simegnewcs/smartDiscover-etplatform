@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { 
   X, 
   Home, 
@@ -96,23 +97,23 @@ export default function UniversalSidebar({ isOpen, onClose }: UniversalSidebarPr
       />
       
       {/* Sidebar */}
-      <div className={`fixed inset-y-0 left-0 bg-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out ${
+      <div className={`fixed inset-y-0 left-0 bg-[#16A34A] shadow-xl z-50 transform transition-transform duration-300 ease-in-out ${
         isOpen ? 'translate-x-0' : '-translate-x-full'
       } w-80 md:w-96 lg:w-80`}>
         <div className="flex flex-col h-full">
           {/* Header */}
-          <div className="flex items-center justify-between p-4 border-b border-neutral-200">
+          <div className="flex items-center justify-between p-4 border-b border-white/20">
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-[#047857] rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">H</span>
+              <div className="relative w-10 h-10 rounded-full overflow-hidden shadow-sm border border-white/20 bg-white">
+                <Image src="/HELLOTLOGO.png" alt="HelloET Logo" fill className="object-cover" priority />
               </div>
-              <span className="text-xl font-bold text-neutral-800">HelloET</span>
+              <span className="text-xl font-bold text-white">HelloET</span>
             </div>
             <button
               onClick={onClose}
-              className="p-2 rounded-lg hover:bg-neutral-100 transition-colors"
+              className="p-2 rounded-lg hover:bg-white/10 transition-colors"
             >
-              <X className="w-5 h-5 text-neutral-600" />
+              <X className="w-5 h-5 text-green-100 hover:text-white" />
             </button>
           </div>
 
@@ -123,7 +124,7 @@ export default function UniversalSidebar({ isOpen, onClose }: UniversalSidebarPr
               <Link
                 href="/"
                 onClick={onClose}
-                className="flex items-center space-x-3 px-3 py-2.5 rounded-lg bg-[#D1FAE5] text-[#047857] border-l-2 border-[#047857]"
+                className="flex items-center space-x-3 px-3 py-2.5 rounded-lg bg-white/20 text-white border-l-2 border-white"
               >
                 <Home className="w-5 h-5" />
                 <span className="font-medium">Home</span>
@@ -132,7 +133,7 @@ export default function UniversalSidebar({ isOpen, onClose }: UniversalSidebarPr
               <Link
                 href="/businesses"
                 onClick={onClose}
-                className="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-neutral-600 hover:bg-neutral-50 hover:text-neutral-800 transition-colors"
+                className="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-green-100 hover:bg-white/10 hover:text-white transition-colors"
               >
                 <Building2 className="w-5 h-5" />
                 <span className="font-medium">All Businesses</span>
@@ -141,7 +142,7 @@ export default function UniversalSidebar({ isOpen, onClose }: UniversalSidebarPr
               <Link
                 href="/search"
                 onClick={onClose}
-                className="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-neutral-600 hover:bg-neutral-50 hover:text-neutral-800 transition-colors"
+                className="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-green-100 hover:bg-white/10 hover:text-white transition-colors"
               >
                 <Search className="w-5 h-5" />
                 <span className="font-medium">Search</span>
@@ -150,14 +151,14 @@ export default function UniversalSidebar({ isOpen, onClose }: UniversalSidebarPr
 
             {/* Categories Section */}
             <div className="mb-6">
-              <h3 className="text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-3 px-3">
+              <h3 className="text-xs font-semibold text-green-200 uppercase tracking-wider mb-3 px-3">
                 Categories
               </h3>
               <div className="space-y-1">
                 {loading ? (
-                  <div className="px-3 py-2 text-neutral-500">Loading categories...</div>
+                  <div className="px-3 py-2 text-green-200">Loading categories...</div>
                 ) : categories.length === 0 ? (
-                  <div className="px-3 py-2 text-neutral-500">No categories found</div>
+                  <div className="px-3 py-2 text-green-200">No categories found</div>
                 ) : (
                   categories.map((category) => {
                     const Icon = iconMap[category.name.split(' - ')[0]] || iconMap['default']
@@ -168,13 +169,13 @@ export default function UniversalSidebar({ isOpen, onClose }: UniversalSidebarPr
                         key={category.id}
                         href={`/businesses?category=${encodeURIComponent(category.name)}`}
                         onClick={onClose}
-                        className="flex items-center justify-between px-3 py-2.5 rounded-lg text-neutral-600 hover:bg-neutral-50 hover:text-neutral-800 transition-colors"
+                        className="flex items-center justify-between px-3 py-2.5 rounded-lg text-green-100 hover:bg-white/10 hover:text-white transition-colors"
                       >
                         <div className="flex items-center space-x-3">
-                          <Icon className="w-5 h-5 text-neutral-400" />
+                          <Icon className="w-5 h-5 text-green-200" />
                           <span className="font-medium text-sm">{category.name}</span>
                         </div>
-                        <span className="text-xs text-neutral-400 bg-neutral-100 px-2 py-1 rounded-full">
+                        <span className="text-xs text-green-200 bg-white/10 px-2 py-1 rounded-full">
                           {category.businessCount}
                         </span>
                       </Link>
@@ -186,7 +187,7 @@ export default function UniversalSidebar({ isOpen, onClose }: UniversalSidebarPr
 
             {/* Popular Locations */}
             <div className="mb-6">
-              <h3 className="text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-3 px-3">
+              <h3 className="text-xs font-semibold text-green-200 uppercase tracking-wider mb-3 px-3">
                 Popular Locations
               </h3>
               <div className="space-y-1">
@@ -195,9 +196,9 @@ export default function UniversalSidebar({ isOpen, onClose }: UniversalSidebarPr
                     key={location}
                     href={`/search?location=${encodeURIComponent(location)}`}
                     onClick={onClose}
-                    className="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-neutral-600 hover:bg-neutral-50 hover:text-neutral-800 transition-colors"
+                    className="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-green-100 hover:bg-white/10 hover:text-white transition-colors"
                   >
-                    <MapPin className="w-5 h-5 text-neutral-400" />
+                    <MapPin className="w-5 h-5 text-green-200" />
                     <span className="font-medium">{location}</span>
                   </Link>
                 ))}
@@ -205,8 +206,8 @@ export default function UniversalSidebar({ isOpen, onClose }: UniversalSidebarPr
             </div>
 
             {/* Account Section */}
-            <div className="border-t border-neutral-200 pt-6">
-              <h3 className="text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-3 px-3">
+            <div className="border-t border-white/20 pt-6">
+              <h3 className="text-xs font-semibold text-green-200 uppercase tracking-wider mb-3 px-3">
                 Account
               </h3>
               <div className="space-y-1">
@@ -215,7 +216,7 @@ export default function UniversalSidebar({ isOpen, onClose }: UniversalSidebarPr
                     onClose()
                     // Open login modal or navigate to login
                   }}
-                  className="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-neutral-600 hover:bg-neutral-50 hover:text-neutral-800 transition-colors"
+                  className="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-green-100 hover:bg-white/10 hover:text-white transition-colors"
                 >
                   <LogIn className="w-5 h-5" />
                   <span className="font-medium">Sign In</span>
@@ -226,7 +227,7 @@ export default function UniversalSidebar({ isOpen, onClose }: UniversalSidebarPr
                     onClose()
                     // Open register modal or navigate to register
                   }}
-                  className="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-neutral-600 hover:bg-neutral-50 hover:text-neutral-800 transition-colors"
+                  className="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-green-100 hover:bg-white/10 hover:text-white transition-colors"
                 >
                   <User className="w-5 h-5" />
                   <span className="font-medium">Register</span>
@@ -235,7 +236,7 @@ export default function UniversalSidebar({ isOpen, onClose }: UniversalSidebarPr
                 <Link
                   href="/dashboard"
                   onClick={onClose}
-                  className="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-neutral-600 hover:bg-neutral-50 hover:text-neutral-800 transition-colors"
+                  className="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-green-100 hover:bg-white/10 hover:text-white transition-colors"
                 >
                   <Settings className="w-5 h-5" />
                   <span className="font-medium">Dashboard</span>
@@ -248,19 +249,19 @@ export default function UniversalSidebar({ isOpen, onClose }: UniversalSidebarPr
               <Link
                 href="/auth/register"
                 onClick={onClose}
-                className="w-full flex items-center justify-center space-x-2 bg-[#047857] hover:bg-[#065F46] text-white px-4 py-3 rounded-lg transition-colors"
+                className="w-full flex items-center justify-center space-x-2 bg-white hover:bg-green-50 text-[#16A34A] px-4 py-3 rounded-lg transition-colors shadow-sm"
               >
                 <Plus className="w-5 h-5" />
-                <span className="font-medium">Add Your Business</span>
+                <span className="font-bold">Add Your Business</span>
               </Link>
             </div>
 
             {/* Support */}
-            <div className="mt-auto pt-6 border-t border-neutral-200">
+            <div className="mt-auto pt-6 border-t border-white/20">
               <Link
                 href="/help"
                 onClick={onClose}
-                className="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-neutral-600 hover:bg-neutral-50 hover:text-neutral-800 transition-colors"
+                className="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-green-100 hover:bg-white/10 hover:text-white transition-colors"
               >
                 <HelpCircle className="w-5 h-5" />
                 <span className="font-medium">Help & Support</span>

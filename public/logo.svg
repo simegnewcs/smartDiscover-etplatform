@@ -1,34 +1,151 @@
-﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 100" width="380" height="100" fill="none">
-  <!-- Badge Background -->
-  <rect x="0" y="0" width="100" height="100" rx="22" ry="22" fill="#16A34A"/>
-  
-  <!-- H letter parts -->
-  <g mask="url(#slash-mask)">
-    <!-- Left vertical -->
-    <rect x="22" y="22" width="22" height="56" fill="white"/>
-    <polygon points="22,22 33,22 33,78 22,78" fill="#4ade80"/>
-    
-    <!-- Right vertical -->
-    <rect x="56" y="22" width="22" height="56" fill="white"/>
-    <polygon points="56,22 67,22 67,78 56,78" fill="#4ade80"/>
-
-    <!-- Middle horizontal -->
-    <rect x="44" y="42" width="12" height="16" fill="white"/>
-  </g>
-
-  <!-- Mask for diagonal slash to create a gap -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 430 118" width="430" height="118" fill="none">
   <defs>
-    <mask id="slash-mask">
-      <rect x="0" y="0" width="100" height="100" fill="white"/>
-      <polygon points="10,75 100,30 100,38 10,83" fill="black"/>
-    </mask>
+    <!-- ── PIN ── -->
+    <linearGradient id="pB" x1="25%" y1="0%" x2="75%" y2="100%">
+      <stop offset="0%"   stop-color="#5ae08a"/>
+      <stop offset="35%"  stop-color="#16a34a"/>
+      <stop offset="100%" stop-color="#0a4020"/>
+    </linearGradient>
+    <linearGradient id="sG" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#4ade80"/>
+      <stop offset="100%" stop-color="#15803d"/>
+    </linearGradient>
+    <radialGradient id="gL" cx="34%" cy="20%" r="48%">
+      <stop offset="0%"   stop-color="#ffffff" stop-opacity="0.7"/>
+      <stop offset="55%"  stop-color="#ffffff" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <!-- ── H ── -->
+    <linearGradient id="hF" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#dceae0"/>
+    </linearGradient>
+    <linearGradient id="hT" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#e8f8f0"/>
+      <stop offset="100%" stop-color="#bcd5c8"/>
+    </linearGradient>
+    <linearGradient id="hR" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#aac8ba"/>
+      <stop offset="100%" stop-color="#86a898"/>
+    </linearGradient>
+    <radialGradient id="cS" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#000000" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
   </defs>
 
-  <!-- Wordmark -->
-  <text x="120" y="64" font-family="'Inter', 'Segoe UI', Arial, sans-serif" font-size="46" letter-spacing="-1">
-    <tspan font-weight="300" fill="#16A34A">Hello</tspan><tspan font-weight="800" fill="#16A34A">ET</tspan>
-  </text>
-  
+  <!-- ════════════════════════════════════════ -->
+  <!-- ICON (scaled 0.74x → fits 92×111 area) -->
+  <!-- Original viewBox 124×150 → scale 0.74  -->
+  <!-- ════════════════════════════════════════ -->
+  <g transform="translate(4, 3) scale(0.742)">
+
+    <!-- Cast shadow -->
+    <ellipse cx="62" cy="145" rx="26" ry="6" fill="url(#cS)"/>
+
+    <!-- Scalloped bumps -->
+    <circle cx="22.7" cy="36.5" r="8" fill="url(#sG)"/>
+    <circle cx="33.3" cy="25.5" r="8" fill="url(#sG)"/>
+    <circle cx="46.9" cy="18.4" r="8" fill="url(#sG)"/>
+    <circle cx="62"   cy="16"   r="8" fill="url(#sG)"/>
+    <circle cx="77.1" cy="18.4" r="8" fill="url(#sG)"/>
+    <circle cx="90.7" cy="25.5" r="8" fill="url(#sG)"/>
+    <circle cx="101.3" cy="36.5" r="8" fill="url(#sG)"/>
+
+    <!-- Main pin -->
+    <path d="M62 16 C37 16 14 39 14 64 C14 89 38 112 56 126 C58 127.5 66 127.5 68 126 C86 112 110 89 110 64 C110 39 87 16 62 16 Z"
+          fill="url(#pB)"/>
+
+    <!-- Ethiopian stripes -->
+    <path d="M15.6 45.3 A50 50 0 0 1 80.7 17.6 L84.5 8.4 A60 60 0 0 0 6.4 41.5 Z" fill="#078930" opacity="0.88"/>
+    <path d="M24.9 49 A40 40 0 0 1 77 26.9 L80.7 17.6 A50 50 0 0 0 15.6 45.3 Z"   fill="#FCDD09"/>
+    <path d="M33.2 52.4 A31 31 0 0 1 73.6 35.2 L77 26.9 A40 40 0 0 0 24.9 49 Z"   fill="#DA121A"/>
+
+    <!-- Gloss -->
+    <path d="M62 16 C37 16 14 39 14 64 C14 89 38 112 56 126 C58 127.5 66 127.5 68 126 C86 112 110 89 110 64 C110 39 87 16 62 16 Z"
+          fill="url(#gL)"/>
+
+    <!-- H shadows -->
+    <rect x="38" y="26" width="13" height="60" rx="2.5" fill="#042a12" opacity="0.3"/>
+    <rect x="81" y="26" width="13" height="60" rx="2.5" fill="#042a12" opacity="0.3"/>
+    <rect x="51" y="50" width="26" height="10" rx="2"   fill="#042a12" opacity="0.26"/>
+
+    <!-- H top extrusion -->
+    <polygon points="34,22  47,22  51,18  38,18" fill="url(#hT)"/>
+    <polygon points="77,22  90,22  94,18  81,18" fill="url(#hT)"/>
+    <polygon points="34,46  77,46  81,42  38,42" fill="url(#hT)"/>
+
+    <!-- H right extrusion -->
+    <polygon points="47,22  51,18  51,86  47,82" fill="url(#hR)"/>
+    <polygon points="90,22  94,18  94,86  90,82" fill="url(#hR)"/>
+    <polygon points="77,46  81,42  81,60  77,56" fill="url(#hR)"/>
+
+    <!-- H bottom extrusion -->
+    <polygon points="34,82  47,82  51,86  38,86" fill="#7a9888" opacity="0.7"/>
+    <polygon points="77,82  90,82  94,86  81,86" fill="#7a9888" opacity="0.7"/>
+    <polygon points="34,56  77,56  81,60  38,60" fill="#7a9888" opacity="0.6"/>
+
+    <!-- H front faces -->
+    <rect x="34" y="22" width="13" height="60" rx="2.5" fill="url(#hF)"/>
+    <rect x="77" y="22" width="13" height="60" rx="2.5" fill="url(#hF)"/>
+    <rect x="34" y="46" width="43" height="10" rx="2"   fill="url(#hF)"/>
+
+    <!-- H bevel highlights -->
+    <rect x="34" y="22" width="2.5" height="60" rx="1" fill="white" opacity="0.88"/>
+    <rect x="77" y="22" width="2.5" height="60" rx="1" fill="white" opacity="0.88"/>
+    <rect x="34" y="22" width="13"  height="2.5" rx="1" fill="white" opacity="0.88"/>
+    <rect x="77" y="22" width="13"  height="2.5" rx="1" fill="white" opacity="0.88"/>
+    <rect x="34" y="46" width="43"  height="2.5" rx="1" fill="white" opacity="0.88"/>
+    <rect x="45" y="24" width="2"   height="56" rx="1" fill="#0a3d22" opacity="0.13"/>
+    <rect x="88" y="24" width="2"   height="56" rx="1" fill="#0a3d22" opacity="0.13"/>
+    <rect x="34" y="79" width="13"  height="3"  rx="1" fill="#0a3d22" opacity="0.11"/>
+    <rect x="77" y="79" width="13"  height="3"  rx="1" fill="#0a3d22" opacity="0.11"/>
+
+    <!-- Store icon (awning in upper H gap) -->
+    <polygon points="47,44 77,44 62,26" fill="white" opacity="0.9"/>
+    <line x1="54" y1="34.5" x2="50" y2="44" stroke="#0d5c2e" stroke-width="1.2" opacity="0.3"/>
+    <line x1="62" y1="26"   x2="58" y2="44" stroke="#0d5c2e" stroke-width="1.2" opacity="0.3"/>
+    <line x1="62" y1="26"   x2="66" y2="44" stroke="#0d5c2e" stroke-width="1.2" opacity="0.3"/>
+    <line x1="70" y1="34.5" x2="74" y2="44" stroke="#0d5c2e" stroke-width="1.2" opacity="0.3"/>
+    <rect x="52" y="44" width="20" height="4" rx="1" fill="white" opacity="0.78"/>
+    <rect x="58" y="44" width="8"  height="4" rx="1" fill="#16a34a" opacity="0.5"/>
+
+    <!-- Tip glow -->
+    <ellipse cx="62" cy="129" rx="11" ry="4.5" fill="#4ade80" opacity="0.2"/>
+  </g>
+
+  <!-- ════════════════════════════════════════ -->
+  <!--   WORDMARK                             -->
+  <!-- "Hello" navy, pin icon, "ET" green     -->
+  <!-- ════════════════════════════════════════ -->
+
+  <!-- "Hello" -->
+  <text x="104" y="60"
+        font-family="'Outfit','Nunito','Poppins','DM Sans','Segoe UI',Arial,sans-serif"
+        font-weight="800"
+        font-size="48"
+        letter-spacing="-0.5"
+        fill="#0f1f3d">Hello</text>
+
+  <!-- Small location pin icon between "Hello" and "ET" -->
+  <!-- Positioned at approximately x=248 based on "Hello" width -->
+  <path d="M252 20 C246 20 240 26 240 32 C240 40 251 52 252 52 C253 52 264 40 264 32 C264 26 258 20 252 20 Z"
+        fill="#22c55e"/>
+  <circle cx="252" cy="32" r="5" fill="white"/>
+
+  <!-- "ET" -->
+  <text x="270" y="60"
+        font-family="'Outfit','Nunito','Poppins','DM Sans','Segoe UI',Arial,sans-serif"
+        font-weight="800"
+        font-size="48"
+        letter-spacing="-0.5"
+        fill="#16a34a">ET</text>
+
   <!-- Tagline -->
-  <text x="122" y="82" font-family="'Inter', 'Segoe UI', Arial, sans-serif" font-size="11" font-weight="600" fill="#16A34A" letter-spacing="4" opacity="0.7">DISCOVER LOCAL</text>
+  <text x="104" y="84"
+        font-family="'Outfit','Nunito','Poppins','DM Sans','Segoe UI',Arial,sans-serif"
+        font-weight="500"
+        font-size="11"
+        letter-spacing="0.3"
+        fill="#64748b">Find Trusted Local Businesses in Ethiopia</text>
 </svg>

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { useSession, signOut } from 'next-auth/react'
 import { 
@@ -23,7 +24,9 @@ import {
   Bookmark,
   PlusCircle,
   Bell,
-  ShieldCheck
+  ShieldCheck,
+  X,
+  Menu
 } from 'lucide-react'
 
 interface SidebarItem {
@@ -43,7 +46,11 @@ interface DashboardStats {
   recentActivityCount: number
 }
 
-export default function Sidebar() {
+interface SidebarProps {
+  onClose?: () => void
+}
+
+export default function Sidebar({ onClose }: SidebarProps = {}) {
   const pathname = usePathname()
   const { data: session } = useSession()
   const [expandedItems, setExpandedItems] = useState<string[]>([])
@@ -163,16 +170,21 @@ export default function Sidebar() {
   return (
     <div className="w-64 bg-white border-r border-neutral-200 h-full flex flex-col">
       {/* Logo Section */}
-      <div className="p-6 border-b border-neutral-200">
-        <Link href="/dashboard" className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-[#047857] rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-lg">H</span>
+      <div className="p-6 border-b border-neutral-200 flex items-center justify-between">
+        <Link href="/dashboard" className="flex items-center space-x-3" onClick={onClose}>
+          <div className="relative w-11 h-11 rounded-full overflow-hidden shadow-sm border border-neutral-100 bg-white">
+            <Image src="/HELLOTLOGO.png" alt="HelloET Logo" fill className="object-cover" priority />
           </div>
-          <div>
-            <div className="text-lg font-bold text-neutral-800">HelloET</div>
-            <div className="text-xs text-neutral-500">{isBusinessOwner ? 'Business Dashboard' : 'User Dashboard'}</div>
+          <div className="flex flex-col">
+            <span className="text-xl font-bold text-neutral-800">HelloET</span>
+            <span className="text-xs text-neutral-500 font-medium">{isBusinessOwner ? 'Business Dashboard' : 'User Dashboard'}</span>
           </div>
         </Link>
+        {onClose && (
+          <button onClick={onClose} className="p-2 -mr-2 rounded-lg hover:bg-neutral-100 md:hidden">
+            <X className="w-5 h-5 text-neutral-500" />
+          </button>
+        )}
       </div>
 
       {/* Navigation */}
@@ -191,9 +203,12 @@ export default function Sidebar() {
                     ? 'bg-[#D1FAE5] text-[#047857] border-l-2 border-[#047857]'
                     : 'text-neutral-600 hover:bg-neutral-50 hover:text-neutral-800'
                 }`}
-                onClick={() => {
+                onClick={(e) => {
                   if (item.children) {
+                    e.preventDefault()
                     toggleExpanded(item.name)
+                  } else if (onClose) {
+                    onClose()
                   }
                 }}
               >
@@ -230,6 +245,7 @@ export default function Sidebar() {
                       <Link
                         key={child.name}
                         href={child.href}
+                        onClick={onClose}
                         className={`flex items-center justify-between px-3 py-2 rounded-lg transition-colors ${
                           childActive
                             ? 'bg-[#D1FAE5] text-[#047857]'
@@ -262,6 +278,7 @@ export default function Sidebar() {
         <div className="space-y-2">
           <Link
             href="/dashboard/help"
+            onClick={onClose}
             className="flex items-center space-x-3 px-3 py-2 text-neutral-600 hover:bg-[#D1FAE5] hover:text-[#047857] rounded-lg transition-colors"
           >
             <FileText className="w-5 h-5 text-neutral-400" />
@@ -271,6 +288,7 @@ export default function Sidebar() {
           {session?.user?.role === 'ADMIN' && (
             <Link
               href="/admin"
+              onClick={onClose}
               className="flex items-center space-x-3 px-3 py-2 bg-neutral-900 text-[#FBBF24] hover:bg-neutral-800 rounded-lg transition-colors"
             >
               <ShieldCheck className="w-5 h-5" />

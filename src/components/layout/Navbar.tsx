@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useSession, signOut } from 'next-auth/react'
 import { Menu, X, User, LogIn, LogOut, Plus, ChevronDown, Compass, LayoutDashboard } from 'lucide-react'
 import UniversalSidebar from '@/components/layout/UniversalSidebar'
@@ -64,10 +65,10 @@ export default function Navbar() {
               </button>
               
               <Link href="/" className="flex items-center space-x-2.5 group">
-                <div className="w-9 h-9 bg-white rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-all duration-300 group-hover:scale-105">
-                  <span className="text-[#047857] font-extrabold text-lg tracking-tight">H</span>
+                <div className="relative w-11 h-11 rounded-full overflow-hidden shadow-md transition-all duration-300 group-hover:scale-105 bg-white">
+                  <Image src="/HELLOTLOGO.png" alt="HelloET Logo" fill className="object-cover" priority />
                 </div>
-                <span className="text-2xl font-bold text-white tracking-tight">HelloET</span>
+                <span className="text-2xl font-bold text-white tracking-tight hidden sm:block">HelloET</span>
               </Link>
             </div>
 
