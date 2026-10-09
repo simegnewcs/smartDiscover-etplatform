@@ -200,7 +200,7 @@ export default function Sidebar({ onClose }: SidebarProps = {}) {
                 href={item.href}
                 className={`flex items-center justify-between px-3 py-2.5 rounded-lg transition-colors group ${
                   active
-                    ? 'bg-[#D1FAE5] text-[#047857] border-l-2 border-[#047857]'
+                    ? 'bg-[#DCFCE7] text-[#16A34A] border-l-2 border-[#16A34A]'
                     : 'text-neutral-600 hover:bg-neutral-50 hover:text-neutral-800'
                 }`}
                 onClick={(e) => {
@@ -213,13 +213,13 @@ export default function Sidebar({ onClose }: SidebarProps = {}) {
                 }}
               >
                 <div className="flex items-center space-x-3">
-                  <Icon className={`w-5 h-5 ${active ? "text-[#047857]" : "text-neutral-400 group-hover:text-neutral-600"}`} />
+                  <Icon className={`w-5 h-5 ${active ? "text-[#16A34A]" : "text-neutral-400 group-hover:text-neutral-600"}`} />
                   <span className="font-medium">{item.name}</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   {item.badge && (
                     <span className={`px-2 py-0.5 text-xs rounded-full ${
-                      active ? "bg-[#047857] text-white" : "bg-neutral-200 text-neutral-600"
+                      active ? "bg-[#16A34A] text-white" : "bg-neutral-200 text-neutral-600"
                     }`}>
                       {item.badge}
                     </span>
@@ -248,8 +248,8 @@ export default function Sidebar({ onClose }: SidebarProps = {}) {
                         onClick={onClose}
                         className={`flex items-center justify-between px-3 py-2 rounded-lg transition-colors ${
                           childActive
-                            ? 'bg-[#D1FAE5] text-[#047857]'
-                            : 'text-neutral-600 hover:bg-[#D1FAE5] hover:text-[#047857]'
+                            ? 'bg-[#DCFCE7] text-[#16A34A]'
+                            : 'text-neutral-600 hover:bg-[#DCFCE7] hover:text-[#16A34A]'
                         }`}
                       >
                         <div className="flex items-center space-x-3">
@@ -258,7 +258,7 @@ export default function Sidebar({ onClose }: SidebarProps = {}) {
                         </div>
                         {child.badge && (
                           <span className={`px-2 py-0.5 text-xs rounded-full ${
-                            childActive ? "bg-[#047857] text-white" : "bg-neutral-200 text-neutral-600"
+                            childActive ? "bg-[#16A34A] text-white" : "bg-neutral-200 text-neutral-600"
                           }`}>
                             {child.badge}
                           </span>
@@ -279,7 +279,7 @@ export default function Sidebar({ onClose }: SidebarProps = {}) {
           <Link
             href="/dashboard/help"
             onClick={onClose}
-            className="flex items-center space-x-3 px-3 py-2 text-neutral-600 hover:bg-[#D1FAE5] hover:text-[#047857] rounded-lg transition-colors"
+            className="flex items-center space-x-3 px-3 py-2 text-neutral-600 hover:bg-[#DCFCE7] hover:text-[#16A34A] rounded-lg transition-colors"
           >
             <FileText className="w-5 h-5 text-neutral-400" />
             <span className="font-medium">Help & Support</span>
@@ -306,12 +306,12 @@ export default function Sidebar({ onClose }: SidebarProps = {}) {
         </div>
 
         {/* User Info */}
-        <div className="mt-4 p-3 bg-[#D1FAE5]/50 rounded-lg">
+        <div className="mt-4 p-3 bg-[#DCFCE7]/50 rounded-lg">
           <div className="flex items-center space-x-3">
             {session?.user?.image ? (
               <img src={session.user.image} alt="" className="w-8 h-8 rounded-full object-cover flex-shrink-0" />
             ) : (
-              <div className="w-8 h-8 bg-[#047857] rounded-full flex items-center justify-center flex-shrink-0">
+              <div className="w-8 h-8 bg-[#16A34A] rounded-full flex items-center justify-center flex-shrink-0">
                 <span className="text-white font-medium text-sm">
                   {session?.user?.name?.split(' ').map((n: string) => n[0]).join('').toUpperCase() || 'U'}
                 </span>

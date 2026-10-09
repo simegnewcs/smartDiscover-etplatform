@@ -4,10 +4,10 @@
 
 :root {
   /* Premium Brand Colors */
-  --brand-green: #047857;
+  --brand-green: #16A34A;
   --brand-yellow: #FBBF24;
-  --brand-mint: #D1FAE5;
-  --brand-dark: #022C22;
+  --brand-mint: #DCFCE7;
+  --brand-dark: #14532D;
   
   --foreground-rgb: 15, 23, 42;
   --background-start-rgb: 248, 250, 252;
@@ -58,12 +58,12 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: rgba(4, 120, 87, 0.3);
+  background-color: rgba(22, 163, 74, 0.3);
   border-radius: 20px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(4, 120, 87, 0.6);
+  background-color: rgba(22, 163, 74, 0.6);
 }
 
 /* Base text rendering optimizations */

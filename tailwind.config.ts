@@ -11,22 +11,22 @@ const config: Config = {
       colors: {
         // Premium Brand Colors
         brand: {
-          green: '#047857',      // Premium Emerald Green (Tailwind emerald-700)
+          green: '#16A34A',      // Premium Green
           yellow: '#FBBF24',     // Rich Golden Yellow (amber-400)
-          mint: '#D1FAE5',       // Vibrant Mint Accent (emerald-100)
-          dark: '#022C22',       // Deep rich dark green for text/accents
+          mint: '#DCFCE7',       // Vibrant Mint Accent (green-100)
+          dark: '#14532D',       // Deep rich dark green for text/accents
         },
         primary: {
-          50: '#ECFDF5',
-          100: '#D1FAE5',
-          200: '#A7F3D0',
-          300: '#6EE7B7',
-          400: '#34D399',
-          500: '#10B981',
-          600: '#059669',
-          700: '#047857', // Brand Green
-          800: '#065F46',
-          900: '#064E3B',
+          50: '#F0FDF4',
+          100: '#DCFCE7',
+          200: '#BBF7D0',
+          300: '#86EFAC',
+          400: '#4ADE80',
+          500: '#22C55E',
+          600: '#16A34A', // Brand Green
+          700: '#15803D', 
+          800: '#166534',
+          900: '#14532D',
         },
         secondary: {
           50: '#FFFBEB',

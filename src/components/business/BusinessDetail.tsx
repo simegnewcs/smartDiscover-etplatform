@@ -356,8 +356,8 @@ export default function BusinessDetail({ slug }: { slug: string }) {
               {business.features && business.features.length > 0 && (
                 <div className="border-t border-neutral-100 pt-6 mt-6">
                   <h2 className="text-xl font-bold text-neutral-800 mb-4 flex items-center gap-2">
-                    <span className="w-8 h-8 bg-[#D1FAE5] rounded-lg flex items-center justify-center">
-                      <span className="text-[#047857]">✓</span>
+                    <span className="w-8 h-8 bg-[#DCFCE7] rounded-lg flex items-center justify-center">
+                      <span className="text-[#16A34A]">✓</span>
                     </span>
                     Features
                   </h2>
@@ -365,7 +365,7 @@ export default function BusinessDetail({ slug }: { slug: string }) {
                     {business.features.map((feature, index) => (
                       <span
                         key={index}
-                        className="px-4 py-2 bg-[#D1FAE5] text-[#047857] rounded-full text-sm font-medium"
+                        className="px-4 py-2 bg-[#DCFCE7] text-[#16A34A] rounded-full text-sm font-medium"
                       >
                         {featureLabels[feature] || feature}
                       </span>

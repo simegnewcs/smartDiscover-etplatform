@@ -211,7 +211,7 @@ export const metadata: Metadata = {
     'revisit-after': '3 days',
     'language': 'English',
     'copyright': 'HelloET',
-    'theme-color': '#047857',
+    'theme-color': '#16A34A',
   },
 }
 

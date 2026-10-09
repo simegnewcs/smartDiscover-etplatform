@@ -214,9 +214,9 @@ function AllBusinessesContent() {
   return (
     <div className="min-h-screen bg-[#F8FAFC]">
       {/* Premium Dark Hero Section */}
-      <div className="relative bg-[#047857] pt-24 pb-32 px-4 overflow-hidden">
+      <div className="relative bg-[#16A34A] pt-24 pb-32 px-4 overflow-hidden">
         {/* Background glow effects */}
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#059669] rounded-full blur-[100px] opacity-50 transform translate-x-1/3 -translate-y-1/2 pointer-events-none"></div>
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#16A34A] rounded-full blur-[100px] opacity-50 transform translate-x-1/3 -translate-y-1/2 pointer-events-none"></div>
         <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-yellow-400 rounded-full blur-[120px] opacity-20 transform -translate-x-1/3 translate-y-1/2 pointer-events-none"></div>
         
         <div className="max-w-7xl mx-auto relative z-10">
@@ -260,7 +260,7 @@ function AllBusinessesContent() {
                 onClick={() => setShowFilters(!showFilters)}
                 className={`flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-bold transition-all w-full md:w-auto ${
                   showFilters 
-                    ? 'bg-[#047857] text-white shadow-md' 
+                    ? 'bg-[#16A34A] text-white shadow-md' 
                     : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
                 }`}
               >
@@ -282,7 +282,7 @@ function AllBusinessesContent() {
                   <div className="bg-white rounded-2xl p-6 shadow-xl border border-neutral-100 grid grid-cols-1 md:grid-cols-4 gap-6">
                     <div>
                       <label className="block text-xs font-bold text-neutral-500 uppercase tracking-wider mb-2">Category</label>
-                      <select value={selectedCategory} onChange={(e) => handleCategoryChange(e.target.value)} className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#047857] text-neutral-700 font-medium appearance-none cursor-pointer">
+                      <select value={selectedCategory} onChange={(e) => handleCategoryChange(e.target.value)} className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#16A34A] text-neutral-700 font-medium appearance-none cursor-pointer">
                         <option value="all">All Categories</option>
                         {categories.map((category) => (
                           <option key={category.id} value={category.name}>{category.name} ({category.businessCount})</option>
@@ -291,7 +291,7 @@ function AllBusinessesContent() {
                     </div>
                     <div>
                       <label className="block text-xs font-bold text-neutral-500 uppercase tracking-wider mb-2">Location</label>
-                      <select value={selectedLocation} onChange={(e) => setSelectedLocation(e.target.value)} className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#047857] text-neutral-700 font-medium appearance-none cursor-pointer">
+                      <select value={selectedLocation} onChange={(e) => setSelectedLocation(e.target.value)} className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#16A34A] text-neutral-700 font-medium appearance-none cursor-pointer">
                         {locations.map((location) => (
                           <option key={location} value={location}>{location}</option>
                         ))}
@@ -299,7 +299,7 @@ function AllBusinessesContent() {
                     </div>
                     <div>
                       <label className="block text-xs font-bold text-neutral-500 uppercase tracking-wider mb-2">Sort By</label>
-                      <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#047857] text-neutral-700 font-medium appearance-none cursor-pointer">
+                      <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#16A34A] text-neutral-700 font-medium appearance-none cursor-pointer">
                         <option value="name">A to Z</option>
                         <option value="rating">Highest Rated</option>
                         <option value="reviews">Most Reviewed</option>
@@ -309,10 +309,10 @@ function AllBusinessesContent() {
                     <div>
                       <label className="block text-xs font-bold text-neutral-500 uppercase tracking-wider mb-2">Layout</label>
                       <div className="flex bg-neutral-100 p-1 rounded-xl">
-                        <button onClick={() => setViewMode('grid')} className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg font-medium transition-all ${viewMode === 'grid' ? 'bg-white text-[#047857] shadow-sm' : 'text-neutral-500 hover:text-neutral-700'}`}>
+                        <button onClick={() => setViewMode('grid')} className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg font-medium transition-all ${viewMode === 'grid' ? 'bg-white text-[#16A34A] shadow-sm' : 'text-neutral-500 hover:text-neutral-700'}`}>
                           <Grid className="w-4 h-4" /> Grid
                         </button>
-                        <button onClick={() => setViewMode('list')} className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg font-medium transition-all ${viewMode === 'list' ? 'bg-white text-[#047857] shadow-sm' : 'text-neutral-500 hover:text-neutral-700'}`}>
+                        <button onClick={() => setViewMode('list')} className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg font-medium transition-all ${viewMode === 'list' ? 'bg-white text-[#16A34A] shadow-sm' : 'text-neutral-500 hover:text-neutral-700'}`}>
                           <List className="w-4 h-4" /> List
                         </button>
                       </div>
@@ -329,7 +329,7 @@ function AllBusinessesContent() {
       <div className="max-w-7xl mx-auto px-4 py-12 -mt-8 relative z-20">
         {loading ? (
           <div className="flex flex-col items-center justify-center py-20 bg-white rounded-3xl shadow-sm border border-neutral-100">
-            <div className="animate-spin rounded-full h-12 w-12 border-4 border-neutral-200 border-t-[#047857] mb-4"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-4 border-neutral-200 border-t-[#16A34A] mb-4"></div>
             <p className="text-neutral-500 font-medium">Discovering best places...</p>
           </div>
         ) : filteredBusinesses.length > 0 ? (
@@ -354,7 +354,7 @@ function AllBusinessesContent() {
                 if (viewMode === 'grid') {
                   return (
                     <motion.div key={business.id} variants={itemVariants}>
-                      <Link href={`/business/${business.slug}`} className="group block bg-white rounded-[2rem] shadow-sm hover:shadow-xl border border-neutral-100 hover:border-[#047857]/20 overflow-hidden transition-all duration-300 hover:-translate-y-1 h-full flex flex-col">
+                      <Link href={`/business/${business.slug}`} className="group block bg-white rounded-[2rem] shadow-sm hover:shadow-xl border border-neutral-100 hover:border-[#16A34A]/20 overflow-hidden transition-all duration-300 hover:-translate-y-1 h-full flex flex-col">
                         <div className="relative h-60 overflow-hidden bg-neutral-100">
                           {business.image ? (
                             <img src={business.image} alt={business.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" 
@@ -375,21 +375,21 @@ function AllBusinessesContent() {
                             disabled={savingId === idNum}
                             className={`absolute top-4 right-4 p-2.5 rounded-full shadow-md backdrop-blur-md transition-all ${
                               isSaved
-                                ? 'bg-[#047857] text-white'
-                                : 'bg-white/90 text-neutral-500 hover:bg-white hover:text-[#047857]'
+                                ? 'bg-[#16A34A] text-white'
+                                : 'bg-white/90 text-neutral-500 hover:bg-white hover:text-[#16A34A]'
                             }`}
                           >
                             <Bookmark className={`w-4 h-4 ${isSaved ? 'fill-current' : ''}`} />
                           </button>
                           {business.verified && (
-                            <div className="absolute bottom-4 right-4 bg-emerald-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1">
+                            <div className="absolute bottom-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1">
                               ✓ Verified
                             </div>
                           )}
                         </div>
                         <div className="p-6 flex-1 flex flex-col">
                           <div className="flex justify-between items-start mb-3 gap-4">
-                            <h3 className="font-extrabold text-xl text-neutral-800 group-hover:text-[#047857] transition-colors line-clamp-2">
+                            <h3 className="font-extrabold text-xl text-neutral-800 group-hover:text-[#16A34A] transition-colors line-clamp-2">
                               {business.name}
                             </h3>
                             <div className="flex items-center gap-1 bg-yellow-50 px-2.5 py-1 rounded-lg border border-yellow-100 shrink-0">
@@ -405,14 +405,14 @@ function AllBusinessesContent() {
                           <div className="space-y-3 pt-5 border-t border-neutral-100">
                             <div className="flex items-center gap-3 text-sm text-neutral-600">
                               <div className="w-8 h-8 rounded-full bg-neutral-50 flex items-center justify-center shrink-0">
-                                <MapPin className="w-4 h-4 text-[#047857]" />
+                                <MapPin className="w-4 h-4 text-[#16A34A]" />
                               </div>
                               <span className="font-medium truncate">{business.location}</span>
                             </div>
                             {business.phone && (
                               <div className="flex items-center gap-3 text-sm text-neutral-600">
                                 <div className="w-8 h-8 rounded-full bg-neutral-50 flex items-center justify-center shrink-0">
-                                  <Phone className="w-4 h-4 text-[#047857]" />
+                                  <Phone className="w-4 h-4 text-[#16A34A]" />
                                 </div>
                                 <span className="font-medium">{business.phone}</span>
                               </div>
@@ -442,7 +442,7 @@ function AllBusinessesContent() {
                           onClick={(e) => toggleSave(e, idNum)}
                           disabled={savingId === idNum}
                           className={`absolute top-3 left-3 p-2 rounded-full shadow-md backdrop-blur-md transition-all ${
-                            isSaved ? 'bg-[#047857] text-white' : 'bg-white/90 text-neutral-500 hover:bg-white hover:text-[#047857]'
+                            isSaved ? 'bg-[#16A34A] text-white' : 'bg-white/90 text-neutral-500 hover:bg-white hover:text-[#16A34A]'
                           }`}
                         >
                           <Bookmark className={`w-4 h-4 ${isSaved ? 'fill-current' : ''}`} />
@@ -452,11 +452,11 @@ function AllBusinessesContent() {
                       <div className="p-6 flex-1 flex flex-col justify-center">
                         <div className="flex flex-wrap items-center justify-between gap-4 mb-2">
                           <div className="flex items-center gap-3">
-                            <h3 className="font-extrabold text-xl text-neutral-800 group-hover:text-[#047857] transition-colors">
+                            <h3 className="font-extrabold text-xl text-neutral-800 group-hover:text-[#16A34A] transition-colors">
                               {business.name}
                             </h3>
                             {business.verified && (
-                              <span className="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full text-xs font-bold flex items-center gap-1">
+                              <span className="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs font-bold flex items-center gap-1">
                                 ✓ Verified
                               </span>
                             )}
@@ -477,12 +477,12 @@ function AllBusinessesContent() {
                             {business.category}
                           </span>
                           <div className="flex items-center gap-2 text-neutral-600">
-                            <MapPin className="w-4 h-4 text-[#047857]" />
+                            <MapPin className="w-4 h-4 text-[#16A34A]" />
                             <span className="font-medium">{business.location}</span>
                           </div>
                           {business.phone && (
                             <div className="flex items-center gap-2 text-neutral-600">
-                              <Phone className="w-4 h-4 text-[#047857]" />
+                              <Phone className="w-4 h-4 text-[#16A34A]" />
                               <span className="font-medium">{business.phone}</span>
                             </div>
                           )}
@@ -511,7 +511,7 @@ function AllBusinessesContent() {
             </p>
             <button 
               onClick={() => { setSearchTerm(''); setSelectedLocation('all'); handleCategoryChange('all') }} 
-              className="bg-[#047857] hover:bg-[#036246] text-white px-8 py-3 rounded-xl font-bold transition-all hover:scale-105 shadow-lg"
+              className="bg-[#16A34A] hover:bg-[#036246] text-white px-8 py-3 rounded-xl font-bold transition-all hover:scale-105 shadow-lg"
             >
               Clear All Filters
             </button>
@@ -526,7 +526,7 @@ export default function AllBusinessesPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-4 border-neutral-200 border-t-[#047857]"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-neutral-200 border-t-[#16A34A]"></div>
       </div>
     }>
       <AllBusinessesContent />

@@ -317,7 +317,7 @@ export default function HeroSection() {
               {/* Professional Search Bar */}
               <div className="relative max-w-4xl w-full mx-auto mt-12 group">
                 {/* Colorful Animated Glow */}
-                <div className="absolute -inset-1 bg-gradient-to-r from-yellow-400 via-[#047857] to-emerald-400 rounded-2xl blur-lg opacity-70 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-pulse"></div>
+                <div className="absolute -inset-1 bg-gradient-to-r from-yellow-400 via-[#16A34A] to-green-400 rounded-2xl blur-lg opacity-70 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-pulse"></div>
                 
                 {/* Search Bar Container */}
                 <div className="relative bg-white/95 backdrop-blur-xl rounded-2xl p-2.5 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.8)] border border-white/30">
@@ -356,7 +356,7 @@ export default function HeroSection() {
                   {/* Search Button */}
                   <Link 
                     href={`/businesses?search=${encodeURIComponent(searchQuery)}&city=${encodeURIComponent(selectedLocation)}`}
-                    className="flex items-center justify-center bg-[#047857] hover:bg-[#036246] text-white px-8 py-4 md:py-3 rounded-lg font-semibold transition-colors mt-2 md:mt-0"
+                    className="flex items-center justify-center bg-[#16A34A] hover:bg-[#036246] text-white px-8 py-4 md:py-3 rounded-lg font-semibold transition-colors mt-2 md:mt-0"
                   >
                     <span>Search</span>
                   </Link>
@@ -371,7 +371,7 @@ export default function HeroSection() {
                   <span className="font-semibold tracking-wide text-sm">Verified Places</span>
                 </div>
                 <div className="flex items-center gap-3 px-6 py-3 rounded-full bg-black/40 backdrop-blur-md border border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.6)] hover:bg-black/60 hover:-translate-y-1 transition-all duration-300">
-                  <MapPin className="w-5 h-5 text-emerald-400" />
+                  <MapPin className="w-5 h-5 text-green-400" />
                   <span className="font-semibold tracking-wide text-sm">Available in Ethiopia</span>
                 </div>
                 <div className="flex items-center gap-3 px-6 py-3 rounded-full bg-black/40 backdrop-blur-md border border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.6)] hover:bg-black/60 hover:-translate-y-1 transition-all duration-300">

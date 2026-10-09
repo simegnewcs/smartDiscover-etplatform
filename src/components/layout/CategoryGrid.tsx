@@ -1,3 +1,4 @@
+import './category-card.css'
 import Link from 'next/link'
 import { 
   Utensils, 
@@ -86,7 +87,7 @@ export default function CategoryGrid() {
           </div>
           <Link 
             href="/businesses"
-            className="hidden md:inline-flex items-center gap-1 text-[#047857] hover:text-[#036246] font-medium mt-4 md:mt-0"
+            className="hidden md:inline-flex items-center gap-1 text-[#16A34A] hover:text-[#036246] font-medium mt-4 md:mt-0"
           >
             <span>View All</span>
             <ChevronRight className="w-4 h-4" />
@@ -94,29 +95,48 @@ export default function CategoryGrid() {
         </div>
         
         {/* Categories Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
           {categories.map((category, index) => (
             <Link
               key={index}
               href={category.href}
-              className="group bg-white rounded-2xl p-6 shadow-sm hover:shadow-[0_8px_30px_rgb(4,120,87,0.15)] transition-all duration-300 border-2 border-[#047857] hover:-translate-y-1"
+              className="parent mx-auto"
             >
-              <div className="flex items-center gap-4 mb-4">
-                <div className="w-12 h-12 bg-neutral-50 rounded-lg flex items-center justify-center border border-neutral-100 group-hover:bg-[#F2FBF7] group-hover:border-[#047857]/20 transition-colors">
-                  <category.icon className="w-6 h-6 text-[#047857]" />
+              <div className="card">
+                <div className="logo">
+                  <span className="circle circle1"></span>
+                  <span className="circle circle2"></span>
+                  <span className="circle circle3"></span>
+                  <span className="circle circle4"></span>
+                  <span className="circle circle5">
+                    <category.icon className="svg text-white" />
+                  </span>
                 </div>
-                <div>
-                  <h3 className="font-semibold text-neutral-800 group-hover:text-[#047857] transition-colors">
-                    {category.title}
-                  </h3>
-                  <p className="text-sm text-neutral-500">
-                    {category.count} listings
-                  </p>
+                <div className="glass"></div>
+                <div className="content">
+                  <span className="title">{category.title}</span>
+                  <span className="text">{category.description}</span>
+                </div>
+                <div className="bottom">
+                  <div className="social-buttons-container">
+                    <button className="social-button">
+                      <category.icon className="svg" />
+                    </button>
+                    <button className="social-button">
+                      <category.icon className="svg" />
+                    </button>
+                    <button className="social-button">
+                      <category.icon className="svg" />
+                    </button>
+                  </div>
+                  <div className="view-more">
+                    <span className="view-more-button">View ({category.count})</span>
+                    <svg className="svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </div>
                 </div>
               </div>
-              <p className="text-sm text-neutral-600 line-clamp-2">
-                {category.description}
-              </p>
             </Link>
           ))}
         </div>
@@ -125,7 +145,7 @@ export default function CategoryGrid() {
         <div className="text-center mt-8 md:hidden">
           <Link 
             href="/businesses"
-            className="inline-flex items-center gap-1 text-[#047857] font-medium"
+            className="inline-flex items-center gap-1 text-[#16A34A] font-medium"
           >
             <span>View All Categories</span>
             <ChevronRight className="w-4 h-4" />

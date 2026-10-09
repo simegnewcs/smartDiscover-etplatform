@@ -48,8 +48,8 @@ export default function Navbar() {
       <nav 
         className={`sticky top-0 z-50 transition-all duration-300 ${
           scrolled 
-            ? 'bg-[#047857]/95 backdrop-blur-md shadow-lg border-b border-[#036246] py-2' 
-            : 'bg-[#047857] border-b border-[#036246] py-3'
+            ? 'bg-[#16A34A]/95 backdrop-blur-md shadow-lg border-b border-[#036246] py-2' 
+            : 'bg-[#16A34A] border-b border-[#036246] py-3'
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -91,7 +91,7 @@ export default function Navbar() {
               {/* Add Business Button (Desktop) */}
               <Link 
                 href="/dashboard/businesses/new" 
-                className="hidden md:flex items-center space-x-2 bg-white hover:bg-neutral-100 text-[#047857] px-5 py-2.5 rounded-xl font-bold transition-all shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
+                className="hidden md:flex items-center space-x-2 bg-white hover:bg-neutral-100 text-[#16A34A] px-5 py-2.5 rounded-xl font-bold transition-all shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
               >
                 <Plus className="w-4 h-4" />
                 <span>Add Business</span>
@@ -113,7 +113,7 @@ export default function Navbar() {
                         <img src={session.user.image} alt="" className="w-7 h-7 rounded-lg object-cover shadow-inner" />
                       ) : (
                         <div className="w-7 h-7 bg-white rounded-lg flex items-center justify-center shadow-inner">
-                          <span className="text-[#047857] font-bold text-xs">
+                          <span className="text-[#16A34A] font-bold text-xs">
                             {(session?.user?.name || 'U').charAt(0).toUpperCase()}
                           </span>
                         </div>
@@ -144,7 +144,7 @@ export default function Navbar() {
                         </div>
                         <Link
                           href="/dashboard"
-                          className="flex items-center space-x-3 px-4 py-2.5 text-sm font-medium text-neutral-700 hover:text-[#047857] hover:bg-neutral-50 transition-colors mx-1 rounded-lg"
+                          className="flex items-center space-x-3 px-4 py-2.5 text-sm font-medium text-neutral-700 hover:text-[#16A34A] hover:bg-neutral-50 transition-colors mx-1 rounded-lg"
                           onClick={() => setIsProfileMenuOpen(false)}
                         >
                           <LayoutDashboard className="w-4 h-4" />
@@ -166,7 +166,7 @@ export default function Navbar() {
                       <>
                         <Link
                           href="/auth/login"
-                          className="flex items-center space-x-3 px-4 py-2.5 text-sm font-medium text-neutral-700 hover:text-[#047857] hover:bg-neutral-50 transition-colors mx-1 rounded-lg"
+                          className="flex items-center space-x-3 px-4 py-2.5 text-sm font-medium text-neutral-700 hover:text-[#16A34A] hover:bg-neutral-50 transition-colors mx-1 rounded-lg"
                           onClick={() => setIsProfileMenuOpen(false)}
                         >
                           <LogIn className="w-4 h-4 text-neutral-400" />
@@ -174,7 +174,7 @@ export default function Navbar() {
                         </Link>
                         <Link
                           href="/auth/register"
-                          className="flex items-center space-x-3 px-4 py-2.5 text-sm font-medium text-neutral-700 hover:text-[#047857] hover:bg-neutral-50 transition-colors mx-1 rounded-lg"
+                          className="flex items-center space-x-3 px-4 py-2.5 text-sm font-medium text-neutral-700 hover:text-[#16A34A] hover:bg-neutral-50 transition-colors mx-1 rounded-lg"
                           onClick={() => setIsProfileMenuOpen(false)}
                         >
                           <User className="w-4 h-4 text-neutral-400" />
@@ -209,7 +209,7 @@ export default function Navbar() {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className="flex items-center space-x-3 text-neutral-700 hover:text-[#047857] hover:bg-neutral-50 font-medium px-4 py-3 rounded-xl transition-colors"
+                  className="flex items-center space-x-3 text-neutral-700 hover:text-[#16A34A] hover:bg-neutral-50 font-medium px-4 py-3 rounded-xl transition-colors"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   <item.icon className="w-5 h-5 text-neutral-400" />
@@ -233,7 +233,7 @@ export default function Navbar() {
               ) : (
                 <Link 
                   href="/auth/login" 
-                  className="w-full flex items-center justify-center space-x-2 bg-[#047857] hover:bg-[#036246] text-white px-4 py-3.5 rounded-xl font-medium transition-colors shadow-sm"
+                  className="w-full flex items-center justify-center space-x-2 bg-[#16A34A] hover:bg-[#036246] text-white px-4 py-3.5 rounded-xl font-medium transition-colors shadow-sm"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   <LogIn className="w-5 h-5" />

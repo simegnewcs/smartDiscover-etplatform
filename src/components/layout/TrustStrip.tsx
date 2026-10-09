@@ -6,7 +6,7 @@ export default function TrustStrip() {
       icon: CheckCircle,
       title: 'Verified Listings',
       description: 'All businesses are verified and authentic',
-      color: 'text-[#047857]'
+      color: 'text-[#16A34A]'
     },
     {
       icon: Users,

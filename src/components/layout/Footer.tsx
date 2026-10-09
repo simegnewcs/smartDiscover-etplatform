@@ -72,16 +72,16 @@ export default function Footer() {
             </p>
             {/* Social Links */}
             <div className="flex items-center gap-3 pt-2">
-              <a href="#" className="w-8 h-8 bg-white/10 hover:bg-[#047857] rounded-lg flex items-center justify-center transition-colors">
+              <a href="#" className="w-8 h-8 bg-white/10 hover:bg-[#16A34A] rounded-lg flex items-center justify-center transition-colors">
                 <Facebook className="w-4 h-4" />
               </a>
-              <a href="#" className="w-8 h-8 bg-white/10 hover:bg-[#047857] rounded-lg flex items-center justify-center transition-colors">
+              <a href="#" className="w-8 h-8 bg-white/10 hover:bg-[#16A34A] rounded-lg flex items-center justify-center transition-colors">
                 <Twitter className="w-4 h-4" />
               </a>
-              <a href="#" className="w-8 h-8 bg-white/10 hover:bg-[#047857] rounded-lg flex items-center justify-center transition-colors">
+              <a href="#" className="w-8 h-8 bg-white/10 hover:bg-[#16A34A] rounded-lg flex items-center justify-center transition-colors">
                 <Instagram className="w-4 h-4" />
               </a>
-              <a href="#" className="w-8 h-8 bg-white/10 hover:bg-[#047857] rounded-lg flex items-center justify-center transition-colors">
+              <a href="#" className="w-8 h-8 bg-white/10 hover:bg-[#16A34A] rounded-lg flex items-center justify-center transition-colors">
                 <Linkedin className="w-4 h-4" />
               </a>
             </div>
@@ -148,7 +148,7 @@ export default function Footer() {
             <ul className="space-y-3 text-sm">
               <li>
                 <a href="tel:0940192676" className="flex items-start gap-3 text-white/60 hover:text-white transition-colors group">
-                  <div className="w-8 h-8 bg-white/10 group-hover:bg-[#047857] rounded-lg flex items-center justify-center flex-shrink-0 transition-colors">
+                  <div className="w-8 h-8 bg-white/10 group-hover:bg-[#16A34A] rounded-lg flex items-center justify-center flex-shrink-0 transition-colors">
                     <Phone className="w-4 h-4 text-[#FBBF24]" />
                   </div>
                   <div>
@@ -159,7 +159,7 @@ export default function Footer() {
               </li>
               <li>
                 <a href="mailto:devvoltztech@gmail.com" className="flex items-start gap-3 text-white/60 hover:text-white transition-colors group">
-                  <div className="w-8 h-8 bg-white/10 group-hover:bg-[#047857] rounded-lg flex items-center justify-center flex-shrink-0 transition-colors">
+                  <div className="w-8 h-8 bg-white/10 group-hover:bg-[#16A34A] rounded-lg flex items-center justify-center flex-shrink-0 transition-colors">
                     <Mail className="w-4 h-4 text-[#FBBF24]" />
                   </div>
                   <div>

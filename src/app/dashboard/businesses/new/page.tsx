@@ -202,7 +202,7 @@ export default function NewBusinessPage() {
   if (status === 'loading' || isLoadingUser) {
     return (
       <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
-        <div className="w-12 h-12 border-4 border-[#047857] border-t-transparent rounded-full animate-spin" />
+        <div className="w-12 h-12 border-4 border-[#16A34A] border-t-transparent rounded-full animate-spin" />
       </div>
     )
   }
@@ -225,7 +225,7 @@ export default function NewBusinessPage() {
           </div>
           {userData && (
             <div className="hidden sm:flex items-center gap-3 bg-neutral-50 px-4 py-2 rounded-full border border-neutral-100">
-              <div className="w-8 h-8 bg-[#047857] rounded-full flex items-center justify-center text-white text-sm font-bold">
+              <div className="w-8 h-8 bg-[#16A34A] rounded-full flex items-center justify-center text-white text-sm font-bold">
                 {userData.name.charAt(0)}
               </div>
               <div className="text-sm">
@@ -243,7 +243,7 @@ export default function NewBusinessPage() {
           <div className="lg:w-80 shrink-0">
             <div className="bg-white rounded-3xl shadow-2xl shadow-neutral-200/50 border-4 border-white ring-1 ring-neutral-100 p-8 sticky top-28">
               <h3 className="text-sm font-black text-neutral-800 uppercase tracking-widest mb-8 flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-[#047857] animate-pulse" />
+                <div className="w-2 h-2 rounded-full bg-[#16A34A] animate-pulse" />
                 Progress Steps
               </h3>
               <div className="space-y-6">
@@ -255,17 +255,17 @@ export default function NewBusinessPage() {
                     <div key={step.id} className="flex gap-4 group">
                       <div className="flex flex-col items-center">
                         <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
-                          isActive ? 'bg-[#047857] text-white shadow-lg shadow-emerald-500/20' : 
-                          isPast ? 'bg-emerald-50 text-[#047857]' : 'bg-neutral-100 text-neutral-400'
+                          isActive ? 'bg-[#16A34A] text-white shadow-lg shadow-green-500/20' : 
+                          isPast ? 'bg-green-50 text-[#16A34A]' : 'bg-neutral-100 text-neutral-400'
                         }`}>
                           {isPast ? <CheckCircle2 className="w-5 h-5" /> : <StepIcon className="w-5 h-5" />}
                         </div>
                         {idx !== steps.length - 1 && (
-                          <div className={`w-0.5 h-12 mt-2 transition-colors duration-300 ${isPast ? 'bg-[#047857]' : 'bg-neutral-100'}`} />
+                          <div className={`w-0.5 h-12 mt-2 transition-colors duration-300 ${isPast ? 'bg-[#16A34A]' : 'bg-neutral-100'}`} />
                         )}
                       </div>
                       <div className="pt-2">
-                        <p className={`font-bold transition-colors ${isActive ? 'text-[#047857]' : isPast ? 'text-neutral-800' : 'text-neutral-500'}`}>
+                        <p className={`font-bold transition-colors ${isActive ? 'text-[#16A34A]' : isPast ? 'text-neutral-800' : 'text-neutral-500'}`}>
                           {step.label}
                         </p>
                         <p className="text-xs text-neutral-500 mt-0.5">{step.description}</p>
@@ -283,7 +283,7 @@ export default function NewBusinessPage() {
               <div className="p-8 md:p-12">
                 <div className="mb-8">
                   <h2 className="text-2xl font-bold text-neutral-800 flex items-center gap-3">
-                    <currentStep.icon className="w-7 h-7 text-[#047857]" />
+                    <currentStep.icon className="w-7 h-7 text-[#16A34A]" />
                     {currentStep.label}
                   </h2>
                   <p className="text-neutral-500 mt-2">{currentStep.description}</p>
@@ -297,9 +297,9 @@ export default function NewBusinessPage() {
                 )}
 
                 {success && (
-                  <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-8 p-4 bg-emerald-50 border border-emerald-100 rounded-xl flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-[#047857] shrink-0 mt-0.5" />
-                    <p className="text-emerald-700 text-sm font-medium">{success}</p>
+                  <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-8 p-4 bg-green-50 border border-green-100 rounded-xl flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-[#16A34A] shrink-0 mt-0.5" />
+                    <p className="text-green-700 text-sm font-medium">{success}</p>
                   </motion.div>
                 )}
 
@@ -326,7 +326,7 @@ export default function NewBusinessPage() {
                               name="name"
                               value={formData.name}
                               onChange={handleInputChange}
-                              className="w-full pl-12 pr-4 py-3.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#047857] focus:border-transparent transition-all"
+                              className="w-full pl-12 pr-4 py-3.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#16A34A] focus:border-transparent transition-all"
                               placeholder="e.g. Kuriftu Resort & Spa"
                             />
                           </div>
@@ -338,7 +338,7 @@ export default function NewBusinessPage() {
                             name="category"
                             value={formData.category}
                             onChange={handleInputChange}
-                            className="w-full px-4 py-3.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#047857] focus:border-transparent transition-all appearance-none cursor-pointer"
+                            className="w-full px-4 py-3.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#16A34A] focus:border-transparent transition-all appearance-none cursor-pointer"
                           >
                             <option value="">Select the main category</option>
                             {businessTypes.map((type) => (
@@ -354,7 +354,7 @@ export default function NewBusinessPage() {
                             value={formData.description}
                             onChange={handleInputChange}
                             rows={5}
-                            className="w-full px-4 py-3.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#047857] focus:border-transparent transition-all resize-none"
+                            className="w-full px-4 py-3.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#16A34A] focus:border-transparent transition-all resize-none"
                             placeholder="Tell customers what makes your business unique..."
                           />
                         </div>
@@ -371,7 +371,7 @@ export default function NewBusinessPage() {
                               name="city"
                               value={formData.city}
                               onChange={handleInputChange}
-                              className="w-full px-4 py-3.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#047857] transition-all appearance-none cursor-pointer"
+                              className="w-full px-4 py-3.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#16A34A] transition-all appearance-none cursor-pointer"
                             >
                               <option value="">Select city</option>
                               {ethiopianCities.map((city) => (
@@ -386,7 +386,7 @@ export default function NewBusinessPage() {
                               value={formData.subcity}
                               onChange={handleInputChange}
                               disabled={!formData.city}
-                              className="w-full px-4 py-3.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#047857] transition-all appearance-none disabled:opacity-50"
+                              className="w-full px-4 py-3.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#16A34A] transition-all appearance-none disabled:opacity-50"
                             >
                               <option value="">Select subcity</option>
                               {ethiopianCities.find(c => c.name === formData.city)?.subcities.map((subcity) => (
@@ -405,7 +405,7 @@ export default function NewBusinessPage() {
                               name="address"
                               value={formData.address}
                               onChange={handleInputChange}
-                              className="w-full pl-12 pr-4 py-3.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#047857] transition-all"
+                              className="w-full pl-12 pr-4 py-3.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#16A34A] transition-all"
                               placeholder="e.g. Next to Edna Mall, Bole Road"
                             />
                           </div>
@@ -420,7 +420,7 @@ export default function NewBusinessPage() {
                               name="phone"
                               value={formData.phone}
                               onChange={handleInputChange}
-                              className="w-full pl-12 pr-4 py-3.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#047857] transition-all"
+                              className="w-full pl-12 pr-4 py-3.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#16A34A] transition-all"
                               placeholder="+251 9XX XXX XXX"
                             />
                           </div>
@@ -436,7 +436,7 @@ export default function NewBusinessPage() {
                                 name="email"
                                 value={formData.email}
                                 onChange={handleInputChange}
-                                className="w-full pl-12 pr-4 py-3.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#047857] transition-all"
+                                className="w-full pl-12 pr-4 py-3.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#16A34A] transition-all"
                                 placeholder="contact@business.com"
                               />
                             </div>
@@ -450,7 +450,7 @@ export default function NewBusinessPage() {
                                 name="website"
                                 value={formData.website}
                                 onChange={handleInputChange}
-                                className="w-full pl-12 pr-4 py-3.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#047857] transition-all"
+                                className="w-full pl-12 pr-4 py-3.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#16A34A] transition-all"
                                 placeholder="https://www.website.com"
                               />
                             </div>
@@ -478,11 +478,11 @@ export default function NewBusinessPage() {
                                 }}
                                 className={`flex flex-col items-center justify-center p-6 rounded-2xl border-2 transition-all duration-300 ${
                                   isSelected
-                                    ? 'border-[#047857] bg-emerald-50 text-[#047857] shadow-sm'
+                                    ? 'border-[#16A34A] bg-green-50 text-[#16A34A] shadow-sm'
                                     : 'border-neutral-100 bg-white text-neutral-500 hover:border-neutral-200 hover:bg-neutral-50'
                                 }`}
                               >
-                                <Icon className={`w-8 h-8 mb-3 ${isSelected ? 'text-[#047857]' : 'text-neutral-400'}`} />
+                                <Icon className={`w-8 h-8 mb-3 ${isSelected ? 'text-[#16A34A]' : 'text-neutral-400'}`} />
                                 <span className="text-sm font-bold text-center leading-tight">{label}</span>
                               </button>
                             )
@@ -494,7 +494,7 @@ export default function NewBusinessPage() {
                     {/* STEP 4: Media */}
                     {currentStepIndex === 3 && (
                       <div className="space-y-6">
-                        <div className="bg-neutral-50 border-2 border-dashed border-neutral-300 rounded-3xl p-10 text-center hover:border-[#047857] transition-colors group">
+                        <div className="bg-neutral-50 border-2 border-dashed border-neutral-300 rounded-3xl p-10 text-center hover:border-[#16A34A] transition-colors group">
                           <input
                             type="file"
                             multiple
@@ -506,7 +506,7 @@ export default function NewBusinessPage() {
                           />
                           <label htmlFor="image-upload" className="cursor-pointer flex flex-col items-center">
                             <div className="w-16 h-16 bg-white rounded-full shadow-sm flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                              <Camera className="w-8 h-8 text-[#047857]" />
+                              <Camera className="w-8 h-8 text-[#16A34A]" />
                             </div>
                             <span className="text-lg font-bold text-neutral-800">
                               {isUploading ? 'Uploading...' : 'Click to Upload Photos'}
@@ -563,7 +563,7 @@ export default function NewBusinessPage() {
                   <button
                     type="button"
                     onClick={handleNext}
-                    className="flex items-center gap-2 px-8 py-3 bg-[#047857] hover:bg-[#036246] text-white rounded-xl font-bold transition-all shadow-md hover:shadow-lg"
+                    className="flex items-center gap-2 px-8 py-3 bg-[#16A34A] hover:bg-[#036246] text-white rounded-xl font-bold transition-all shadow-md hover:shadow-lg"
                   >
                     Continue <ChevronRight className="w-5 h-5" />
                   </button>
@@ -572,7 +572,7 @@ export default function NewBusinessPage() {
                     type="button"
                     onClick={handleSubmit}
                     disabled={isLoading}
-                    className="flex items-center gap-2 px-8 py-3 bg-[#047857] hover:bg-[#036246] text-white rounded-xl font-bold transition-all shadow-md hover:shadow-lg disabled:opacity-70 disabled:cursor-not-allowed"
+                    className="flex items-center gap-2 px-8 py-3 bg-[#16A34A] hover:bg-[#036246] text-white rounded-xl font-bold transition-all shadow-md hover:shadow-lg disabled:opacity-70 disabled:cursor-not-allowed"
                   >
                     {isLoading ? <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <Save className="w-5 h-5" />}
                     {isLoading ? 'Publishing...' : 'Publish Business'}

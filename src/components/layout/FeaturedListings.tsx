@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { Star, MapPin, Phone } from 'lucide-react'
 import Link from 'next/link'
+import './featured-card.css'
 
 interface Business {
   id: string | number
@@ -100,7 +101,7 @@ export default function FeaturedListings() {
   useEffect(() => {
     const fetchFeatured = async () => {
       try {
-        const res = await fetch('/api/search?limit=6')
+        const res = await fetch('/api/search?limit=8')
         const data = await res.json()
         if (data.success && data.data.businesses.length > 0) {
           setBusinesses(data.data.businesses)
@@ -122,7 +123,7 @@ export default function FeaturedListings() {
   if (loading) {
     return (
       <div className="py-24 px-4 bg-neutral-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#047857]"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#16A34A]"></div>
       </div>
     )
   }
@@ -139,78 +140,41 @@ export default function FeaturedListings() {
               Discover the most highly-rated places in your area.
             </p>
           </div>
-          <Link href="/businesses" className="hidden md:inline-flex text-[#047857] hover:text-[#036246] font-medium mt-4 md:mt-0">
+          <Link href="/businesses" className="hidden md:inline-flex text-[#16A34A] hover:text-[#036246] font-medium mt-4 md:mt-0">
             View All Top Businesses &rarr;
           </Link>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-6">
           {businesses.map((business) => (
-            <Link
-              href={`/business/${business.slug}`}
-              key={business.id}
-              className="group bg-white rounded-2xl border-2 border-[#047857] overflow-hidden hover:shadow-[0_8px_30px_rgb(4,120,87,0.15)] transition-all duration-300 flex flex-col cursor-pointer hover:-translate-y-1"
-            >
-              <div className="relative h-60 overflow-hidden bg-neutral-100">
-                <img
-                  src={business.image || 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&q=80'}
-                  alt={business.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
-                  onError={(e) => {
-                    e.currentTarget.src = 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&q=80'
-                  }}
-                />
-                
-                {/* Badges */}
-                <div className="absolute top-4 left-4">
-                  <div className="bg-white px-3 py-1 rounded-full text-xs font-semibold text-neutral-700 shadow-sm">
-                    {business.category}
-                  </div>
-                </div>
-                {/* We assume real businesses might not have isOpen in DB yet, default to false logic if undefined */}
-                {(business.isOpen ?? true) && (
-                  <div className="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-xs font-semibold shadow-sm">
-                    Open
-                  </div>
-                )}
+            <div key={business.id} className="featured-card">
+              <img
+                src={business.image || 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&q=80'}
+                alt={business.name}
+                className="image"
+                onError={(e) => {
+                  e.currentTarget.src = 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&q=80'
+                }}
+              />
+              <div className="content">
+                <Link href={`/business/${business.slug}`}>
+                  <span className="title">{business.name}</span>
+                </Link>
+                <p className="desc">{business.description || 'Discover this amazing local business on HelloET.'}</p>
+                <Link className="action" href={`/business/${business.slug}`}>
+                  Find out more
+                  <span aria-hidden="true">
+                    →
+                  </span>
+                </Link>
               </div>
-              
-              <div className="p-6 flex-1 flex flex-col">
-                <div className="flex justify-between items-start mb-2">
-                  <h3 className="font-bold text-xl text-neutral-800 group-hover:text-[#047857] transition-colors line-clamp-1">
-                    {business.name}
-                  </h3>
-                  <div className="flex items-center gap-1 bg-yellow-50 px-2 py-1 rounded-md">
-                    <Star className="w-3.5 h-3.5 fill-yellow-500 text-yellow-500" />
-                    <span className="font-bold text-sm text-neutral-800">{typeof business.rating === 'number' ? business.rating.toFixed(1) : '0.0'}</span>
-                  </div>
-                </div>
-                
-                <p className="text-neutral-500 text-sm mb-4 line-clamp-2 flex-1">
-                  {business.description || 'Discover this amazing local business on HelloET.'}
-                </p>
-                
-                <div className="space-y-2 pt-4 border-t border-neutral-100">
-                  <div className="flex items-center gap-2 text-sm text-neutral-600">
-                    <MapPin className="w-4 h-4 text-neutral-400" />
-                    <span className="font-medium line-clamp-1">{business.location}</span>
-                  </div>
-                  
-                  {business.phone && (
-                    <div className="flex items-center gap-2 text-sm text-neutral-600">
-                      <Phone className="w-4 h-4 text-neutral-400" />
-                      <span className="font-medium">{business.phone}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </Link>
+            </div>
           ))}
         </div>
         
         {/* Mobile View All */}
         <div className="text-center mt-8 md:hidden">
-          <Link href="/businesses" className="inline-flex text-[#047857] font-medium">
+          <Link href="/businesses" className="inline-flex text-[#16A34A] font-medium">
             View All Top Businesses &rarr;
           </Link>
         </div>
