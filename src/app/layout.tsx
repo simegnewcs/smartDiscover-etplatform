@@ -19,6 +19,10 @@ export const metadata: Metadata = {
     template: '%s | HelloET Ethiopia'
   },
   description: 'HelloET is Ethiopia\'s #1 trusted local business discovery platform. Find restaurants, hotels, cafés, pharmacies, supermarkets, tourist attractions and services in Addis Ababa, Dire Dawa, Gondar, Bahir Dar, Hawassa and across Ethiopia.',
+  icons: {
+    icon: '/logo-icon.svg',
+    apple: '/logo-icon.svg',
+  },
   keywords: [
     // --- Platform ---
     'HelloET', 'HelloET Ethiopia', 'helloet.devvoltz.com',

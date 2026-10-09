@@ -4,7 +4,8 @@ import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useSession, signOut } from 'next-auth/react'
-import { Menu, X, User, LogIn, LogOut, Plus, ChevronDown, Compass, LayoutDashboard } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { Menu, X, User, LogIn, LogOut, Plus, ChevronDown, Compass, LayoutDashboard, Search } from 'lucide-react'
 import UniversalSidebar from '@/components/layout/UniversalSidebar'
 
 export default function Navbar() {
@@ -13,7 +14,17 @@ export default function Navbar() {
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false)
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false)
+  const [globalSearchQuery, setGlobalSearchQuery] = useState('')
   const profileMenuRef = useRef<HTMLDivElement>(null)
+  const router = useRouter()
+  
+  const handleGlobalSearch = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (globalSearchQuery.trim()) {
+      router.push(`/businesses?search=${encodeURIComponent(globalSearchQuery.trim())}`)
+    }
+  }
   
   const isLoggedIn = status === 'authenticated'
   
@@ -72,8 +83,21 @@ export default function Navbar() {
               </Link>
             </div>
 
-            {/* Middle Section: Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-1">
+            {/* Middle Section: Search & Desktop Navigation */}
+            <div className="hidden md:flex flex-1 items-center justify-center px-4 lg:px-8 space-x-4">
+              <form onSubmit={handleGlobalSearch} className="relative w-full max-w-sm lg:max-w-md">
+                <div className="flex items-center bg-white/10 hover:bg-white/20 border border-white/20 rounded-full px-4 py-2 transition-colors focus-within:bg-white/20 focus-within:border-white/40">
+                  <Search className="w-4 h-4 text-white/80" />
+                  <input
+                    type="text"
+                    placeholder="Search for local businesses..."
+                    value={globalSearchQuery}
+                    onChange={(e) => setGlobalSearchQuery(e.target.value)}
+                    className="w-full bg-transparent border-none outline-none text-white placeholder-white/60 ml-2 text-sm"
+                  />
+                </div>
+              </form>
+              <div className="hidden lg:flex items-center space-x-1">
               {navigationItems.map((item) => (
                 <Link
                   key={item.name}
@@ -84,6 +108,7 @@ export default function Navbar() {
                   <span>{item.name}</span>
                 </Link>
               ))}
+              </div>
             </div>
 
             {/* Right Section: Actions */}
@@ -186,6 +211,14 @@ export default function Navbar() {
                 )}
               </div>
 
+              {/* Mobile Search Toggle */}
+              <button
+                onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
+                className="md:hidden p-2 rounded-xl hover:bg-white/10 text-white transition-colors focus:outline-none"
+              >
+                <Search className="w-6 h-6" />
+              </button>
+
               {/* Mobile Menu Toggle */}
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -199,6 +232,25 @@ export default function Navbar() {
               </button>
             </div>
           </div>
+          
+          {/* Mobile Search Bar */}
+          {isMobileSearchOpen && (
+            <div className="md:hidden w-full pb-1 mt-3">
+              <form onSubmit={handleGlobalSearch} className="relative w-full">
+                <div className="flex items-center bg-white/10 hover:bg-white/20 border border-white/20 rounded-full px-4 py-2 transition-colors focus-within:bg-white/20 focus-within:border-white/40">
+                  <Search className="w-4 h-4 text-white/80" />
+                  <input
+                    type="text"
+                    placeholder="Search for local businesses..."
+                    value={globalSearchQuery}
+                    onChange={(e) => setGlobalSearchQuery(e.target.value)}
+                    className="w-full bg-transparent border-none outline-none text-white placeholder-white/60 ml-2 text-sm"
+                    autoFocus
+                  />
+                </div>
+              </form>
+            </div>
+          )}
         </div>
 
         {/* Mobile Navigation Dropdown */}

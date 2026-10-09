@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from 'react'
 import Link from 'next/link'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
+import '../../components/layout/featured-card.css'
 import { 
   Search, 
   Filter, 
@@ -214,25 +215,25 @@ function AllBusinessesContent() {
   return (
     <div className="min-h-screen bg-[#F8FAFC]">
       {/* Premium Dark Hero Section */}
-      <div className="relative bg-[#16A34A] pt-24 pb-32 px-4 overflow-hidden">
+      <div className="relative bg-[#16A34A] pt-12 pb-20 px-4 overflow-hidden">
         {/* Background glow effects */}
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#16A34A] rounded-full blur-[100px] opacity-50 transform translate-x-1/3 -translate-y-1/2 pointer-events-none"></div>
         <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-yellow-400 rounded-full blur-[120px] opacity-20 transform -translate-x-1/3 translate-y-1/2 pointer-events-none"></div>
         
         <div className="max-w-7xl mx-auto relative z-10">
-          <div className="text-center mb-12">
+          <div className="text-center mb-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <span className="inline-block py-1 px-3 rounded-full bg-white/10 text-yellow-300 text-sm font-semibold tracking-wider uppercase mb-4 backdrop-blur-md border border-white/20">
+              <span className="inline-block py-1 px-3 rounded-full bg-white/10 text-yellow-300 text-xs font-semibold tracking-wider uppercase mb-3 backdrop-blur-md border border-white/20">
                 Explore Ethiopia
               </span>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-6 tracking-tight drop-shadow-sm">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white mb-4 tracking-tight drop-shadow-sm">
                 {categoryFromUrl !== 'all' ? `Find ${categoryFromUrl}` : 'Discover Local Businesses'}
               </h1>
-              <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto font-medium">
+              <p className="text-base md:text-lg text-white/90 max-w-2xl mx-auto font-medium">
                 Uncover the best spots in Ethiopia, from highly-rated restaurants and luxury hotels to essential local services.
               </p>
             </motion.div>
@@ -344,7 +345,7 @@ function AllBusinessesContent() {
               variants={containerVariants}
               initial="hidden"
               animate="show"
-              className={viewMode === 'grid' ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" : "space-y-4"}
+              className={viewMode === 'grid' ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" : "space-y-4"}
             >
               {filteredBusinesses.map((business) => {
                 const CategoryIcon = getCategoryIcon(business.category)
@@ -353,27 +354,21 @@ function AllBusinessesContent() {
 
                 if (viewMode === 'grid') {
                   return (
-                    <motion.div key={business.id} variants={itemVariants}>
-                      <Link href={`/business/${business.slug}`} className="group block bg-white rounded-[2rem] shadow-sm hover:shadow-xl border border-neutral-100 hover:border-[#16A34A]/20 overflow-hidden transition-all duration-300 hover:-translate-y-1 h-full flex flex-col">
-                        <div className="relative h-60 overflow-hidden bg-neutral-100">
-                          {business.image ? (
-                            <img src={business.image} alt={business.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" 
-                              onError={(e) => { e.currentTarget.src = 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&q=80' }}
-                            />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-neutral-100 to-neutral-200">
-                              <CategoryIcon className="w-16 h-16 text-neutral-300" />
-                            </div>
-                          )}
-                          <div className="absolute top-4 left-4 flex gap-2">
-                            <span className="bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-bold text-neutral-700 shadow-sm">
-                              {business.category}
-                            </span>
-                          </div>
+                    <motion.div key={business.id} variants={itemVariants} className="flex justify-center h-full">
+                      <div className="featured-card flex flex-col h-full w-full">
+                        <div className="relative">
+                          <img
+                            src={business.image || 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&q=80'}
+                            alt={business.name}
+                            className="image w-full"
+                            onError={(e) => {
+                              e.currentTarget.src = 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&q=80'
+                            }}
+                          />
                           <button
                             onClick={(e) => toggleSave(e, idNum)}
                             disabled={savingId === idNum}
-                            className={`absolute top-4 right-4 p-2.5 rounded-full shadow-md backdrop-blur-md transition-all ${
+                            className={`absolute top-3 right-3 p-2 rounded-full shadow-md backdrop-blur-md transition-all ${
                               isSaved
                                 ? 'bg-[#16A34A] text-white'
                                 : 'bg-white/90 text-neutral-500 hover:bg-white hover:text-[#16A34A]'
@@ -382,44 +377,34 @@ function AllBusinessesContent() {
                             <Bookmark className={`w-4 h-4 ${isSaved ? 'fill-current' : ''}`} />
                           </button>
                           {business.verified && (
-                            <div className="absolute bottom-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1">
+                            <div className="absolute top-3 left-3 bg-green-500 text-white px-2 py-1 rounded-md text-[10px] font-bold shadow-sm flex items-center gap-1">
                               ✓ Verified
                             </div>
                           )}
                         </div>
-                        <div className="p-6 flex-1 flex flex-col">
-                          <div className="flex justify-between items-start mb-3 gap-4">
-                            <h3 className="font-extrabold text-xl text-neutral-800 group-hover:text-[#16A34A] transition-colors line-clamp-2">
-                              {business.name}
-                            </h3>
-                            <div className="flex items-center gap-1 bg-yellow-50 px-2.5 py-1 rounded-lg border border-yellow-100 shrink-0">
-                              <Star className="w-4 h-4 fill-yellow-400 text-yellow-500" />
-                              <span className="text-sm font-extrabold text-yellow-700">{typeof business.rating === 'number' ? business.rating.toFixed(1) : '0.0'}</span>
+                        <div className="content flex-1 flex flex-col">
+                          <div className="flex justify-between items-start gap-2">
+                            <Link href={`/business/${business.slug}`} className="flex-1">
+                              <span className="title line-clamp-1">{business.name}</span>
+                            </Link>
+                            <div className="flex items-center gap-1 bg-yellow-50 px-1.5 py-0.5 rounded-md border border-yellow-100 shrink-0">
+                              <Star className="w-3 h-3 fill-yellow-400 text-yellow-500" />
+                              <span className="text-xs font-bold text-yellow-700">{typeof business.rating === 'number' ? business.rating.toFixed(1) : '0.0'}</span>
                             </div>
                           </div>
-                          
-                          <p className="text-sm text-neutral-500 line-clamp-2 mb-5 flex-1">
-                            {business.description || 'A great local business waiting to be discovered.'}
+                          <p className="desc line-clamp-2 mt-1 flex-1">
+                            {business.description || 'Discover this amazing local business on HelloET.'}
                           </p>
-                          
-                          <div className="space-y-3 pt-5 border-t border-neutral-100">
-                            <div className="flex items-center gap-3 text-sm text-neutral-600">
-                              <div className="w-8 h-8 rounded-full bg-neutral-50 flex items-center justify-center shrink-0">
-                                <MapPin className="w-4 h-4 text-[#16A34A]" />
-                              </div>
-                              <span className="font-medium truncate">{business.location}</span>
-                            </div>
-                            {business.phone && (
-                              <div className="flex items-center gap-3 text-sm text-neutral-600">
-                                <div className="w-8 h-8 rounded-full bg-neutral-50 flex items-center justify-center shrink-0">
-                                  <Phone className="w-4 h-4 text-[#16A34A]" />
-                                </div>
-                                <span className="font-medium">{business.phone}</span>
-                              </div>
-                            )}
+                          <div className="mt-auto">
+                            <Link className="action" href={`/business/${business.slug}`}>
+                              Find out more
+                              <span aria-hidden="true">
+                                →
+                              </span>
+                            </Link>
                           </div>
                         </div>
-                      </Link>
+                      </div>
                     </motion.div>
                   )
                 }
