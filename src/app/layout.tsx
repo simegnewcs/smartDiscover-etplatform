@@ -21,7 +21,8 @@ export const metadata: Metadata = {
   description: 'HelloET is Ethiopia\'s #1 trusted local business discovery platform. Find restaurants, hotels, cafés, pharmacies, supermarkets, tourist attractions and services in Addis Ababa, Dire Dawa, Gondar, Bahir Dar, Hawassa and across Ethiopia.',
   icons: {
     icon: '/logo-icon.svg',
-    apple: '/logo-icon.svg',
+    shortcut: '/favicon-16x16.png',
+    apple: '/apple-touch-icon.png',
   },
   keywords: [
     // --- Platform ---
@@ -197,11 +198,7 @@ export const metadata: Metadata = {
   },
   category: 'Business Directory',
   classification: 'Business',
-  icons: {
-    icon: '/favicon.ico',
-    shortcut: '/favicon-16x16.png',
-    apple: '/apple-touch-icon.png',
-  },
+
   manifest: '/site.webmanifest',
   other: {
     'geo.region': 'ET',
