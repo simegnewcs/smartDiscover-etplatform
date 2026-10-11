@@ -29,13 +29,15 @@ import {
   Sparkles,
   Compass,
   Briefcase,
-  Share2
+  Share2,
+  ShieldCheck
 } from 'lucide-react'
 
 // ========================================================
 // 1. REGULAR USER / EXPLORER DASHBOARD COMPONENT
 // ========================================================
 function UserDashboard({ session }: { session: any }) {
+  const isAdmin = session?.user?.role === 'ADMIN'
   const [userStats, setUserStats] = useState({
     totalReviews: 0,
     savedBusinesses: 0,
@@ -87,22 +89,45 @@ function UserDashboard({ session }: { session: any }) {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6">
           <div>
             <h1 className="text-xl sm:text-2xl font-extrabold text-[#0F172A] tracking-tight flex items-center gap-2.5">
-              <span>Welcome, {session?.user?.name?.split(' ')[0] || 'Explorer'}!</span>
+              <span>Welcome, {session?.user?.name?.split(' ')[0] || (isAdmin ? 'Admin' : 'Explorer')}!</span>
               <span className="text-xs font-extrabold px-2.5 py-0.5 rounded-full bg-[#DCFCE7] text-[#16A34A]">
-                EXPLORER
+                {isAdmin ? 'ADMINISTRATOR' : 'EXPLORER'}
               </span>
             </h1>
             <p className="text-sm font-medium text-[#64748B] mt-0.5">
-              Discover top restaurants, hotels, and verified services across Ethiopia.
+              {isAdmin
+                ? 'Manage all Ethiopian businesses, verify listings, and oversee users and reviews.'
+                : 'Discover top restaurants, hotels, and verified services across Ethiopia.'}
             </p>
           </div>
-          <Link 
-            href="/businesses"
-            className="inline-flex items-center gap-2 bg-[#16A34A] hover:bg-[#15803D] text-white px-5 py-2.5 rounded-2xl font-bold transition-all shadow-md shadow-[#16A34A]/20 text-xs self-start sm:self-auto"
-          >
-            <Search className="w-4 h-4" />
-            <span>Explore Ethiopia</span>
-          </Link>
+          <div className="flex items-center gap-2.5 self-start sm:self-auto flex-wrap">
+            {isAdmin ? (
+              <>
+                <Link 
+                  href="/admin/businesses"
+                  className="inline-flex items-center gap-2 bg-[#16A34A] hover:bg-[#15803D] text-white px-5 py-2.5 rounded-2xl font-bold transition-all shadow-md shadow-[#16A34A]/20 text-xs"
+                >
+                  <Building2 className="w-4 h-4" />
+                  <span>Manage All Businesses</span>
+                </Link>
+                <Link 
+                  href="/admin"
+                  className="inline-flex items-center gap-2 bg-[#F1F5F9] hover:bg-[#E2E8F0] text-[#0F172A] px-4 py-2.5 rounded-2xl font-bold transition-all text-xs"
+                >
+                  <ShieldCheck className="w-4 h-4 text-[#16A34A]" />
+                  <span>Admin Dashboard</span>
+                </Link>
+              </>
+            ) : (
+              <Link 
+                href="/businesses"
+                className="inline-flex items-center gap-2 bg-[#16A34A] hover:bg-[#15803D] text-white px-5 py-2.5 rounded-2xl font-bold transition-all shadow-md shadow-[#16A34A]/20 text-xs"
+              >
+                <Search className="w-4 h-4" />
+                <span>Explore Ethiopia</span>
+              </Link>
+            )}
+          </div>
         </div>
 
         {/* 4 Pastel Stat Cards (HelloET Palette) */}

@@ -17,7 +17,8 @@ import {
   LogOut,
   Star,
   CheckCircle2,
-  Compass
+  Compass,
+  Building2
 } from 'lucide-react'
 import Sidebar from '@/components/dashboard/Sidebar'
 
@@ -252,13 +253,22 @@ export default function DashboardLayout({
                       <span>Explore Ethiopia</span>
                     </Link>
                     {isAdmin && (
-                      <Link
-                        href="/admin"
-                        className="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-[#0F172A] hover:bg-[#DCFCE7] hover:text-[#16A34A] rounded-xl transition-colors"
-                      >
-                        <ShieldCheck className="w-3.5 h-3.5 text-[#16A34A]" />
-                        <span>Admin Dashboard</span>
-                      </Link>
+                      <>
+                        <Link
+                          href="/admin/businesses"
+                          className="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-[#0F172A] hover:bg-[#DCFCE7] hover:text-[#16A34A] rounded-xl transition-colors"
+                        >
+                          <Building2 className="w-3.5 h-3.5 text-[#16A34A]" />
+                          <span>Manage All Businesses</span>
+                        </Link>
+                        <Link
+                          href="/admin"
+                          className="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-[#0F172A] hover:bg-[#DCFCE7] hover:text-[#16A34A] rounded-xl transition-colors"
+                        >
+                          <ShieldCheck className="w-3.5 h-3.5 text-[#16A34A]" />
+                          <span>Admin Dashboard</span>
+                        </Link>
+                      </>
                     )}
                     <button
                       onClick={() => signOut({ callbackUrl: '/' })}

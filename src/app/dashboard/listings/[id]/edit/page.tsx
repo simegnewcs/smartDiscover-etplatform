@@ -21,6 +21,7 @@ import {
   ArrowRight,
   Star
 } from 'lucide-react'
+import CategorySelect from '@/components/dashboard/CategorySelect'
 
 interface BusinessData {
   id: string
@@ -389,17 +390,10 @@ export default function EditBusiness() {
               <label className="block text-sm font-medium text-neutral-700 mb-1.5">
                 Category <span className="text-red-500">*</span>
               </label>
-              <div className="relative">
-                <Tag className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
-                <input
-                  type="text"
-                  name="category"
-                  value={formData.category}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full pl-10 pr-4 py-2.5 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#16A34A] text-sm"
-                />
-              </div>
+              <CategorySelect
+                value={formData.category}
+                onChange={(cat) => setFormData(prev => ({ ...prev, category: cat }))}
+              />
             </div>
 
             <div>

@@ -19,6 +19,7 @@ export async function GET(request: NextRequest) {
     const userId = parseInt(session.user.id)
     const userRole = session.user.role
     const isBusinessOwner = userRole === 'BUSINESS_OWNER'
+    const isAdmin = userRole === 'ADMIN'
 
     let stats = {
       businessCount: 0,
@@ -29,7 +30,21 @@ export async function GET(request: NextRequest) {
       recentActivityCount: 0
     }
 
-    if (isBusinessOwner) {
+    if (isAdmin) {
+      const [businessCount, reviewCount, pendingCount] = await Promise.all([
+        prisma.business.count(),
+        prisma.review.count(),
+        prisma.business.count({ where: { verified: false } })
+      ])
+      stats = {
+        businessCount,
+        reviewCount,
+        messageCount: 0,
+        notificationCount: pendingCount,
+        savedPlacesCount: 0,
+        recentActivityCount: reviewCount
+      }
+    } else if (isBusinessOwner) {
       // Count businesses owned by user
       const businessCount = await prisma.business.count({
         where: { ownerId: userId }

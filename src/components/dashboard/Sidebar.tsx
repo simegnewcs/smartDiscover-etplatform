@@ -28,7 +28,8 @@ import {
   X,
   Sparkles,
   HelpCircle,
-  Compass
+  Compass,
+  Tags
 } from 'lucide-react'
 
 interface SidebarItem {
@@ -94,7 +95,32 @@ export default function Sidebar({ onClose, isCollapsed = false }: SidebarProps) 
 
   // Build dynamic sidebar items with real data
   const getSidebarItems = (): SidebarItem[] => {
-    if (isBusinessOwner) {
+    if (isAdmin) {
+      return [
+        { name: 'Admin Overview', href: '/admin', icon: LayoutDashboard },
+        { 
+          name: 'Manage Businesses', 
+          href: '/admin/businesses', 
+          icon: Building2,
+          badge: stats.businessCount > 0 ? stats.businessCount : undefined
+        },
+        { name: 'Users Management', href: '/admin/users', icon: Users },
+        { 
+          name: 'Reviews Moderation', 
+          href: '/admin/reviews', 
+          icon: Star,
+          badge: stats.reviewCount > 0 ? stats.reviewCount : undefined
+        },
+        { name: 'Categories', href: '/admin/categories', icon: Tags },
+        { 
+          name: 'My Business Listings', 
+          href: '/dashboard/listings', 
+          icon: Building2 
+        },
+        { name: 'Add New Business', href: '/dashboard/businesses/new', icon: PlusCircle },
+        { name: 'Settings', href: '/dashboard/settings', icon: Settings }
+      ]
+    } else if (isBusinessOwner) {
       return [
         { name: 'Overview', href: '/dashboard', icon: LayoutDashboard },
         { 
@@ -123,7 +149,7 @@ export default function Sidebar({ onClose, isCollapsed = false }: SidebarProps) 
     } else {
       return [
         { name: 'Overview', href: '/dashboard', icon: LayoutDashboard },
-        { name: 'Find Businesses', href: '/businesses', icon: Search },
+        { name: 'My Businesses', href: '/dashboard/listings', icon: Building2 },
         { 
           name: 'My Reviews', 
           href: '/my-reviews', 
@@ -156,7 +182,7 @@ export default function Sidebar({ onClose, isCollapsed = false }: SidebarProps) 
   const sidebarItems = getSidebarItems()
 
   const isActive = (href: string) => {
-    if (href === '/dashboard') {
+    if (href === '/dashboard' || href === '/admin') {
       return pathname === href
     }
     return pathname.startsWith(href)
@@ -184,11 +210,11 @@ export default function Sidebar({ onClose, isCollapsed = false }: SidebarProps) 
                 <div className="font-extrabold text-[#0F172A] text-lg tracking-tight leading-none flex items-center gap-1.5">
                   HelloET
                   <span className="text-[10px] font-extrabold px-1.5 py-0.5 rounded-full bg-[#16A34A]/10 text-[#16A34A]">
-                    {isBusinessOwner ? 'PARTNER' : 'EXPLORER'}
+                    {isAdmin ? 'ADMIN' : isBusinessOwner ? 'PARTNER' : 'EXPLORER'}
                   </span>
                 </div>
                 <div className="text-[11px] font-medium text-[#64748B] mt-0.5 truncate">
-                  {isBusinessOwner ? 'Business Portal' : 'User Portal'}
+                  {isAdmin ? 'Admin Portal' : isBusinessOwner ? 'Business Portal' : 'User Portal'}
                 </div>
               </div>
             </div>
@@ -282,19 +308,32 @@ export default function Sidebar({ onClose, isCollapsed = false }: SidebarProps) 
           {!isCollapsed && <span className="truncate">Explore Ethiopia</span>}
         </Link>
 
-        {/* Admin link if user is admin */}
+        {/* Admin links if user is admin */}
         {isAdmin && (
-          <Link
-            href="/admin"
-            title={isCollapsed ? 'Admin Panel' : undefined}
-            className={`flex items-center gap-3.5 px-3.5 py-2.5 rounded-2xl text-[14px] font-bold text-[#16A34A] bg-[#DCFCE7]/60 hover:bg-[#DCFCE7] transition-all group ${
-              isCollapsed ? 'justify-center !px-2' : ''
-            }`}
-            onClick={onClose}
-          >
-            <ShieldCheck className="w-5 h-5 flex-shrink-0 text-[#16A34A]" />
-            {!isCollapsed && <span className="truncate">Admin Dashboard</span>}
-          </Link>
+          <div className="space-y-1">
+            <Link
+              href="/admin/businesses"
+              title={isCollapsed ? 'Manage All Businesses' : undefined}
+              className={`flex items-center gap-3.5 px-3.5 py-2.5 rounded-2xl text-[14px] font-bold text-[#16A34A] bg-[#DCFCE7]/60 hover:bg-[#DCFCE7] transition-all group ${
+                isCollapsed ? 'justify-center !px-2' : ''
+              }`}
+              onClick={onClose}
+            >
+              <Building2 className="w-5 h-5 flex-shrink-0 text-[#16A34A]" />
+              {!isCollapsed && <span className="truncate">Manage All Businesses</span>}
+            </Link>
+            <Link
+              href="/admin"
+              title={isCollapsed ? 'Admin Control Center' : undefined}
+              className={`flex items-center gap-3.5 px-3.5 py-2.5 rounded-2xl text-[14px] font-bold text-[#16A34A] hover:bg-[#DCFCE7]/40 transition-all group ${
+                isCollapsed ? 'justify-center !px-2' : ''
+              }`}
+              onClick={onClose}
+            >
+              <ShieldCheck className="w-5 h-5 flex-shrink-0 text-[#16A34A]" />
+              {!isCollapsed && <span className="truncate">Admin Control Center</span>}
+            </Link>
+          </div>
         )}
       </nav>
 
@@ -320,7 +359,7 @@ export default function Sidebar({ onClose, isCollapsed = false }: SidebarProps) 
                 {session?.user?.name || 'User'}
               </div>
               <div className="text-[10px] font-semibold text-[#16A34A] uppercase tracking-wider truncate">
-                {isBusinessOwner ? 'Business Owner' : 'Explorer'}
+                {isAdmin ? 'Administrator' : isBusinessOwner ? 'Business Owner' : 'Explorer'}
               </div>
             </div>
           )}

@@ -11,6 +11,7 @@ import {
   Baby, Music, Tv, Utensils, Coffee, Dumbbell, Plane, BookOpen, Shield,
   ChevronRight, ChevronLeft, CheckCircle2, Camera
 } from 'lucide-react'
+import CategorySelect from '@/components/dashboard/CategorySelect'
 
 const businessTypes = [
   'Restaurants', 'Hotels', 'Cafes', 'Pharmacies', 'Supermarkets',
@@ -334,17 +335,13 @@ export default function NewBusinessPage() {
 
                         <div>
                           <label className="block text-sm font-bold text-neutral-700 mb-2">Category <span className="text-red-500">*</span></label>
-                          <select
-                            name="category"
+                          <CategorySelect
                             value={formData.category}
-                            onChange={handleInputChange}
-                            className="w-full px-4 py-3.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#16A34A] focus:border-transparent transition-all appearance-none cursor-pointer"
-                          >
-                            <option value="">Select the main category</option>
-                            {businessTypes.map((type) => (
-                              <option key={type} value={type}>{type}</option>
-                            ))}
-                          </select>
+                            onChange={(catName) => {
+                              setFormData(prev => ({ ...prev, category: catName }))
+                              setError('')
+                            }}
+                          />
                         </div>
 
                         <div>

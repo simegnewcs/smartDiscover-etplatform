@@ -13,7 +13,8 @@ import {
   ChevronRight,
   Eye,
   Plus,
-  Clock
+  Clock,
+  Edit
 } from 'lucide-react'
 
 interface Business {
@@ -222,6 +223,13 @@ export default function AdminBusinessesPage() {
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center justify-end gap-1.5">
+                        <Link
+                          href={`/dashboard/listings/${biz.id}/edit`}
+                          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-bold bg-[#F8FAFC] hover:bg-[#F0FDF4] text-[#64748B] hover:text-[#16A34A] transition-colors border border-transparent hover:border-[#16A34A]/20"
+                          title="Edit business details"
+                        >
+                          <Edit className="w-3.5 h-3.5" /> Edit
+                        </Link>
                         <Link
                           href={`/businesses/${biz.slug}`}
                           target="_blank"
