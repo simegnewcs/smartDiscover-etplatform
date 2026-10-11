@@ -28,7 +28,7 @@ export async function GET() {
         city: true,
         subcity: true,
         images: {
-          where: { sortOrder: 0 },
+          orderBy: { sortOrder: 'asc' },
           take: 1
         },
         _count: {

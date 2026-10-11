@@ -26,7 +26,9 @@ import {
   Bell,
   ShieldCheck,
   X,
-  Menu
+  Sparkles,
+  HelpCircle,
+  Compass
 } from 'lucide-react'
 
 interface SidebarItem {
@@ -48,9 +50,10 @@ interface DashboardStats {
 
 interface SidebarProps {
   onClose?: () => void
+  isCollapsed?: boolean
 }
 
-export default function Sidebar({ onClose }: SidebarProps = {}) {
+export default function Sidebar({ onClose, isCollapsed = false }: SidebarProps) {
   const pathname = usePathname()
   const { data: session } = useSession()
   const [expandedItems, setExpandedItems] = useState<string[]>([])
@@ -64,9 +67,9 @@ export default function Sidebar({ onClose }: SidebarProps = {}) {
   })
   const [isLoading, setIsLoading] = useState(true)
 
-  // Determine user role and get appropriate navigation items
   const userRole = session?.user?.role
   const isBusinessOwner = userRole === 'BUSINESS_OWNER'
+  const isAdmin = userRole === 'ADMIN'
 
   // Fetch dashboard stats
   useEffect(() => {
@@ -152,14 +155,6 @@ export default function Sidebar({ onClose }: SidebarProps = {}) {
 
   const sidebarItems = getSidebarItems()
 
-  const toggleExpanded = (itemName: string) => {
-    setExpandedItems(prev =>
-      prev.includes(itemName)
-        ? prev.filter(item => item !== itemName)
-        : [...prev, itemName]
-    )
-  }
-
   const isActive = (href: string) => {
     if (href === '/dashboard') {
       return pathname === href
@@ -168,161 +163,177 @@ export default function Sidebar({ onClose }: SidebarProps = {}) {
   }
 
   return (
-    <div className="w-64 bg-white border-r border-neutral-200 h-full flex flex-col">
-      {/* Logo Section */}
-      <div className="p-6 border-b border-neutral-200 flex items-center justify-between">
-        <Link href="/dashboard" className="flex items-center space-x-3" onClick={onClose}>
-          <div className="relative w-11 h-11 rounded-full overflow-hidden shadow-sm border border-neutral-100 bg-white">
-            <Image src="/HELLOTLOGO.png" alt="HelloET Logo" fill className="object-cover" priority />
-          </div>
-          <div className="flex flex-col">
-            <span className="text-xl font-bold text-neutral-800">HelloET</span>
-            <span className="text-xs text-neutral-500 font-medium">{isBusinessOwner ? 'Business Dashboard' : 'User Dashboard'}</span>
-          </div>
+    <div className={`bg-white border-r border-[#E2E8F0] h-full flex flex-col transition-all duration-300 ease-in-out ${
+      isCollapsed ? 'w-20' : 'w-64'
+    }`}>
+      {/* Brand Header */}
+      <div className="h-20 px-5 border-b border-[#F1F5F9] flex items-center justify-between flex-shrink-0">
+        <Link href="/dashboard" className="flex items-center gap-2.5 group" onClick={onClose}>
+          {!isCollapsed ? (
+            <div className="flex items-center gap-2.5">
+              <div className="relative w-9 h-9 flex-shrink-0 group-hover:scale-105 transition-transform">
+                <Image 
+                  src="/logo-icon.svg" 
+                  alt="HelloET Logo" 
+                  fill 
+                  className="object-contain" 
+                  priority 
+                />
+              </div>
+              <div className="overflow-hidden">
+                <div className="font-extrabold text-[#0F172A] text-lg tracking-tight leading-none flex items-center gap-1.5">
+                  HelloET
+                  <span className="text-[10px] font-extrabold px-1.5 py-0.5 rounded-full bg-[#16A34A]/10 text-[#16A34A]">
+                    {isBusinessOwner ? 'PARTNER' : 'EXPLORER'}
+                  </span>
+                </div>
+                <div className="text-[11px] font-medium text-[#64748B] mt-0.5 truncate">
+                  {isBusinessOwner ? 'Business Portal' : 'User Portal'}
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="w-10 h-10 rounded-2xl bg-white border border-[#E2E8F0] p-1.5 flex items-center justify-center shadow-sm mx-auto group-hover:scale-105 transition-transform">
+              <Image 
+                src="/logo-icon.svg" 
+                alt="HelloET" 
+                width={28} 
+                height={28} 
+                className="object-contain" 
+                priority 
+              />
+            </div>
+          )}
         </Link>
         {onClose && (
-          <button onClick={onClose} className="p-2 -mr-2 rounded-lg hover:bg-neutral-100 md:hidden">
-            <X className="w-5 h-5 text-neutral-500" />
+          <button 
+            onClick={onClose} 
+            className="p-1.5 rounded-xl text-[#64748B] hover:text-[#0F172A] hover:bg-gray-100 md:hidden transition-colors"
+          >
+            <X className="w-5 h-5" />
           </button>
         )}
       </div>
 
-      {/* Navigation */}
-      <nav className="flex-1 p-4 space-y-1">
+      {/* Navigation List */}
+      <nav className="flex-1 px-3 py-5 space-y-1.5 overflow-y-auto">
+        {!isCollapsed && (
+          <div className="px-3 pb-2 text-[11px] font-bold text-[#94A3B8] uppercase tracking-wider">
+            Menu Navigation
+          </div>
+        )}
+
         {sidebarItems.map((item) => {
           const Icon = item.icon
-          const isExpanded = expandedItems.includes(item.name)
           const active = isActive(item.href)
 
           return (
-            <div key={item.name}>
-              <Link
-                href={item.href}
-                className={`flex items-center justify-between px-3 py-2.5 rounded-lg transition-colors group ${
-                  active
-                    ? 'bg-[#DCFCE7] text-[#16A34A] border-l-2 border-[#16A34A]'
-                    : 'text-neutral-600 hover:bg-neutral-50 hover:text-neutral-800'
+            <Link
+              key={item.name}
+              href={item.href}
+              title={isCollapsed ? item.name : undefined}
+              className={`flex items-center gap-3.5 px-3.5 py-3 rounded-2xl text-[14px] font-semibold transition-all group ${
+                active
+                  ? 'bg-[#16A34A] text-white shadow-lg shadow-[#16A34A]/25'
+                  : 'text-[#64748B] hover:bg-[#F0FDF4] hover:text-[#16A34A]'
+              } ${isCollapsed ? 'justify-center !px-2' : ''}`}
+              onClick={onClose}
+            >
+              <Icon
+                className={`w-5 h-5 flex-shrink-0 transition-transform group-hover:scale-110 ${
+                  active ? 'text-white' : 'text-[#64748B] group-hover:text-[#16A34A]'
                 }`}
-                onClick={(e) => {
-                  if (item.children) {
-                    e.preventDefault()
-                    toggleExpanded(item.name)
-                  } else if (onClose) {
-                    onClose()
-                  }
-                }}
-              >
-                <div className="flex items-center space-x-3">
-                  <Icon className={`w-5 h-5 ${active ? "text-[#16A34A]" : "text-neutral-400 group-hover:text-neutral-600"}`} />
-                  <span className="font-medium">{item.name}</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  {item.badge && (
-                    <span className={`px-2 py-0.5 text-xs rounded-full ${
-                      active ? "bg-[#16A34A] text-white" : "bg-neutral-200 text-neutral-600"
+              />
+              {!isCollapsed && (
+                <span className="truncate">{item.name}</span>
+              )}
+              {!isCollapsed && (
+                <div className="ml-auto flex items-center gap-1.5">
+                  {item.badge !== undefined && (
+                    <span className={`px-2 py-0.5 text-[11px] font-bold rounded-full ${
+                      active ? 'bg-white/20 text-white' : 'bg-[#DCFCE7] text-[#16A34A]'
                     }`}>
                       {item.badge}
                     </span>
                   )}
-                  {item.children && (
-                    isExpanded ? (
-                      <ChevronDown className="w-4 h-4 text-neutral-400" />
-                    ) : (
-                      <ChevronRight className="w-4 h-4 text-neutral-400" />
-                    )
-                  )}
-                </div>
-              </Link>
-
-              {/* Sub-items */}
-              {item.children && isExpanded && (
-                <div className="ml-8 mt-1 space-y-1">
-                  {item.children.map((child) => {
-                    const childActive = pathname === child.href
-                    const ChildIcon = child.icon
-
-                    return (
-                      <Link
-                        key={child.name}
-                        href={child.href}
-                        onClick={onClose}
-                        className={`flex items-center justify-between px-3 py-2 rounded-lg transition-colors ${
-                          childActive
-                            ? 'bg-[#DCFCE7] text-[#16A34A]'
-                            : 'text-neutral-600 hover:bg-[#DCFCE7] hover:text-[#16A34A]'
-                        }`}
-                      >
-                        <div className="flex items-center space-x-3">
-                          <ChildIcon className="w-4 h-4 text-neutral-400" />
-                          <span className="text-sm">{child.name}</span>
-                        </div>
-                        {child.badge && (
-                          <span className={`px-2 py-0.5 text-xs rounded-full ${
-                            childActive ? "bg-[#16A34A] text-white" : "bg-neutral-200 text-neutral-600"
-                          }`}>
-                            {child.badge}
-                          </span>
-                        )}
-                      </Link>
-                    )
-                  })}
+                  {active && <ChevronRight className="w-4 h-4 text-white/80" />}
                 </div>
               )}
-            </div>
+            </Link>
           )
         })}
+
+        {!isCollapsed && (
+          <div className="pt-5 px-3 pb-2 text-[11px] font-bold text-[#94A3B8] uppercase tracking-wider">
+            Quick Actions
+          </div>
+        )}
+
+        {/* Explore Directory */}
+        <Link
+          href="/businesses"
+          title={isCollapsed ? 'Explore Directory' : undefined}
+          className={`flex items-center gap-3.5 px-3.5 py-2.5 rounded-2xl text-[14px] font-semibold text-[#64748B] hover:bg-[#F0FDF4] hover:text-[#16A34A] transition-all group ${
+            isCollapsed ? 'justify-center !px-2' : ''
+          }`}
+          onClick={onClose}
+        >
+          <Compass className="w-5 h-5 flex-shrink-0 text-[#64748B] group-hover:text-[#16A34A] transition-transform" />
+          {!isCollapsed && <span className="truncate">Explore Ethiopia</span>}
+        </Link>
+
+        {/* Admin link if user is admin */}
+        {isAdmin && (
+          <Link
+            href="/admin"
+            title={isCollapsed ? 'Admin Panel' : undefined}
+            className={`flex items-center gap-3.5 px-3.5 py-2.5 rounded-2xl text-[14px] font-bold text-[#16A34A] bg-[#DCFCE7]/60 hover:bg-[#DCFCE7] transition-all group ${
+              isCollapsed ? 'justify-center !px-2' : ''
+            }`}
+            onClick={onClose}
+          >
+            <ShieldCheck className="w-5 h-5 flex-shrink-0 text-[#16A34A]" />
+            {!isCollapsed && <span className="truncate">Admin Dashboard</span>}
+          </Link>
+        )}
       </nav>
 
-      {/* Bottom Section */}
-      <div className="p-4 border-t border-neutral-200">
-        <div className="space-y-2">
-          <Link
-            href="/dashboard/help"
-            onClick={onClose}
-            className="flex items-center space-x-3 px-3 py-2 text-neutral-600 hover:bg-[#DCFCE7] hover:text-[#16A34A] rounded-lg transition-colors"
-          >
-            <FileText className="w-5 h-5 text-neutral-400" />
-            <span className="font-medium">Help & Support</span>
-          </Link>
-
-          {session?.user?.role === 'ADMIN' && (
-            <Link
-              href="/admin"
-              onClick={onClose}
-              className="flex items-center space-x-3 px-3 py-2 bg-neutral-900 text-[#FBBF24] hover:bg-neutral-800 rounded-lg transition-colors"
-            >
-              <ShieldCheck className="w-5 h-5" />
-              <span className="font-medium">Admin Panel</span>
-            </Link>
-          )}
-          
-          <button 
-            onClick={() => signOut({ callbackUrl: '/' })}
-            className="w-full flex items-center space-x-3 px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-          >
-            <LogOut className="w-5 h-5" />
-            <span className="font-medium">Sign Out</span>
-          </button>
-        </div>
-
-        {/* User Info */}
-        <div className="mt-4 p-3 bg-[#DCFCE7]/50 rounded-lg">
-          <div className="flex items-center space-x-3">
-            {session?.user?.image ? (
-              <img src={session.user.image} alt="" className="w-8 h-8 rounded-full object-cover flex-shrink-0" />
-            ) : (
-              <div className="w-8 h-8 bg-[#16A34A] rounded-full flex items-center justify-center flex-shrink-0">
-                <span className="text-white font-medium text-sm">
-                  {session?.user?.name?.split(' ').map((n: string) => n[0]).join('').toUpperCase() || 'U'}
-                </span>
-              </div>
-            )}
-            <div className="flex-1 min-w-0">
-              <div className="text-sm font-medium text-neutral-800 truncate">{session?.user?.name || 'User'}</div>
-              <div className="text-xs text-neutral-500 truncate">{session?.user?.email || 'user@example.com'}</div>
+      {/* User Footer & Logout */}
+      <div className="p-3 border-t border-[#E2E8F0] flex items-center justify-between gap-2 bg-white flex-shrink-0">
+        <div className={`flex items-center gap-3 overflow-hidden ${
+          isCollapsed ? 'justify-center w-full' : ''
+        }`}>
+          {session?.user?.image ? (
+            <img 
+              src={session.user.image} 
+              alt={session.user.name || ''} 
+              className="w-9 h-9 rounded-xl object-cover ring-2 ring-white shadow-sm flex-shrink-0" 
+            />
+          ) : (
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#16A34A] to-[#22C55E] text-white flex items-center justify-center font-extrabold text-xs shadow-sm flex-shrink-0">
+              {session?.user?.name ? session.user.name.charAt(0).toUpperCase() : 'U'}
             </div>
-          </div>
+          )}
+          {!isCollapsed && (
+            <div className="min-w-0 flex-1">
+              <div className="text-xs font-bold text-[#0F172A] truncate">
+                {session?.user?.name || 'User'}
+              </div>
+              <div className="text-[10px] font-semibold text-[#16A34A] uppercase tracking-wider truncate">
+                {isBusinessOwner ? 'Business Owner' : 'Explorer'}
+              </div>
+            </div>
+          )}
         </div>
+        {!isCollapsed && (
+          <button
+            onClick={() => signOut({ callbackUrl: '/' })}
+            title="Sign Out"
+            className="p-2 text-[#64748B] hover:text-[#DC2626] hover:bg-[#FEF2F2] rounded-xl transition-colors"
+          >
+            <LogOut className="w-4 h-4" />
+          </button>
+        )}
       </div>
     </div>
   )

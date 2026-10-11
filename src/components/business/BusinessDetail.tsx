@@ -3,7 +3,25 @@
 import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useParams } from 'next/navigation'
-import { Star, MapPin, Phone, Globe, Clock, ChevronLeft, ChevronRight, Navigation } from 'lucide-react'
+import Link from 'next/link'
+import { 
+  Star, 
+  MapPin, 
+  Phone, 
+  Globe, 
+  Clock, 
+  ChevronLeft, 
+  ChevronRight, 
+  Navigation,
+  AlertTriangle,
+  CheckCircle2,
+  XCircle,
+  Loader2,
+  Edit3,
+  ArrowLeft,
+  LogIn,
+  ShieldCheck
+} from 'lucide-react'
 import 'leaflet/dist/leaflet.css'
 import dynamic from 'next/dynamic'
 
@@ -19,20 +37,21 @@ const MapComponent = dynamic<MapComponentProps>(() => import('./MapComponent').t
 })
 
 interface Business {
-  id: number
+  id: number | string
   slug: string
   name: string
+  ownerId?: string | number | null
   description: string
   category: {
-    id: number
+    id: number | string
     name: string
   }
   city: {
-    id: number
+    id: number | string
     name: string
   }
   subcity?: {
-    id: number
+    id: number | string
     name: string
   }
   address?: string
@@ -45,31 +64,31 @@ interface Business {
   longitude?: number
   features?: string[]
   images: Array<{
-    id: number
+    id: number | string
     imageUrl: string
     sortOrder: number
   }>
   hours: Array<{
-    id: number
+    id: number | string
     day: string
     openTime?: string
     closeTime?: string
     isClosed: boolean
   }>
   reviews: Array<{
-    id: number
+    id: number | string
     rating: number
     comment?: string
     createdAt: string
     user: {
-      id: number
+      id: number | string
       name: string
     }
   }>
   averageRating: number
   totalReviews: number
   nearbyBusinesses: Array<{
-    id: number
+    id: number | string
     slug: string
     name: string
     category: string
@@ -85,6 +104,10 @@ export default function BusinessDetail({ slug }: { slug: string }) {
   const [business, setBusiness] = useState<Business | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [isUnverified, setIsUnverified] = useState(false)
+  const [unverifiedName, setUnverifiedName] = useState('')
+  const [isVerifying, setIsVerifying] = useState(false)
+  const [verifySuccessMsg, setVerifySuccessMsg] = useState('')
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   
   // Review form state
@@ -126,13 +149,44 @@ export default function BusinessDetail({ slug }: { slug: string }) {
       
       if (data.success) {
         setBusiness(data.data)
+        setIsUnverified(false)
+        setError(null)
       } else {
+        if (data.unverified) {
+          setIsUnverified(true)
+          setUnverifiedName(data.businessName || slug)
+        }
         setError(data.error || 'Failed to fetch business')
       }
     } catch (err) {
       setError('Failed to fetch business')
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handleAdminVerify = async (newStatus: boolean) => {
+    if (!business) return
+    setIsVerifying(true)
+    try {
+      const res = await fetch(`/api/admin/businesses/${business.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ verified: newStatus })
+      })
+      const data = await res.json()
+      if (data.success) {
+        setBusiness(prev => prev ? { ...prev, verified: newStatus } : null)
+        setVerifySuccessMsg(newStatus ? '✓ Business verified and published to directory!' : 'Business marked as unverified.')
+        setTimeout(() => setVerifySuccessMsg(''), 4500)
+      } else {
+        alert(data.error || 'Failed to update verification status')
+      }
+    } catch (e) {
+      console.error('Verify error:', e)
+      alert('Error updating verification status')
+    } finally {
+      setIsVerifying(false)
     }
   }
 
@@ -199,26 +253,64 @@ export default function BusinessDetail({ slug }: { slug: string }) {
     }
   }
 
+  const isAdmin = session?.user?.role === 'ADMIN'
+  const isOwner = Boolean(session?.user?.id && business && (business.ownerId?.toString() === session.user.id || (business as any).owner?.id === session.user.id))
+
   if (loading) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-green mx-auto mb-4"></div>
-          <p className="text-neutral-600">Loading business details...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#16A34A] mx-auto mb-4"></div>
+          <p className="text-neutral-600 font-medium">Loading business details...</p>
         </div>
       </div>
     )
   }
 
   if (error || !business) {
+    if (isUnverified) {
+      return (
+        <div className="min-h-screen bg-neutral-50 flex items-center justify-center p-4">
+          <div className="max-w-md w-full bg-white rounded-3xl shadow-xl border border-neutral-200 p-8 text-center">
+            <div className="w-16 h-16 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center mx-auto mb-4 shadow-sm">
+              <AlertTriangle className="w-8 h-8" />
+            </div>
+            <span className="inline-block px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-xs font-extrabold uppercase tracking-wider mb-2">
+              Pending Admin Verification
+            </span>
+            <h1 className="text-2xl font-bold text-neutral-900 mb-2">
+              {unverifiedName || slug}
+            </h1>
+            <p className="text-sm text-neutral-600 mb-6 leading-relaxed">
+              This business is registered on HelloET but is currently awaiting administrator verification before being publicly visible in search.
+            </p>
+            <div className="space-y-3">
+              <Link
+                href={`/auth/login?callbackUrl=/businesses/${slug}`}
+                className="flex items-center justify-center gap-2 w-full py-3 px-4 bg-[#16A34A] hover:bg-[#15803D] text-white text-sm font-bold rounded-xl transition-colors shadow-md shadow-green-600/20"
+              >
+                <LogIn className="w-4 h-4" /> Sign In as Admin to Review &amp; Verify
+              </Link>
+              <Link
+                href="/businesses"
+                className="flex items-center justify-center gap-2 w-full py-2.5 px-4 bg-neutral-100 hover:bg-neutral-200 text-neutral-700 text-sm font-semibold rounded-xl transition-colors"
+              >
+                <ArrowLeft className="w-4 h-4" /> Browse Verified Businesses
+              </Link>
+            </div>
+          </div>
+        </div>
+      )
+    }
+
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-neutral-800 mb-4">Business Not Found</h1>
+      <div className="min-h-screen bg-white flex items-center justify-center p-4">
+        <div className="text-center max-w-md">
+          <h1 className="text-2xl font-bold text-neutral-800 mb-2">Business Not Found</h1>
           <p className="text-neutral-600 mb-6">{error || 'The business you are looking for could not be found.'}</p>
-          <a href="/" className="bg-brand-green text-white px-6 py-2 rounded-lg hover:bg-primary-800 transition-colors">
-            Back to Home
-          </a>
+          <Link href="/businesses" className="bg-[#16A34A] text-white px-6 py-2.5 rounded-xl font-bold hover:bg-[#15803D] transition-colors inline-block shadow-md">
+            Browse Businesses
+          </Link>
         </div>
       </div>
     )
@@ -246,6 +338,101 @@ export default function BusinessDetail({ slug }: { slug: string }) {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-white">
+      {/* Admin Review & Verification Bar */}
+      {isAdmin && (
+        <div className={`sticky top-0 z-50 border-b shadow-md transition-colors ${
+          business.verified 
+            ? 'bg-[#DCFCE7] border-green-200 text-[#15803D]' 
+            : 'bg-gradient-to-r from-amber-500 to-amber-600 border-amber-600 text-white'
+        }`}>
+          <div className="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <div className={`p-2 rounded-xl flex items-center justify-center ${
+                business.verified ? 'bg-green-100 text-[#16A34A]' : 'bg-black/20 text-white'
+              }`}>
+                {business.verified ? <CheckCircle2 className="w-5 h-5" /> : <AlertTriangle className="w-5 h-5 text-amber-100" />}
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className={`text-[11px] font-extrabold uppercase px-2 py-0.5 rounded tracking-wide ${
+                    business.verified ? 'bg-[#16A34A] text-white' : 'bg-amber-950 text-amber-200'
+                  }`}>
+                    Admin Review Mode
+                  </span>
+                  <span className={`font-bold text-sm ${business.verified ? 'text-[#15803D]' : 'text-white'}`}>
+                    {business.verified 
+                      ? 'Status: Verified & Live in Directory' 
+                      : 'Status: Pending Verification (Hidden from Public)'}
+                  </span>
+                </div>
+                <p className={`text-xs mt-0.5 ${business.verified ? 'text-green-700' : 'text-amber-100'}`}>
+                  {business.verified 
+                    ? 'This business listing is active and discoverable on HelloET.' 
+                    : 'Review the details below. As an admin, you can approve and verify this listing now.'}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2.5">
+              <Link
+                href={`/dashboard/listings/${business.id}/edit`}
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold bg-white text-neutral-800 hover:bg-neutral-100 shadow-sm transition-colors"
+              >
+                <Edit3 className="w-3.5 h-3.5" /> Edit Business
+              </Link>
+              <button
+                type="button"
+                onClick={() => handleAdminVerify(!business.verified)}
+                disabled={isVerifying}
+                className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-xs font-bold shadow-sm transition-colors disabled:opacity-50 ${
+                  business.verified
+                    ? 'bg-red-600 hover:bg-red-700 text-white'
+                    : 'bg-[#16A34A] hover:bg-[#15803D] text-white'
+                }`}
+              >
+                {isVerifying ? (
+                  <>
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" /> Updating...
+                  </>
+                ) : business.verified ? (
+                  <>
+                    <XCircle className="w-3.5 h-3.5" /> Mark Unverified
+                  </>
+                ) : (
+                  <>
+                    <CheckCircle2 className="w-3.5 h-3.5" /> Approve &amp; Verify Now
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Owner Notification Bar */}
+      {isOwner && !isAdmin && !business.verified && (
+        <div className="bg-amber-50 border-b border-amber-200 text-amber-800 px-4 py-3">
+          <div className="max-w-7xl mx-auto flex items-center justify-between text-xs font-medium">
+            <div className="flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 text-amber-600 flex-shrink-0" />
+              <span>
+                Your listing &ldquo;{business.name}&rdquo; is currently pending verification by HelloET administrators. It will be published once approved.
+              </span>
+            </div>
+            <Link href={`/dashboard/listings/${business.id}/edit`} className="underline font-bold text-amber-900 ml-3">
+              Edit Details
+            </Link>
+          </div>
+        </div>
+      )}
+
+      {/* Verification Success Toast */}
+      {verifySuccessMsg && (
+        <div className="bg-[#16A34A] text-white px-4 py-2.5 text-center text-xs font-bold shadow-md">
+          {verifySuccessMsg}
+        </div>
+      )}
+
       {/* Hero Image Gallery */}
       <div className="relative h-[400px] lg:h-[500px] bg-neutral-100 overflow-hidden">
         {business.images.length > 0 ? (
@@ -299,12 +486,15 @@ export default function BusinessDetail({ slug }: { slug: string }) {
           </div>
         )}
         
-        {business.verified && (
-          <div className="absolute top-6 right-6 bg-green-500 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg flex items-center gap-2">
-            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-            </svg>
+        {business.verified ? (
+          <div className="absolute top-6 right-6 bg-[#16A34A] text-white px-4 py-2 rounded-full text-xs font-bold shadow-lg flex items-center gap-1.5 border border-green-300">
+            <CheckCircle2 className="w-4 h-4" />
             Verified Business
+          </div>
+        ) : (
+          <div className="absolute top-6 right-6 bg-amber-500 text-neutral-950 px-4 py-2 rounded-full text-xs font-bold shadow-lg flex items-center gap-1.5 border border-amber-300">
+            <AlertTriangle className="w-4 h-4" />
+            Pending Verification
           </div>
         )}
       </div>

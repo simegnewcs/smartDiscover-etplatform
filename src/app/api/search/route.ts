@@ -45,8 +45,8 @@ export async function GET(request: NextRequest) {
           city: true,
           subcity: true,
           images: {
-            where: { sortOrder: 0 },
-            take: 1
+            orderBy: { sortOrder: 'asc' },
+            take: 10
           },
           _count: {
             select: {
@@ -93,6 +93,7 @@ export async function GET(request: NextRequest) {
       website: business.website,
       verified: business.verified,
       image: business.images[0]?.imageUrl || null,
+      images: business.images.map(img => img.imageUrl),
       rating: ratingMap[business.id.toString()] || 0,
       reviewCount: business._count.reviews,
       latitude: business.latitude ? parseFloat(business.latitude.toString()) : null,

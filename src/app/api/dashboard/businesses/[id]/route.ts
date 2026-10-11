@@ -22,9 +22,10 @@ export async function GET(
 
     const businessId = parseInt(params.id)
     const userId = parseInt(session.user.id)
+    const isAdmin = session.user.role === 'ADMIN'
 
     const business = await prisma.business.findFirst({
-      where: {
+      where: isAdmin ? { id: businessId } : {
         id: businessId,
         ownerId: userId
       },
@@ -32,7 +33,9 @@ export async function GET(
         category: true,
         city: true,
         subcity: true,
-        images: true,
+        images: {
+          orderBy: { sortOrder: 'asc' }
+        },
         hours: true
       }
     })
@@ -103,10 +106,11 @@ export async function PUT(
 
     const businessId = parseInt(params.id)
     const userId = parseInt(session.user.id)
+    const isAdmin = session.user.role === 'ADMIN'
 
-    // Check ownership
+    // Check ownership or admin
     const existing = await prisma.business.findFirst({
-      where: {
+      where: isAdmin ? { id: businessId } : {
         id: businessId,
         ownerId: userId
       }
@@ -187,20 +191,33 @@ export async function PUT(
     })
 
     // Update images if provided
-    if (images && images.length > 0) {
+    if (images !== undefined) {
+      const sanitizedImages: string[] = Array.isArray(images)
+        ? images
+            .map((img: any) => {
+              if (typeof img === 'string') return img.trim()
+              if (img && typeof img.imageUrl === 'string') return img.imageUrl.trim()
+              if (img && typeof img.url === 'string') return img.url.trim()
+              return ''
+            })
+            .filter((url: string) => url.length > 0)
+        : []
+
       // Delete existing images
       await prisma.businessImage.deleteMany({
-        where: { businessId }
+        where: { businessId: BigInt(businessId) }
       })
       
       // Create new images
-      await prisma.businessImage.createMany({
-        data: images.map((url: string, index: number) => ({
-          businessId,
-          imageUrl: url,
-          sortOrder: index
-        }))
-      })
+      if (sanitizedImages.length > 0) {
+        await prisma.businessImage.createMany({
+          data: sanitizedImages.map((url: string, index: number) => ({
+            businessId: BigInt(businessId),
+            imageUrl: url,
+            sortOrder: index
+          }))
+        })
+      }
     }
 
     return NextResponse.json({
@@ -238,10 +255,11 @@ export async function DELETE(
 
     const businessId = parseInt(params.id)
     const userId = parseInt(session.user.id)
+    const isAdmin = session.user.role === 'ADMIN'
 
-    // Check ownership
+    // Check ownership or admin
     const existing = await prisma.business.findFirst({
-      where: {
+      where: isAdmin ? { id: businessId } : {
         id: businessId,
         ownerId: userId
       }

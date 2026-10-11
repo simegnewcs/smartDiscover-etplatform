@@ -316,13 +316,13 @@ export async function GET(request: Request) {
 
     if (category) {
       where.category = {
-        name: { contains: category, mode: 'insensitive' }
+        name: { contains: category }
       }
     }
 
     if (city) {
       where.city = {
-        name: { contains: city, mode: 'insensitive' }
+        name: { contains: city }
       }
     }
 
@@ -341,8 +341,8 @@ export async function GET(request: Request) {
             }
           },
           images: {
-            where: { sortOrder: 0 },
-            take: 1
+            orderBy: { sortOrder: 'asc' },
+            take: 10
           },
           _count: {
             select: {
@@ -362,14 +362,40 @@ export async function GET(request: Request) {
 
     // Convert BigInt to string and format response
     const formattedBusinesses = businesses.map(business => ({
-      ...business,
       id: business.id.toString(),
+      slug: business.slug,
+      name: business.name,
+      description: business.description,
       categoryId: business.categoryId.toString(),
       cityId: business.cityId.toString(),
-      ownerId: business.ownerId?.toString(),
+      subcityId: business.subcityId?.toString() || null,
+      address: business.address,
+      latitude: business.latitude ? parseFloat(business.latitude.toString()) : null,
+      longitude: business.longitude ? parseFloat(business.longitude.toString()) : null,
+      phone: business.phone,
+      email: business.email,
+      website: business.website,
+      mapUrl: business.mapUrl,
+      features: business.features,
+      verified: business.verified,
+      ownerId: business.ownerId?.toString() || null,
+      createdAt: business.createdAt,
+      image: business.images[0]?.imageUrl || null,
+      images: business.images.map(img => img.imageUrl),
+      category: business.category ? {
+        id: business.category.id.toString(),
+        name: business.category.name,
+        description: business.category.description,
+        icon: business.category.icon
+      } : null,
+      city: business.city ? {
+        id: business.city.id.toString(),
+        name: business.city.name
+      } : null,
       owner: business.owner ? {
-        ...business.owner,
-        id: business.owner.id.toString()
+        id: business.owner.id.toString(),
+        name: business.owner.name,
+        email: business.owner.email
       } : null,
       reviewCount: business._count.reviews
     }))

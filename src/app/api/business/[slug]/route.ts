@@ -61,8 +61,15 @@ export async function GET(
       const isOwner = session?.user?.id && business.ownerId?.toString() === session.user.id
       if (!isAdmin && !isOwner) {
         return NextResponse.json(
-          { success: false, error: 'Business not found' },
-          { status: 404 }
+          { 
+            success: false, 
+            error: 'This business is pending admin verification and is not publicly visible yet.',
+            unverified: true,
+            businessName: business.name,
+            businessId: business.id.toString(),
+            businessSlug: business.slug
+          },
+          { status: 403 }
         )
       }
     }
@@ -125,6 +132,7 @@ export async function GET(
 
     const formattedBusiness = {
       id: business.id.toString(),
+      ownerId: business.ownerId?.toString() || null,
       slug: business.slug,
       name: business.name,
       description: business.description,

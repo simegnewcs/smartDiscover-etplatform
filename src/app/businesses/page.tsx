@@ -25,6 +25,7 @@ import {
   ChevronDown
 } from 'lucide-react'
 import { useSession } from 'next-auth/react'
+import BusinessCardSlider from '@/components/business/BusinessCardSlider'
 
 interface Business {
   id: string | number
@@ -38,6 +39,7 @@ interface Business {
   website?: string
   verified: boolean
   image?: string
+  images?: string[]
   rating: number
   reviewCount: number
   latitude?: number
@@ -354,37 +356,23 @@ function AllBusinessesContent() {
 
                 if (viewMode === 'grid') {
                   return (
-                    <motion.div key={business.id} variants={itemVariants} className="flex justify-center h-full">
-                      <div className="featured-card flex flex-col h-full w-full">
-                        <div className="relative">
-                          <img
-                            src={business.image || 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&q=80'}
-                            alt={business.name}
-                            className="image w-full"
-                            onError={(e) => {
-                              e.currentTarget.src = 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&q=80'
-                            }}
-                          />
-                          <button
-                            onClick={(e) => toggleSave(e, idNum)}
-                            disabled={savingId === idNum}
-                            className={`absolute top-3 right-3 p-2 rounded-full shadow-md backdrop-blur-md transition-all ${
-                              isSaved
-                                ? 'bg-[#16A34A] text-white'
-                                : 'bg-white/90 text-neutral-500 hover:bg-white hover:text-[#16A34A]'
-                            }`}
-                          >
-                            <Bookmark className={`w-4 h-4 ${isSaved ? 'fill-current' : ''}`} />
-                          </button>
-                          {business.verified && (
-                            <div className="absolute top-3 left-3 bg-green-500 text-white px-2 py-1 rounded-md text-[10px] font-bold shadow-sm flex items-center gap-1">
-                              ✓ Verified
-                            </div>
-                          )}
-                        </div>
+                    <motion.div key={business.id} variants={itemVariants} className="flex justify-center h-full w-full">
+                      <div className="featured-card flex flex-col h-full w-full overflow-hidden">
+                        <BusinessCardSlider
+                          images={business.images}
+                          fallbackImage={business.image || 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&q=80'}
+                          businessName={business.name}
+                          slug={business.slug}
+                          verified={business.verified}
+                          isSaved={isSaved}
+                          onToggleSave={(e) => toggleSave(e, idNum)}
+                          isSaving={savingId === idNum}
+                          heightClassName="h-[175px]"
+                          containerClassName="rounded-t-lg"
+                        />
                         <div className="content flex-1 flex flex-col">
                           <div className="flex justify-between items-start gap-2">
-                            <Link href={`/business/${business.slug}`} className="flex-1">
+                            <Link href={`/businesses/${business.slug}`} className="flex-1">
                               <span className="title line-clamp-1">{business.name}</span>
                             </Link>
                             <div className="flex items-center gap-1 bg-yellow-50 px-1.5 py-0.5 rounded-md border border-yellow-100 shrink-0">
@@ -396,7 +384,7 @@ function AllBusinessesContent() {
                             {business.description || 'Discover this amazing local business on HelloET.'}
                           </p>
                           <div className="mt-auto">
-                            <Link className="action" href={`/business/${business.slug}`}>
+                            <Link className="action" href={`/businesses/${business.slug}`}>
                               Find out more
                               <span aria-hidden="true">
                                 →
@@ -412,34 +400,30 @@ function AllBusinessesContent() {
                 // List View
                 return (
                   <motion.div key={business.id} variants={itemVariants}>
-                    <Link href={`/business/${business.slug}`} className="group flex flex-col md:flex-row bg-white rounded-2xl shadow-sm hover:shadow-lg border border-neutral-100 overflow-hidden transition-all duration-300">
-                      <div className="relative w-full md:w-64 h-48 md:h-full bg-neutral-100 shrink-0">
-                        {business.image ? (
-                          <img src={business.image} alt={business.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
-                            onError={(e) => { e.currentTarget.src = 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&q=80' }}
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center">
-                            <CategoryIcon className="w-12 h-12 text-neutral-300" />
-                          </div>
-                        )}
-                        <button
-                          onClick={(e) => toggleSave(e, idNum)}
-                          disabled={savingId === idNum}
-                          className={`absolute top-3 left-3 p-2 rounded-full shadow-md backdrop-blur-md transition-all ${
-                            isSaved ? 'bg-[#16A34A] text-white' : 'bg-white/90 text-neutral-500 hover:bg-white hover:text-[#16A34A]'
-                          }`}
-                        >
-                          <Bookmark className={`w-4 h-4 ${isSaved ? 'fill-current' : ''}`} />
-                        </button>
+                    <div className="group flex flex-col md:flex-row bg-white rounded-2xl shadow-sm hover:shadow-lg border border-neutral-100 overflow-hidden transition-all duration-300">
+                      <div className="w-full md:w-72 h-48 md:h-auto min-h-[190px] shrink-0">
+                        <BusinessCardSlider
+                          images={business.images}
+                          fallbackImage={business.image || 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&q=80'}
+                          businessName={business.name}
+                          slug={business.slug}
+                          verified={business.verified}
+                          isSaved={isSaved}
+                          onToggleSave={(e) => toggleSave(e, idNum)}
+                          isSaving={savingId === idNum}
+                          heightClassName="h-48 md:h-full min-h-[190px]"
+                          containerClassName="w-full h-full rounded-t-2xl md:rounded-t-none md:rounded-l-2xl"
+                        />
                       </div>
                       
                       <div className="p-6 flex-1 flex flex-col justify-center">
                         <div className="flex flex-wrap items-center justify-between gap-4 mb-2">
                           <div className="flex items-center gap-3">
-                            <h3 className="font-extrabold text-xl text-neutral-800 group-hover:text-[#16A34A] transition-colors">
-                              {business.name}
-                            </h3>
+                            <Link href={`/businesses/${business.slug}`}>
+                              <h3 className="font-extrabold text-xl text-neutral-800 hover:text-[#16A34A] transition-colors">
+                                {business.name}
+                              </h3>
+                            </Link>
                             {business.verified && (
                               <span className="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs font-bold flex items-center gap-1">
                                 ✓ Verified
@@ -473,7 +457,7 @@ function AllBusinessesContent() {
                           )}
                         </div>
                       </div>
-                    </Link>
+                    </div>
                   </motion.div>
                 )
               })}
