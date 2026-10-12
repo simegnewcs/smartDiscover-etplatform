@@ -21,7 +21,8 @@ import {
   Bell,
   ChevronDown,
   ShieldCheck,
-  CheckCircle2
+  CheckCircle2,
+  MapPin
 } from 'lucide-react'
 
 const navItems = [
@@ -30,6 +31,7 @@ const navItems = [
   { href: '/admin/users', label: 'Users', icon: Users },
   { href: '/admin/reviews', label: 'Reviews', icon: Star },
   { href: '/admin/categories', label: 'Categories', icon: Tags },
+  { href: '/admin/places', label: 'Places', icon: MapPin },
 ]
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {

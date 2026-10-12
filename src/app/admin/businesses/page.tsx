@@ -116,7 +116,7 @@ export default function AdminBusinessesPage() {
           </p>
         </div>
         <Link
-          href="/dashboard/businesses/new"
+          href="/dashboard/listings/new"
           className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#16A34A] hover:bg-[#15803D] text-white rounded-2xl font-bold transition-all shadow-md shadow-[#16A34A]/20 text-xs self-start sm:self-auto"
         >
           <Plus className="w-4 h-4" /> Add Business

@@ -115,7 +115,7 @@ export default function Navbar() {
             <div className="flex items-center space-x-3">
               {/* Add Business Button (Desktop) */}
               <Link 
-                href="/dashboard/businesses/new" 
+                href="/dashboard/listings/new" 
                 className="hidden md:flex items-center space-x-2 bg-white hover:bg-neutral-100 text-[#16A34A] px-5 py-2.5 rounded-xl font-bold transition-all shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
               >
                 <Plus className="w-4 h-4" />

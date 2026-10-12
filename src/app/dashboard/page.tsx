@@ -384,7 +384,7 @@ function BusinessOwnerDashboard({ session }: { session: any }) {
             </p>
           </div>
           <Link 
-            href="/dashboard/businesses/new"
+            href="/dashboard/listings/new"
             className="inline-flex items-center gap-2 bg-[#16A34A] hover:bg-[#15803D] text-white px-5 py-2.5 rounded-2xl font-bold transition-all shadow-md shadow-[#16A34A]/20 text-xs self-start sm:self-auto"
           >
             <Plus className="w-4 h-4" />
@@ -575,7 +575,7 @@ function BusinessOwnerDashboard({ session }: { session: any }) {
             <Building2 className="w-10 h-10 text-[#94A3B8] mx-auto mb-2" />
             <p className="text-xs font-semibold text-[#64748B] mb-3">You don&apos;t have any listed businesses yet</p>
             <Link
-              href="/dashboard/businesses/new"
+              href="/dashboard/listings/new"
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#16A34A] text-white text-xs font-bold hover:bg-[#15803D] transition-colors"
             >
               <Plus className="w-3.5 h-3.5" /> Add Your First Business

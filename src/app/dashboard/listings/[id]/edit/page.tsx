@@ -87,8 +87,18 @@ export default function EditBusiness() {
   const [uploadCount, setUploadCount] = useState(0)
   const [isDragging, setIsDragging] = useState(false)
 
+  const [locations, setLocations] = useState<Array<{ name: string; subcities: Array<{ name: string }> }>>([])
+
   useEffect(() => {
     fetchBusiness()
+    fetch('/api/locations')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success && Array.isArray(data.data)) {
+          setLocations(data.data)
+        }
+      })
+      .catch(console.error)
   }, [businessId])
 
   const fetchBusiness = async () => {
@@ -595,11 +605,17 @@ export default function EditBusiness() {
               <input
                 type="text"
                 name="city"
+                list="cities-options"
                 value={formData.city}
                 onChange={handleInputChange}
                 required
                 className="w-full px-4 py-2.5 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#16A34A] text-sm"
               />
+              <datalist id="cities-options">
+                {locations.map(loc => (
+                  <option key={loc.name} value={loc.name} />
+                ))}
+              </datalist>
             </div>
 
             <div>
@@ -609,10 +625,18 @@ export default function EditBusiness() {
               <input
                 type="text"
                 name="subcity"
+                list="subcities-options"
                 value={formData.subcity}
                 onChange={handleInputChange}
                 className="w-full px-4 py-2.5 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#16A34A] text-sm"
               />
+              <datalist id="subcities-options">
+                {locations
+                  .find(loc => loc.name === formData.city)
+                  ?.subcities?.map(sub => (
+                    <option key={sub.name} value={sub.name} />
+                  ))}
+              </datalist>
             </div>
 
             <div className="md:col-span-2">

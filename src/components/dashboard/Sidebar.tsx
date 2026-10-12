@@ -29,7 +29,8 @@ import {
   Sparkles,
   HelpCircle,
   Compass,
-  Tags
+  Tags,
+  MapPin
 } from 'lucide-react'
 
 interface SidebarItem {
@@ -112,12 +113,13 @@ export default function Sidebar({ onClose, isCollapsed = false }: SidebarProps) 
           badge: stats.reviewCount > 0 ? stats.reviewCount : undefined
         },
         { name: 'Categories', href: '/admin/categories', icon: Tags },
+        { name: 'Places', href: '/admin/places', icon: MapPin },
         { 
           name: 'My Business Listings', 
           href: '/dashboard/listings', 
           icon: Building2 
         },
-        { name: 'Add New Business', href: '/dashboard/businesses/new', icon: PlusCircle },
+        { name: 'Add New Business', href: '/dashboard/listings/new', icon: PlusCircle },
         { name: 'Settings', href: '/dashboard/settings', icon: Settings }
       ]
     } else if (isBusinessOwner) {
@@ -129,7 +131,7 @@ export default function Sidebar({ onClose, isCollapsed = false }: SidebarProps) 
           icon: Building2,
           badge: stats.businessCount > 0 ? stats.businessCount : undefined
         },
-        { name: 'Add Business', href: '/dashboard/businesses/new', icon: PlusCircle },
+        { name: 'Add Business', href: '/dashboard/listings/new', icon: PlusCircle },
         { 
           name: 'Customer Reviews', 
           href: '/dashboard/reviews', 
