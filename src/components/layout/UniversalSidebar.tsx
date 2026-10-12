@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import { 
   X, 
@@ -56,6 +57,8 @@ const iconMap: Record<string, any> = {
 }
 
 export default function UniversalSidebar({ isOpen, onClose }: UniversalSidebarProps) {
+  const { data: session } = useSession()
+  const isRegularUser = session?.user?.role === 'USER'
   const [expandedCategories, setExpandedCategories] = useState<string[]>([])
   const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)
@@ -244,10 +247,11 @@ export default function UniversalSidebar({ isOpen, onClose }: UniversalSidebarPr
               </div>
             </div>
 
-            {/* Add Business CTA */}
+            {/* Add Business CTA - Hidden for regular users */}
+            {!isRegularUser && (
             <div className="mt-6 px-3">
               <Link
-                href="/auth/register"
+                href={session ? "/dashboard/listings/new" : "/auth/register"}
                 onClick={onClose}
                 className="w-full flex items-center justify-center space-x-2 bg-white hover:bg-green-50 text-[#16A34A] px-4 py-3 rounded-lg transition-colors shadow-sm"
               >
@@ -255,6 +259,7 @@ export default function UniversalSidebar({ isOpen, onClose }: UniversalSidebarPr
                 <span className="font-bold">Add Your Business</span>
               </Link>
             </div>
+            )}
 
             {/* Support */}
             <div className="mt-auto pt-6 border-t border-white/20">

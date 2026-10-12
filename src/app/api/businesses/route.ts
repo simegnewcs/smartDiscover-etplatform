@@ -1,53 +1,9 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { extractMapUrl, extractCoordinatesFromMapUrl } from '@/lib/maps'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
-
-// Helper function to extract coordinates from Google Maps URL
-function extractCoordinatesFromMapUrl(url: string): { lat: number; lng: number } | null {
-  try {
-    // Handle maps.app.goo.gl short URLs (need to resolve)
-    if (url.includes('maps.app.goo.gl')) {
-      // Short URLs need to be resolved - we'll store the URL without extracting coordinates
-      return null
-    }
-
-    // Handle standard Google Maps URLs with query parameter
-    // e.g., https://www.google.com/maps?q=9.0242,38.7468 or https://maps.google.com/?q=9.0242,38.7468
-    const qMatch = url.match(/[?&]q=(-?\d+\.?\d*),(-?\d+\.?\d*)/)
-    if (qMatch) {
-      return {
-        lat: parseFloat(qMatch[1]),
-        lng: parseFloat(qMatch[2])
-      }
-    }
-
-    // Handle URLs with @lat,lng format
-    // e.g., https://www.google.com/maps/@9.0242,38.7468,15z
-    const atMatch = url.match(/@(-?\d+\.?\d*),(-?\d+\.?\d*)/)
-    if (atMatch) {
-      return {
-        lat: parseFloat(atMatch[1]),
-        lng: parseFloat(atMatch[2])
-      }
-    }
-
-    // Handle place URLs with ll parameter
-    // e.g., https://maps.google.com/?ll=9.0242,38.7468
-    const llMatch = url.match(/[?&]ll=(-?\d+\.?\d*),(-?\d+\.?\d*)/)
-    if (llMatch) {
-      return {
-        lat: parseFloat(llMatch[1]),
-        lng: parseFloat(llMatch[2])
-      }
-    }
-
-    return null
-  } catch {
-    return null
-  }
-}
 
 export async function POST(request: Request) {
   try {
@@ -188,7 +144,7 @@ export async function POST(request: Request) {
 
       // Store Google Maps URL for location
       if (mapUrl) {
-        businessData.mapUrl = mapUrl
+        businessData.mapUrl = extractMapUrl(mapUrl)
         // Try to extract coordinates from Google Maps URL
         const coords = extractCoordinatesFromMapUrl(mapUrl)
         if (coords) {

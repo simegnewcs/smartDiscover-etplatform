@@ -67,7 +67,7 @@ const categoryIcons: Record<string, any> = {
 function AllBusinessesContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
   const categoryFromUrl = searchParams?.get('category') || 'all'
   
   const [businesses, setBusinesses] = useState<Business[]>([])
@@ -85,6 +85,7 @@ function AllBusinessesContent() {
   const toggleSave = async (e: React.MouseEvent, businessId: number | string) => {
     e.preventDefault()
     e.stopPropagation()
+    if (status === 'loading') return
     if (!session) {
       router.push('/auth/login?callbackUrl=/businesses')
       return
@@ -105,6 +106,13 @@ function AllBusinessesContent() {
           else next.delete(idNum)
           return next
         })
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(
+            new CustomEvent('saved-count-updated', {
+              detail: { count: data.total, businessId: idNum, saved: data.saved }
+            })
+          )
+        }
       }
     } catch (err) {
       console.error('Error toggling save:', err)
@@ -142,14 +150,37 @@ function AllBusinessesContent() {
       fetch('/api/saved')
         .then(res => res.json())
         .then(data => {
-          if (data.success) {
+          if (data.success && Array.isArray(data.data?.savedBusinesses)) {
             const ids = new Set<number>(data.data.savedBusinesses.map((s: any) => parseInt(s.business.id)))
             setSavedIds(ids)
+            if (typeof data.data?.total === 'number' && typeof window !== 'undefined') {
+              window.dispatchEvent(
+                new CustomEvent('saved-count-updated', { detail: { count: data.data.total } })
+              )
+            }
           }
         })
         .catch(() => {})
     }
   }, [session])
+
+  useEffect(() => {
+    const handleSavedUpdated = (event: Event) => {
+      const customEvent = event as CustomEvent
+      if (customEvent.detail?.businessId !== undefined && typeof customEvent.detail?.saved === 'boolean') {
+        const bId = customEvent.detail.businessId
+        const isSaved = customEvent.detail.saved
+        setSavedIds(prev => {
+          const next = new Set(prev)
+          if (isSaved) next.add(bId)
+          else next.delete(bId)
+          return next
+        })
+      }
+    }
+    window.addEventListener('saved-count-updated', handleSavedUpdated)
+    return () => window.removeEventListener('saved-count-updated', handleSavedUpdated)
+  }, [])
 
   useEffect(() => {
     fetchData()

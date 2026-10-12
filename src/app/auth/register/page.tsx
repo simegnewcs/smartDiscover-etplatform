@@ -145,11 +145,10 @@ export default function RegisterPage() {
               <button
                 type="button"
                 onClick={() => setUserType('USER')}
-                className={`flex-1 flex items-center justify-center gap-3 p-4 rounded-xl border-2 transition-all ${
-                  userType === 'USER'
+                className={`flex-1 flex items-center justify-center gap-3 p-4 rounded-xl border-2 transition-all ${userType === 'USER'
                     ? 'border-[#16A34A] bg-[#DCFCE7] text-[#16A34A]'
                     : 'border-neutral-200 hover:border-neutral-300'
-                }`}
+                  }`}
               >
                 <User className="w-5 h-5" />
                 <div className="text-left">
@@ -161,11 +160,10 @@ export default function RegisterPage() {
               <button
                 type="button"
                 onClick={() => setUserType('BUSINESS_OWNER')}
-                className={`flex-1 flex items-center justify-center gap-3 p-4 rounded-xl border-2 transition-all ${
-                  userType === 'BUSINESS_OWNER'
+                className={`flex-1 flex items-center justify-center gap-3 p-4 rounded-xl border-2 transition-all ${userType === 'BUSINESS_OWNER'
                     ? 'border-[#16A34A] bg-[#DCFCE7] text-[#16A34A]'
                     : 'border-neutral-200 hover:border-neutral-300'
-                }`}
+                  }`}
               >
                 <Briefcase className="w-5 h-5" />
                 <div className="text-left">
@@ -191,7 +189,7 @@ export default function RegisterPage() {
                   onChange={handleInputChange}
                   required
                   className="w-full pl-10 pr-4 py-3 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#16A34A]"
-                  placeholder="John Doe"
+                  placeholder="Enter Name"
                 />
               </div>
             </div>
@@ -324,7 +322,7 @@ export default function RegisterPage() {
             <h3 className="font-semibold text-neutral-800 mb-2">Reach More Customers</h3>
             <p className="text-sm text-neutral-600">Connect with thousands of customers looking for businesses in Ethiopia</p>
           </div>
-          
+
           <div className="text-center">
             <div className="w-12 h-12 bg-[#E6F2ED] rounded-lg flex items-center justify-center mx-auto mb-4">
               <Star className="w-6 h-6 text-[#16A34A]" />
@@ -332,7 +330,7 @@ export default function RegisterPage() {
             <h3 className="font-semibold text-neutral-800 mb-2">Build Your Reputation</h3>
             <p className="text-sm text-neutral-600">Collect reviews and build trust with Ethiopian customers</p>
           </div>
-          
+
           <div className="text-center">
             <div className="w-12 h-12 bg-[#E6F2ED] rounded-lg flex items-center justify-center mx-auto mb-4">
               <TrendingUp className="w-6 h-6 text-[#16A34A]" />

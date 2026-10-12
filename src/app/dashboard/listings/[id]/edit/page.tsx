@@ -19,9 +19,11 @@ import {
   AlertCircle,
   Image as ImageIcon,
   ArrowRight,
-  Star
+  Star,
+  ExternalLink
 } from 'lucide-react'
 import CategorySelect from '@/components/dashboard/CategorySelect'
+import { extractMapUrl, getMapEmbedUrl, getMapExternalUrl } from '@/lib/maps'
 
 interface BusinessData {
   id: string
@@ -143,10 +145,13 @@ export default function EditBusiness() {
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    })
+    const { name, value } = e.target
+    if (name === 'mapUrl') {
+      const cleanUrl = extractMapUrl(value)
+      setFormData(prev => ({ ...prev, mapUrl: cleanUrl }))
+    } else {
+      setFormData(prev => ({ ...prev, [name]: value }))
+    }
     setError('')
   }
 
@@ -653,17 +658,64 @@ export default function EditBusiness() {
             </div>
 
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-neutral-700 mb-1.5">
-                Google Maps Link
+              <label className="block text-sm font-medium text-neutral-700 mb-1.5 flex items-center justify-between">
+                <span>Google Maps Link or Embed HTML</span>
+                {formData.mapUrl && (
+                  <span className="text-xs text-[#16A34A] font-semibold flex items-center gap-1">
+                    <CheckCircle2 className="w-3.5 h-3.5" /> Embed URL recognized
+                  </span>
+                )}
               </label>
-              <input
-                type="url"
+              <textarea
                 name="mapUrl"
                 value={formData.mapUrl}
                 onChange={handleInputChange}
-                placeholder="https://maps.google.com/..."
-                className="w-full px-4 py-2.5 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#16A34A] text-sm"
+                onPaste={(e) => {
+                  const pasted = e.clipboardData.getData('text')
+                  if (pasted && (pasted.includes('<iframe') || pasted.includes('src='))) {
+                    e.preventDefault()
+                    const cleanUrl = extractMapUrl(pasted)
+                    setFormData(prev => ({ ...prev, mapUrl: cleanUrl }))
+                  }
+                }}
+                rows={2}
+                placeholder="Paste Google Maps URL or full <iframe> embed HTML code (e.g. <iframe src=&quot;https://www.google.com/maps/embed?...&quot; ...></iframe>)"
+                className="w-full px-4 py-2.5 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#16A34A] text-sm resize-none font-mono"
               />
+              <p className="text-xs text-neutral-400 mt-1">
+                Accepts both standard Google Maps links and complete &lt;iframe&gt; embed code. The embed source is extracted automatically.
+              </p>
+
+              {/* Live Map Preview */}
+              {formData.mapUrl && (
+                <div className="mt-3 rounded-xl border border-neutral-200 bg-neutral-50 p-3">
+                  <div className="flex items-center justify-between mb-2 text-xs font-semibold text-neutral-600">
+                    <span className="flex items-center gap-1.5 text-[#16A34A]">
+                      <MapPin className="w-3.5 h-3.5" /> Location Map Preview
+                    </span>
+                    <a
+                      href={getMapExternalUrl(formData.mapUrl)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[#16A34A] hover:underline inline-flex items-center gap-1"
+                    >
+                      View on Google Maps <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </div>
+                  <div className="aspect-video w-full rounded-lg overflow-hidden border border-neutral-200 bg-neutral-100 shadow-inner">
+                    <iframe
+                      src={getMapEmbedUrl(formData.mapUrl)}
+                      width="100%"
+                      height="100%"
+                      style={{ border: 0 }}
+                      allowFullScreen
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      className="w-full h-full"
+                    />
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

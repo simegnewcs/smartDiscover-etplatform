@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { useSession } from 'next-auth/react'
 import { 
   X, 
   Home, 
@@ -55,6 +56,8 @@ const iconMap: Record<string, any> = {
 }
 
 export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
+  const { data: session } = useSession()
+  const isRegularUser = session?.user?.role === 'USER'
   const [expandedCategories, setExpandedCategories] = useState<string[]>([])
   const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)
@@ -241,7 +244,8 @@ export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
               </div>
             </div>
 
-            {/* Add Business CTA */}
+            {/* Add Business CTA - Hidden for regular users */}
+            {!isRegularUser && (
             <div className="mt-6 px-3">
               <Link
                 href="/dashboard/listings/new"
@@ -252,6 +256,7 @@ export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
                 <span className="font-medium">Add Your Business</span>
               </Link>
             </div>
+            )}
 
             {/* Support */}
             <div className="mt-auto pt-6 border-t border-neutral-200">

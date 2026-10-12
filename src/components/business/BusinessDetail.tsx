@@ -24,6 +24,7 @@ import {
 } from 'lucide-react'
 import 'leaflet/dist/leaflet.css'
 import dynamic from 'next/dynamic'
+import { getMapEmbedUrl, getMapExternalUrl } from '@/lib/maps'
 
 // Dynamic import for Leaflet Map component (must be outside component to avoid hook issues)
 import type { MapComponentProps } from './MapComponent'
@@ -660,7 +661,7 @@ export default function BusinessDetail({ slug }: { slug: string }) {
                 </h2>
                 <div className="aspect-video rounded-xl overflow-hidden">
                   <iframe
-                    src={business.mapUrl}
+                    src={getMapEmbedUrl(business.mapUrl)}
                     width="100%"
                     height="100%"
                     style={{ border: 0 }}
@@ -670,15 +671,17 @@ export default function BusinessDetail({ slug }: { slug: string }) {
                     className="rounded-xl"
                   />
                 </div>
-                <a
-                  href={business.mapUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-4 inline-flex items-center gap-2 text-primary-800 hover:text-brand-green font-medium"
-                >
-                  <MapPin className="w-4 h-4" />
-                  View on Google Maps
-                </a>
+                {getMapExternalUrl(business.mapUrl) && (
+                  <a
+                    href={getMapExternalUrl(business.mapUrl)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-4 inline-flex items-center gap-2 text-primary-800 hover:text-brand-green font-medium"
+                  >
+                    <MapPin className="w-4 h-4" />
+                    View on Google Maps
+                  </a>
+                )}
               </div>
             )}
 

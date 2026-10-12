@@ -42,7 +42,7 @@ model Business {
   phone       String?
   email       String?
   website     String?
-  mapUrl      String?  @map("map_url")
+  mapUrl      String?  @db.Text @map("map_url")
   features    Json?    // Array of feature IDs like ["wifi", "parking", "delivery"]
   verified    Boolean  @default(false)
   ownerId     BigInt?  @map("owner_id")

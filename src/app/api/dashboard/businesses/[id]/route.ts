@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth/next'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
+import { extractMapUrl, extractCoordinatesFromMapUrl } from '@/lib/maps'
 
 export const dynamic = 'force-dynamic'
 
@@ -172,22 +173,34 @@ export async function PUT(
       }
     }
 
+    // Clean map URL and extract coordinates if provided
+    const cleanMapUrl = mapUrl ? extractMapUrl(mapUrl) : (mapUrl === '' ? null : mapUrl)
+    const updateData: any = {
+      name,
+      description,
+      categoryId: categoryRecord.id,
+      cityId: cityRecord.id,
+      subcityId: subcityRecord?.id,
+      address,
+      phone,
+      email,
+      website,
+      mapUrl: cleanMapUrl,
+      features: features || []
+    }
+
+    if (mapUrl) {
+      const coords = extractCoordinatesFromMapUrl(mapUrl)
+      if (coords) {
+        updateData.latitude = coords.lat
+        updateData.longitude = coords.lng
+      }
+    }
+
     // Update business
     const updated = await prisma.business.update({
       where: { id: businessId },
-      data: {
-        name,
-        description,
-        categoryId: categoryRecord.id,
-        cityId: cityRecord.id,
-        subcityId: subcityRecord?.id,
-        address,
-        phone,
-        email,
-        website,
-        mapUrl,
-        features: features || []
-      }
+      data: updateData
     })
 
     // Update images if provided

@@ -5,7 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { Menu, X, User, LogIn, LogOut, Plus, ChevronDown, Compass, LayoutDashboard, Search } from 'lucide-react'
+import { Menu, X, User, LogIn, LogOut, Plus, ChevronDown, Compass, LayoutDashboard, Search, Building2, Heart, Bell, Bookmark } from 'lucide-react'
 import UniversalSidebar from '@/components/layout/UniversalSidebar'
 
 export default function Navbar() {
@@ -27,6 +27,54 @@ export default function Navbar() {
   }
   
   const isLoggedIn = status === 'authenticated'
+  const isRegularUser = session?.user?.role === 'USER'
+  const [savedCount, setSavedCount] = useState<number>(0)
+  const [unreadNotificationsCount, setUnreadNotificationsCount] = useState<number>(0)
+
+  // Fetch saved places and notifications count for logged in users
+  useEffect(() => {
+    if (isLoggedIn) {
+      fetch('/api/saved')
+        .then(res => res.json())
+        .then(data => {
+          if (data.success && data.data) {
+            setSavedCount(data.data.total ?? data.data.savedBusinesses?.length ?? 0)
+          }
+        })
+        .catch(() => {})
+
+      fetch('/api/notifications')
+        .then(res => res.json())
+        .then(data => {
+          if (data.success && data.data) {
+            setUnreadNotificationsCount(data.data.unreadCount ?? 0)
+          }
+        })
+        .catch(() => {})
+    }
+  }, [isLoggedIn])
+
+  // Real-time synchronization of saved count across components
+  useEffect(() => {
+    const handleSavedUpdated = (event: Event) => {
+      const customEvent = event as CustomEvent
+      if (typeof customEvent.detail?.count === 'number') {
+        setSavedCount(customEvent.detail.count)
+      } else {
+        fetch('/api/saved')
+          .then(res => res.json())
+          .then(data => {
+            if (data.success && data.data) {
+              setSavedCount(data.data.total ?? data.data.savedBusinesses?.length ?? 0)
+            }
+          })
+          .catch(() => {})
+      }
+    }
+
+    window.addEventListener('saved-count-updated', handleSavedUpdated)
+    return () => window.removeEventListener('saved-count-updated', handleSavedUpdated)
+  }, [])
   
   // Handle scroll effect for glassmorphism
   useEffect(() => {
@@ -50,7 +98,7 @@ export default function Navbar() {
   }, [])
 
   const navigationItems = [
-    { name: 'Discover', href: '/businesses', icon: Compass },
+    { name: 'Businesses', href: '/businesses', icon: Building2 },
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard }
   ]
 
@@ -113,7 +161,49 @@ export default function Navbar() {
 
             {/* Right Section: Actions */}
             <div className="flex items-center space-x-3">
-              {/* Add Business Button (Desktop) */}
+              {/* Add Business Button (Desktop) - Hidden for regular users */}
+              {/* When regular user logs in: Businesses, Favorite icon, Notification icon */}
+              {isLoggedIn && isRegularUser ? (
+                <>
+                  <Link 
+                    href="/businesses" 
+                    className="flex items-center space-x-1.5 bg-white/10 hover:bg-white/20 text-white px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl font-semibold text-xs sm:text-sm transition-all border border-white/20 hover:border-white/40 shadow-sm"
+                    title="Browse Businesses"
+                  >
+                    <Building2 className="w-4 h-4 text-white" />
+                    <span>Businesses</span>
+                  </Link>
+
+                  <Link 
+                    href="/saved" 
+                    className="relative p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-all border border-white/20 hover:border-white/40 group"
+                    title="Saved Places"
+                    aria-label="Saved Places"
+                  >
+                    <Bookmark className="w-4 h-4 sm:w-5 sm:h-5 text-white group-hover:scale-110 transition-all" />
+                    {savedCount > 0 && (
+                      <span className="absolute -top-1.5 -right-1.5 px-1 bg-red-600 text-white text-[10px] font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center shadow-md animate-in fade-in zoom-in duration-200">
+                        {savedCount > 99 ? '99+' : savedCount}
+                      </span>
+                    )}
+                  </Link>
+
+                  <Link 
+                    href="/notifications" 
+                    className="relative p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-all border border-white/20 hover:border-white/40 group"
+                    title="Notifications"
+                    aria-label="Notifications"
+                  >
+                    <Bell className="w-4 h-4 sm:w-5 sm:h-5 text-white group-hover:scale-110 group-hover:text-yellow-200 transition-all" />
+                    {unreadNotificationsCount > 0 && (
+                      <span className="absolute -top-1 -right-1 px-1 bg-red-500 text-white text-[10px] font-bold rounded-full min-w-[16px] h-4 flex items-center justify-center shadow-sm animate-pulse">
+                        {unreadNotificationsCount > 99 ? '99+' : unreadNotificationsCount}
+                      </span>
+                    )}
+                  </Link>
+                </>
+              ) : (
+                !isRegularUser && (
               <Link 
                 href="/dashboard/listings/new" 
                 className="hidden md:flex items-center space-x-2 bg-white hover:bg-neutral-100 text-[#16A34A] px-5 py-2.5 rounded-xl font-bold transition-all shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
@@ -121,6 +211,8 @@ export default function Navbar() {
                 <Plus className="w-4 h-4" />
                 <span>Add Business</span>
               </Link>
+                )
+              )}
 
               {/* Profile Dropdown */}
               <div className="relative" ref={profileMenuRef}>
@@ -175,6 +267,36 @@ export default function Navbar() {
                           <LayoutDashboard className="w-4 h-4" />
                           <span>Dashboard</span>
                         </Link>
+                        {isLoggedIn && (
+                          <>
+                            <Link
+                              href="/saved"
+                              className="flex items-center space-x-3 px-4 py-2.5 text-sm font-medium text-neutral-700 hover:text-[#16A34A] hover:bg-neutral-50 transition-colors mx-1 rounded-lg"
+                              onClick={() => setIsProfileMenuOpen(false)}
+                            >
+                              <Bookmark className="w-4 h-4 text-neutral-500" />
+                              <span className="flex-1">Saved Places</span>
+                              {savedCount > 0 && (
+                                <span className="text-xs px-2 py-0.5 rounded-full bg-red-600 text-white font-bold">
+                                  {savedCount}
+                                </span>
+                              )}
+                            </Link>
+                            <Link
+                              href="/notifications"
+                              className="flex items-center space-x-3 px-4 py-2.5 text-sm font-medium text-neutral-700 hover:text-[#16A34A] hover:bg-neutral-50 transition-colors mx-1 rounded-lg"
+                              onClick={() => setIsProfileMenuOpen(false)}
+                            >
+                              <Bell className="w-4 h-4 text-neutral-500" />
+                              <span className="flex-1">Notifications</span>
+                              {unreadNotificationsCount > 0 && (
+                                <span className="text-xs px-2 py-0.5 rounded-full bg-red-500 text-white font-bold">
+                                  {unreadNotificationsCount}
+                                </span>
+                              )}
+                            </Link>
+                          </>
+                        )}
                         <div className="border-t border-neutral-100 my-1"></div>
                         <button
                           onClick={() => {
@@ -257,7 +379,49 @@ export default function Navbar() {
         {isMobileMenuOpen && (
           <div className="md:hidden absolute top-full left-0 w-full bg-white border-b border-neutral-200 shadow-lg py-4 px-4 flex flex-col space-y-4">
             <div className="flex flex-col space-y-1">
-              {navigationItems.map((item) => (
+              <Link
+                href="/businesses"
+                className="flex items-center space-x-3 text-neutral-700 hover:text-[#16A34A] hover:bg-neutral-50 font-medium px-4 py-3 rounded-xl transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <Building2 className="w-5 h-5 text-neutral-400" />
+                <span>Businesses</span>
+              </Link>
+              {isLoggedIn && (
+                <>
+                  <Link
+                    href="/saved"
+                    className="flex items-center justify-between text-neutral-700 hover:text-[#16A34A] hover:bg-neutral-50 font-medium px-4 py-3 rounded-xl transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <div className="flex items-center space-x-3">
+                      <Bookmark className="w-5 h-5 text-neutral-400" />
+                      <span>Saved Places</span>
+                    </div>
+                    {savedCount > 0 && (
+                      <span className="text-xs px-2 py-0.5 rounded-full bg-red-600 text-white font-bold">
+                        {savedCount}
+                      </span>
+                    )}
+                  </Link>
+                  <Link
+                    href="/notifications"
+                    className="flex items-center justify-between text-neutral-700 hover:text-[#16A34A] hover:bg-neutral-50 font-medium px-4 py-3 rounded-xl transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <div className="flex items-center space-x-3">
+                      <Bell className="w-5 h-5 text-neutral-400" />
+                      <span>Notifications</span>
+                    </div>
+                    {unreadNotificationsCount > 0 && (
+                      <span className="text-xs px-2 py-0.5 rounded-full bg-red-500 text-white font-bold">
+                        {unreadNotificationsCount}
+                      </span>
+                    )}
+                  </Link>
+                </>
+              )}
+              {navigationItems.filter(item => item.name !== 'Businesses').map((item) => (
                 <Link
                   key={item.name}
                   href={item.href}

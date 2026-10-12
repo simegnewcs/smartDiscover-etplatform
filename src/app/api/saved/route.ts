@@ -126,9 +126,15 @@ export async function POST(request: NextRequest) {
           `DELETE FROM saved_businesses WHERE user_id = ? AND business_id = ?`,
           userId, bizId
         )
+        const countRes: any[] = await prisma.$queryRawUnsafe(
+          `SELECT COUNT(*) as count FROM saved_businesses WHERE user_id = ?`,
+          userId
+        )
+        const total = Number(countRes[0]?.count || 0)
         return NextResponse.json({
           success: true,
           saved: false,
+          total,
           message: 'Business removed from saved'
         })
       } else {
@@ -137,9 +143,15 @@ export async function POST(request: NextRequest) {
           `INSERT INTO saved_businesses (user_id, business_id, created_at) VALUES (?, ?, NOW())`,
           userId, bizId
         )
+        const countRes: any[] = await prisma.$queryRawUnsafe(
+          `SELECT COUNT(*) as count FROM saved_businesses WHERE user_id = ?`,
+          userId
+        )
+        const total = Number(countRes[0]?.count || 0)
         return NextResponse.json({
           success: true,
           saved: true,
+          total,
           message: 'Business saved'
         })
       }

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { ChevronLeft, ChevronRight, Bookmark, Camera } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Bookmark, Camera, Loader2 } from 'lucide-react'
 
 interface BusinessCardSliderProps {
   images?: string[]
@@ -183,13 +183,17 @@ export default function BusinessCardSlider({
           disabled={isSaving}
           title={isSaved ? 'Remove from saved' : 'Save business'}
           aria-label={isSaved ? 'Remove from saved' : 'Save business'}
-          className={`absolute top-3 right-3 p-2 rounded-full shadow-md backdrop-blur-md transition-all z-10 ${
+          className={`absolute top-3 right-3 p-2 rounded-full shadow-md backdrop-blur-md transition-all z-10 hover:scale-110 active:scale-95 ${
             isSaved
-              ? 'bg-[#16A34A] text-white'
+              ? 'bg-[#16A34A] text-white shadow-[#16A34A]/30'
               : 'bg-white/90 text-neutral-600 hover:bg-white hover:text-[#16A34A]'
-          }`}
+          } ${isSaving ? 'opacity-70 cursor-wait' : 'cursor-pointer'}`}
         >
-          <Bookmark className={`w-3.5 h-3.5 ${isSaved ? 'fill-current' : ''}`} />
+          {isSaving ? (
+            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+          ) : (
+            <Bookmark className={`w-3.5 h-3.5 ${isSaved ? 'fill-current' : ''}`} />
+          )}
         </button>
       )}
     </div>

@@ -80,6 +80,13 @@ export default function SavedPage() {
       const data = await res.json()
       if (data.success) {
         setSavedItems(prev => prev.filter(item => item.business.id !== businessId))
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(
+            new CustomEvent('saved-count-updated', {
+              detail: { count: data.total, businessId: parseInt(businessId), saved: false }
+            })
+          )
+        }
       }
     } catch (err) {
       console.error('Error removing saved:', err)
