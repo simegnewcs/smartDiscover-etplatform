@@ -19,56 +19,56 @@ export default function CategoryGrid() {
       title: 'Restaurants',
       description: 'Find the best dining experiences',
       count: '2,847',
-      href: '/businesses?category=restaurant'
+      href: '/category/restaurants'
     },
     {
       icon: Bed,
       title: 'Hotels',
       description: 'Comfortable stays for every budget',
       count: '1,523',
-      href: '/businesses?category=hotel'
+      href: '/category/hotels'
     },
     {
       icon: Coffee,
       title: 'Cafés',
       description: 'Perfect spots for coffee and work',
       count: '892',
-      href: '/businesses?category=cafe'
+      href: '/category/cafes'
     },
     {
       icon: Pill,
       title: 'Pharmacies',
       description: 'Health and wellness essentials',
       count: '456',
-      href: '/businesses?category=pharmacy'
+      href: '/category/pharmacies'
     },
     {
       icon: ShoppingCart,
       title: 'Supermarkets',
       description: 'Groceries and daily necessities',
       count: '678',
-      href: '/businesses?category=supermarket'
+      href: '/category/supermarkets'
     },
     {
       icon: Camera,
       title: 'Tourist Attractions',
       description: 'Explore Ethiopia\'s treasures',
       count: '234',
-      href: '/businesses?category=tourist-attraction'
+      href: '/category/tourist-attractions'
     },
     {
       icon: MapPin,
       title: 'Local Services',
       description: 'Professional services near you',
       count: '1,123',
-      href: '/businesses?category=local-service'
+      href: '/category/local-services'
     },
     {
       icon: Wrench,
       title: 'Repair Services',
       description: 'Fix and maintenance solutions',
       count: '567',
-      href: '/businesses?category=repair-service'
+      href: '/category/repair-services'
     }
   ]
 

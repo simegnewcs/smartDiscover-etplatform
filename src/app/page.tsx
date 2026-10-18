@@ -89,6 +89,45 @@ const jsonLdLocalBusiness = {
   }
 }
 
+const jsonLdFaq = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'What is HelloET?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'HelloET is Ethiopia\'s #1 trusted local business discovery platform, connecting consumers and tourists with verified restaurants, hotels, cafes, pharmacies, supermarkets, and local services across all Ethiopian cities.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'Which cities in Ethiopia are covered on HelloET?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'HelloET covers businesses across Ethiopia including Addis Ababa (Bole, Kirkos, Arada, Yeka, Lideta, Kazanchis, etc.), Dire Dawa, Bahir Dar, Gondar, Hawassa, Mekelle, Jimma, Adama (Nazret), Harar, Dessie, Debre Birhan, and Lalibela.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'How can Ethiopian business owners add or claim their business on HelloET?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Business owners can register an account, click "Add Your Business" or "Claim Business", provide their business details, photos, opening hours, and location, and get verified for enhanced visibility.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'Is HelloET available as a mobile app (PWA / APK)?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes! HelloET is a full Progressive Web App (PWA) and Android APK. You can install it directly to your phone from https://helloet.devvoltz.com/ or download the APK for offline business discovery.'
+      }
+    }
+  ]
+}
+
 export default function Home() {
   return (
     <>
@@ -103,6 +142,10 @@ export default function Home() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdLocalBusiness) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdFaq) }}
       />
       <div className="min-h-screen bg-white">
         <HeroSection />

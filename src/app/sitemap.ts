@@ -1,155 +1,168 @@
 import { MetadataRoute } from 'next'
+import { prisma } from '@/lib/prisma'
 
-const siteUrl = process.env.NEXTAUTH_URL || 'https://helloet.devvoltz.com'
+const siteUrl = process.env.NEXTAUTH_URL || process.env.NEXT_PUBLIC_APP_URL || 'https://helloet.devvoltz.com'
+
+export const dynamic = 'force-dynamic'
+export const revalidate = 3600 // Revalidate every hour
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const staticPages: MetadataRoute.Sitemap = [
+  const now = new Date()
+
+  // 1. Core Platform Pages
+  const corePages: MetadataRoute.Sitemap = [
     {
       url: siteUrl,
-      lastModified: new Date(),
+      lastModified: now,
       changeFrequency: 'daily',
       priority: 1.0,
     },
     {
       url: `${siteUrl}/businesses`,
-      lastModified: new Date(),
+      lastModified: now,
       changeFrequency: 'hourly',
-      priority: 0.9,
+      priority: 0.95,
     },
     {
-      url: `${siteUrl}/businesses?category=Restaurants`,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 0.8,
-    },
-    {
-      url: `${siteUrl}/businesses?category=Hotels`,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 0.8,
-    },
-    {
-      url: `${siteUrl}/businesses?category=Cafes`,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 0.8,
-    },
-    {
-      url: `${siteUrl}/businesses?category=Pharmacies`,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 0.7,
-    },
-    {
-      url: `${siteUrl}/businesses?category=Supermarkets`,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 0.7,
-    },
-    {
-      url: `${siteUrl}/businesses?category=Tourist+Attractions`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.7,
-    },
-    {
-      url: `${siteUrl}/businesses?category=Local+Services`,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 0.7,
-    },
-    {
-      url: `${siteUrl}/businesses?category=Education`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
+      url: `${siteUrl}/about`,
+      lastModified: now,
+      changeFrequency: 'monthly',
       priority: 0.6,
     },
     {
-      url: `${siteUrl}/businesses?category=Healthcare`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.7,
-    },
-    {
-      url: `${siteUrl}/businesses?category=Entertainment`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.6,
-    },
-    {
-      url: `${siteUrl}/businesses?city=Addis+Ababa`,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 0.8,
-    },
-    {
-      url: `${siteUrl}/businesses?city=Dire+Dawa`,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 0.7,
-    },
-    {
-      url: `${siteUrl}/businesses?city=Gondar`,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 0.7,
-    },
-    {
-      url: `${siteUrl}/businesses?city=Bahir+Dar`,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 0.7,
-    },
-    {
-      url: `${siteUrl}/businesses?city=Hawassa`,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 0.7,
-    },
-    {
-      url: `${siteUrl}/businesses?city=Mekelle`,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 0.6,
-    },
-    {
-      url: `${siteUrl}/businesses?city=Jimma`,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 0.6,
+      url: `${siteUrl}/help`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.5,
     },
     {
       url: `${siteUrl}/auth/login`,
-      lastModified: new Date(),
+      lastModified: now,
       changeFrequency: 'monthly',
       priority: 0.3,
     },
     {
       url: `${siteUrl}/auth/register`,
-      lastModified: new Date(),
+      lastModified: now,
       changeFrequency: 'monthly',
       priority: 0.4,
     },
   ]
 
-  // Fetch dynamic business pages
+  // 2. High-Intent Category Landing Pages
+  const mainCategories = [
+    'Restaurants',
+    'Hotels',
+    'Cafes',
+    'Pharmacies',
+    'Supermarkets',
+    'Tourist Attractions',
+    'Local Services',
+    'Healthcare',
+    'Education',
+    'Entertainment',
+  ]
+
+  const categoryPages: MetadataRoute.Sitemap = mainCategories.flatMap((cat) => [
+    {
+      url: `${siteUrl}/businesses?category=${encodeURIComponent(cat)}`,
+      lastModified: now,
+      changeFrequency: 'daily' as const,
+      priority: 0.85,
+    },
+    {
+      url: `${siteUrl}/category/${cat.toLowerCase().replace(/\s+/g, '-')}`,
+      lastModified: now,
+      changeFrequency: 'daily' as const,
+      priority: 0.85,
+    },
+  ])
+
+  // 3. High-Intent City Landing Pages
+  const mainCities = [
+    'Addis Ababa',
+    'Dire Dawa',
+    'Bahir Dar',
+    'Hawassa',
+    'Gondar',
+    'Mekelle',
+    'Jimma',
+    'Adama',
+    'Harar',
+    'Dessie',
+    'Debre Birhan',
+    'Lalibela',
+    'Axum',
+    'Arba Minch',
+  ]
+
+  const cityPages: MetadataRoute.Sitemap = mainCities.flatMap((city) => [
+    {
+      url: `${siteUrl}/businesses?city=${encodeURIComponent(city)}`,
+      lastModified: now,
+      changeFrequency: 'daily' as const,
+      priority: 0.8,
+    },
+    {
+      url: `${siteUrl}/city/${city.toLowerCase().replace(/\s+/g, '-')}`,
+      lastModified: now,
+      changeFrequency: 'daily' as const,
+      priority: 0.8,
+    },
+  ])
+
+  // 4. Programmatic City + Category Combinations (e.g., Restaurants in Addis Ababa)
+  const topCombos: MetadataRoute.Sitemap = [
+    { cat: 'Restaurants', city: 'Addis Ababa' },
+    { cat: 'Hotels', city: 'Addis Ababa' },
+    { cat: 'Cafes', city: 'Addis Ababa' },
+    { cat: 'Pharmacies', city: 'Addis Ababa' },
+    { cat: 'Supermarkets', city: 'Addis Ababa' },
+    { cat: 'Hotels', city: 'Bahir Dar' },
+    { cat: 'Restaurants', city: 'Bahir Dar' },
+    { cat: 'Hotels', city: 'Hawassa' },
+    { cat: 'Restaurants', city: 'Hawassa' },
+    { cat: 'Hotels', city: 'Gondar' },
+    { cat: 'Hotels', city: 'Lalibela' },
+    { cat: 'Restaurants', city: 'Dire Dawa' },
+    { cat: 'Cafes', city: 'Jimma' },
+  ].map((combo) => ({
+    url: `${siteUrl}/businesses?category=${encodeURIComponent(combo.cat)}&city=${encodeURIComponent(combo.city)}`,
+    lastModified: now,
+    changeFrequency: 'daily' as const,
+    priority: 0.82,
+  }))
+
+  // 5. Dynamic Business Profile Pages (Fetched directly from DB)
   let businessPages: MetadataRoute.Sitemap = []
   try {
-    const response = await fetch(`${siteUrl}/api/businesses?limit=500`, {
-      next: { revalidate: 3600 }
+    const businesses = await prisma.business.findMany({
+      select: {
+        slug: true,
+        updatedAt: true,
+        verified: true,
+      },
+      take: 2000,
+      orderBy: { updatedAt: 'desc' },
     })
-    const data = await response.json()
-    if (data.success && data.data?.businesses) {
-      businessPages = data.data.businesses.map((business: { slug: string; updatedAt?: string }) => ({
-        url: `${siteUrl}/business/${business.slug}`,
-        lastModified: business.updatedAt ? new Date(business.updatedAt) : new Date(),
+
+    if (businesses && businesses.length > 0) {
+      businessPages = businesses.map((b) => ({
+        url: `${siteUrl}/business/${b.slug}`,
+        lastModified: b.updatedAt ? new Date(b.updatedAt) : now,
         changeFrequency: 'weekly' as const,
-        priority: 0.8,
+        priority: b.verified ? 0.9 : 0.75,
       }))
     }
-  } catch {
-    // Silently fail - static pages will still be included
+  } catch (error) {
+    console.warn('[Sitemap] Database fetch failed, falling back to static index:', error)
   }
 
-  return [...staticPages, ...businessPages]
+  return [
+    ...corePages,
+    ...categoryPages,
+    ...cityPages,
+    ...topCombos,
+    ...businessPages,
+  ]
 }

@@ -92,12 +92,12 @@ export default function Footer() {
             <h3 className="text-white font-semibold text-sm uppercase tracking-wider">Browse Categories</h3>
             <ul className="space-y-2 text-sm">
               {[
-                { icon: Utensils, label: 'Restaurants', href: '/businesses?category=Restaurants' },
-                { icon: Bed, label: 'Hotels', href: '/businesses?category=Hotels' },
-                { icon: Coffee, label: 'Cafes', href: '/businesses?category=Cafes' },
-                { icon: Pill, label: 'Pharmacies', href: '/businesses?category=Pharmacies' },
-                { icon: ShoppingCart, label: 'Supermarkets', href: '/businesses?category=Supermarkets' },
-                { icon: Camera, label: 'Tourist Attractions', href: '/businesses?category=Tourist+Attractions' },
+                { icon: Utensils, label: 'Restaurants', href: '/category/restaurants' },
+                { icon: Bed, label: 'Hotels', href: '/category/hotels' },
+                { icon: Coffee, label: 'Cafes', href: '/category/cafes' },
+                { icon: Pill, label: 'Pharmacies', href: '/category/pharmacies' },
+                { icon: ShoppingCart, label: 'Supermarkets', href: '/category/supermarkets' },
+                { icon: Camera, label: 'Tourist Attractions', href: '/category/tourist-attractions' },
                 { icon: Building2, label: 'All Businesses', href: '/businesses' },
               ].map(({ icon: Icon, label, href }) => (
                 <li key={label}>
@@ -131,11 +131,18 @@ export default function Footer() {
 
             <h3 className="text-white font-semibold text-sm uppercase tracking-wider pt-4">Top Cities</h3>
             <ul className="space-y-2 text-sm">
-              {['Addis Ababa', 'Bahir Dar', 'Hawassa', 'Gondar', 'Dire Dawa', 'Mekelle'].map((city) => (
-                <li key={city}>
-                  <Link href={`/businesses?city=${encodeURIComponent(city)}`} className="flex items-center gap-2 text-white/60 hover:text-white transition-colors">
+              {[
+                { name: 'Addis Ababa', slug: 'addis-ababa' },
+                { name: 'Bahir Dar', slug: 'bahir-dar' },
+                { name: 'Hawassa', slug: 'hawassa' },
+                { name: 'Gondar', slug: 'gondar' },
+                { name: 'Dire Dawa', slug: 'dire-dawa' },
+                { name: 'Mekelle', slug: 'mekelle' },
+              ].map((c) => (
+                <li key={c.name}>
+                  <Link href={`/city/${c.slug}`} className="flex items-center gap-2 text-white/60 hover:text-white transition-colors">
                     <MapPin className="w-3 h-3 text-[#FBBF24]" />
-                    {city}
+                    {c.name}
                   </Link>
                 </li>
               ))}
@@ -192,7 +199,9 @@ export default function Footer() {
               Devvoltz Technology PLC
             </a>
           </p>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 flex-wrap">
+            <Link href="/sitemap.xml" className="hover:text-white transition-colors">Sitemap</Link>
+            <Link href="/feed.xml" className="hover:text-white transition-colors">RSS Feed</Link>
             <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
             <Link href="/terms" className="hover:text-white transition-colors">Terms of Use</Link>
           </div>
