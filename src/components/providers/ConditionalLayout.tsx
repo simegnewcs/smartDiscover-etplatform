@@ -4,6 +4,8 @@ import { usePathname } from 'next/navigation'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import ChatWidget from '@/components/layout/ChatWidget'
+import DownloadAppBanner from '@/components/layout/DownloadAppBanner'
+import PwaRegister from '@/components/providers/PwaRegister'
 
 export default function ConditionalLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -13,10 +15,13 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
 
   return (
     <>
+      <PwaRegister />
       {!shouldHideLayout && <Navbar />}
+      {!shouldHideLayout && <DownloadAppBanner />}
       {children}
       {!shouldHideLayout && <Footer />}
       {!shouldHideLayout && <ChatWidget />}
     </>
   )
 }
+

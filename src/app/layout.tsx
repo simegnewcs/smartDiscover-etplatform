@@ -199,7 +199,12 @@ export const metadata: Metadata = {
   category: 'Business Directory',
   classification: 'Business',
 
-  manifest: '/site.webmanifest',
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'HelloET',
+  },
   other: {
     'geo.region': 'ET',
     'geo.placename': 'Ethiopia',
@@ -213,6 +218,7 @@ export const metadata: Metadata = {
     'language': 'English',
     'copyright': 'HelloET',
     'theme-color': '#16A34A',
+    'mobile-web-app-capable': 'yes',
   },
 }
 
@@ -226,6 +232,16 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#16A34A" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="HelloET" />
+        <meta name="application-name" content="HelloET" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
       </head>
       <body className={`${outfit.variable} font-sans antialiased text-neutral-800 selection:bg-brand-green/20 selection:text-brand-green`}>
         <SessionProvider>
