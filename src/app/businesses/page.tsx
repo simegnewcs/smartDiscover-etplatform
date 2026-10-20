@@ -26,6 +26,7 @@ import {
 } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import BusinessCardSlider from '@/components/business/BusinessCardSlider'
+import GoogleAdUnit from '@/components/ads/GoogleAdUnit'
 
 interface Business {
   id: string | number
@@ -493,6 +494,7 @@ function AllBusinessesContent() {
                 )
               })}
             </motion.div>
+            <GoogleAdUnit format="horizontal" slot="1001" className="mt-10" />
           </>
         ) : (
           <motion.div 

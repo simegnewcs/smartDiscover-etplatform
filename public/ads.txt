@@ -1,0 +1,9 @@
+# ==============================================================================
+# HelloET Authorized Digital Sellers (ads.txt)
+# Official domain: helloet.devvoltz.com
+# Managed by: Devvoltz Technology PLC
+#
+# IMPORTANT: When your Google AdSense account is approved, replace 'pub-0000000000000000'
+# with your actual 16-digit Google AdSense Publisher ID (e.g. pub-1234567890123456).
+# ==============================================================================
+google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0

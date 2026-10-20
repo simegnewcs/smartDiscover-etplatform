@@ -3,6 +3,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { prisma } from '@/lib/prisma'
 import { MapPin, Star, Phone, CheckCircle2, Building2, ArrowRight } from 'lucide-react'
+import GoogleAdUnit from '@/components/ads/GoogleAdUnit'
 
 const siteUrl = process.env.NEXTAUTH_URL || process.env.NEXT_PUBLIC_APP_URL || 'https://helloet.devvoltz.com'
 
@@ -322,6 +323,9 @@ export default async function CityPage({ params }: PageProps) {
               })}
             </section>
           )}
+
+          {/* Sponsored Ad Unit */}
+          <GoogleAdUnit format="horizontal" slot="4001" className="my-8" />
 
           {/* SEO Content Guide */}
           <section className="mt-12 bg-white rounded-3xl border border-neutral-200/80 p-6 sm:p-8">

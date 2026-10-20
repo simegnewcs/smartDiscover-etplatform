@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { Outfit } from 'next/font/google'
 import ConditionalLayout from '@/components/providers/ConditionalLayout'
 import { SessionProvider } from '@/components/providers/SessionProvider'
+import GoogleAdSenseScript from '@/components/ads/GoogleAdSenseScript'
 
 const outfit = Outfit({ 
   subsets: ['latin'],
@@ -245,6 +246,7 @@ export default function RootLayout({
         <link rel="alternate" type="application/rss+xml" title="HelloET Ethiopia Business Feed" href="/feed.xml" />
       </head>
       <body className={`${outfit.variable} font-sans antialiased text-neutral-800 selection:bg-brand-green/20 selection:text-brand-green`}>
+        <GoogleAdSenseScript />
         <SessionProvider>
           <ConditionalLayout>
             {children}

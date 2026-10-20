@@ -72,16 +72,40 @@ export default function Footer() {
             </p>
             {/* Social Links */}
             <div className="flex items-center gap-3 pt-2">
-              <a href="#" className="w-8 h-8 bg-white/10 hover:bg-[#16A34A] rounded-lg flex items-center justify-center transition-colors">
+              <a 
+                href="https://facebook.com" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                aria-label="HelloET on Facebook"
+                className="w-8 h-8 bg-white/10 hover:bg-[#16A34A] rounded-lg flex items-center justify-center transition-colors"
+              >
                 <Facebook className="w-4 h-4" />
               </a>
-              <a href="#" className="w-8 h-8 bg-white/10 hover:bg-[#16A34A] rounded-lg flex items-center justify-center transition-colors">
+              <a 
+                href="https://twitter.com" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                aria-label="HelloET on Twitter"
+                className="w-8 h-8 bg-white/10 hover:bg-[#16A34A] rounded-lg flex items-center justify-center transition-colors"
+              >
                 <Twitter className="w-4 h-4" />
               </a>
-              <a href="#" className="w-8 h-8 bg-white/10 hover:bg-[#16A34A] rounded-lg flex items-center justify-center transition-colors">
+              <a 
+                href="https://instagram.com" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                aria-label="HelloET on Instagram"
+                className="w-8 h-8 bg-white/10 hover:bg-[#16A34A] rounded-lg flex items-center justify-center transition-colors"
+              >
                 <Instagram className="w-4 h-4" />
               </a>
-              <a href="#" className="w-8 h-8 bg-white/10 hover:bg-[#16A34A] rounded-lg flex items-center justify-center transition-colors">
+              <a 
+                href="https://linkedin.com" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                aria-label="HelloET on LinkedIn"
+                className="w-8 h-8 bg-white/10 hover:bg-[#16A34A] rounded-lg flex items-center justify-center transition-colors"
+              >
                 <Linkedin className="w-4 h-4" />
               </a>
             </div>
@@ -117,6 +141,9 @@ export default function Footer() {
               {[
                 { label: 'Home', href: '/' },
                 { label: 'All Businesses', href: '/businesses' },
+                { label: 'About HelloET', href: '/about' },
+                { label: 'Contact Us', href: '/contact' },
+                { label: 'How HelloET Works', href: '/help' },
                 { label: 'Register Your Business', href: '/auth/register' },
                 { label: 'Sign In', href: '/auth/login' },
                 { label: 'Dashboard', href: '/dashboard' },
@@ -200,10 +227,13 @@ export default function Footer() {
             </a>
           </p>
           <div className="flex items-center gap-4 flex-wrap">
-            <Link href="/sitemap.xml" className="hover:text-white transition-colors">Sitemap</Link>
-            <Link href="/feed.xml" className="hover:text-white transition-colors">RSS Feed</Link>
+            <Link href="/about" className="hover:text-white transition-colors">About</Link>
+            <Link href="/contact" className="hover:text-white transition-colors">Contact</Link>
+            <Link href="/help" className="hover:text-white transition-colors">Help</Link>
             <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
             <Link href="/terms" className="hover:text-white transition-colors">Terms of Use</Link>
+            <Link href="/sitemap.xml" className="hover:text-white transition-colors">Sitemap</Link>
+            <Link href="/feed.xml" className="hover:text-white transition-colors">RSS Feed</Link>
           </div>
         </div>
       </div>

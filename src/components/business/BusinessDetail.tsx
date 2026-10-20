@@ -25,6 +25,7 @@ import {
 import 'leaflet/dist/leaflet.css'
 import dynamic from 'next/dynamic'
 import { getMapEmbedUrl, getMapExternalUrl } from '@/lib/maps'
+import GoogleAdUnit from '@/components/ads/GoogleAdUnit'
 
 // Dynamic import for Leaflet Map component (must be outside component to avoid hook issues)
 import type { MapComponentProps } from './MapComponent'
@@ -886,6 +887,7 @@ export default function BusinessDetail({ slug }: { slug: string }) {
                 </div>
               )}
             </div>
+            <GoogleAdUnit format="horizontal" slot="2001" className="mt-8" />
           </div>
 
           {/* Sidebar */}
@@ -982,6 +984,7 @@ export default function BusinessDetail({ slug }: { slug: string }) {
                 </div>
               </div>
             )}
+            <GoogleAdUnit format="rectangle" slot="2002" className="mt-6" />
           </div>
         </div>
       </div>

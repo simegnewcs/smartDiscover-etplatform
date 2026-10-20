@@ -261,15 +261,38 @@ export default function UniversalSidebar({ isOpen, onClose }: UniversalSidebarPr
             </div>
             )}
 
-            {/* Support */}
-            <div className="mt-auto pt-6 border-t border-white/20">
+            {/* Support & Legal */}
+            <div className="mt-auto pt-6 border-t border-white/20 space-y-1">
+              <Link
+                href="/about"
+                onClick={onClose}
+                className="flex items-center space-x-3 px-3 py-2 rounded-lg text-green-100 hover:bg-white/10 hover:text-white transition-colors text-sm"
+              >
+                <Building2 className="w-4 h-4 text-brand-yellow" />
+                <span className="font-medium">About HelloET</span>
+              </Link>
+              <Link
+                href="/contact"
+                onClick={onClose}
+                className="flex items-center space-x-3 px-3 py-2 rounded-lg text-green-100 hover:bg-white/10 hover:text-white transition-colors text-sm"
+              >
+                <Phone className="w-4 h-4 text-brand-yellow" />
+                <span className="font-medium">Contact Us</span>
+              </Link>
               <Link
                 href="/help"
                 onClick={onClose}
-                className="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-green-100 hover:bg-white/10 hover:text-white transition-colors"
+                className="flex items-center space-x-3 px-3 py-2 rounded-lg text-green-100 hover:bg-white/10 hover:text-white transition-colors text-sm"
               >
-                <HelpCircle className="w-5 h-5" />
-                <span className="font-medium">Help & Support</span>
+                <HelpCircle className="w-4 h-4 text-brand-yellow" />
+                <span className="font-medium">Help &amp; How It Works</span>
+              </Link>
+              <Link
+                href="/privacy"
+                onClick={onClose}
+                className="flex items-center space-x-3 px-3 py-1.5 rounded-lg text-white/50 hover:text-white transition-colors text-xs"
+              >
+                <span className="font-medium">Privacy Policy</span>
               </Link>
             </div>
           </nav>

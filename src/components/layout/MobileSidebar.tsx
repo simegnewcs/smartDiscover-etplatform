@@ -258,15 +258,38 @@ export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
             </div>
             )}
 
-            {/* Support */}
-            <div className="mt-auto pt-6 border-t border-neutral-200">
+            {/* Support & Legal */}
+            <div className="mt-auto pt-6 border-t border-neutral-200 space-y-1">
+              <Link
+                href="/about"
+                onClick={onClose}
+                className="flex items-center space-x-3 px-3 py-2 rounded-lg text-neutral-600 hover:bg-neutral-50 hover:text-neutral-800 transition-colors text-sm"
+              >
+                <Building2 className="w-4 h-4 text-[#16A34A]" />
+                <span className="font-medium">About HelloET</span>
+              </Link>
+              <Link
+                href="/contact"
+                onClick={onClose}
+                className="flex items-center space-x-3 px-3 py-2 rounded-lg text-neutral-600 hover:bg-neutral-50 hover:text-neutral-800 transition-colors text-sm"
+              >
+                <Phone className="w-4 h-4 text-[#16A34A]" />
+                <span className="font-medium">Contact Us</span>
+              </Link>
               <Link
                 href="/help"
                 onClick={onClose}
-                className="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-neutral-600 hover:bg-neutral-50 hover:text-neutral-800 transition-colors"
+                className="flex items-center space-x-3 px-3 py-2 rounded-lg text-neutral-600 hover:bg-neutral-50 hover:text-neutral-800 transition-colors text-sm"
               >
-                <HelpCircle className="w-5 h-5" />
-                <span className="font-medium">Help & Support</span>
+                <HelpCircle className="w-4 h-4 text-[#16A34A]" />
+                <span className="font-medium">Help &amp; How It Works</span>
+              </Link>
+              <Link
+                href="/privacy"
+                onClick={onClose}
+                className="flex items-center space-x-3 px-3 py-1.5 rounded-lg text-neutral-400 hover:text-neutral-600 transition-colors text-xs"
+              >
+                <span className="font-medium">Privacy Policy</span>
               </Link>
             </div>
           </nav>
