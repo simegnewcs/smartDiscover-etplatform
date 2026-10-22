@@ -652,7 +652,7 @@ export default function BusinessDetail({ slug }: { slug: string }) {
             )}
 
             {/* Map Card */}
-            {business.mapUrl && (
+            {(business.mapUrl || (business.latitude && business.longitude) || business.address) && (
               <div className="bg-white rounded-[2rem] shadow-premium border border-neutral-100 p-10 mb-8">
                 <h2 className="text-2xl font-bold text-neutral-800 mb-8 flex items-center gap-3">
                   <span className="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center">
@@ -660,21 +660,36 @@ export default function BusinessDetail({ slug }: { slug: string }) {
                   </span>
                   Location Map
                 </h2>
-                <div className="aspect-video rounded-xl overflow-hidden">
+                <div className="aspect-video rounded-xl overflow-hidden bg-neutral-100">
                   <iframe
-                    src={getMapEmbedUrl(business.mapUrl)}
+                    src={getMapEmbedUrl(
+                      business.mapUrl,
+                      business.latitude,
+                      business.longitude,
+                      business.address ? `${business.name}, ${business.address}` : business.name
+                    )}
                     width="100%"
                     height="100%"
                     style={{ border: 0 }}
                     allowFullScreen
                     loading="lazy"
                     referrerPolicy="no-referrer-when-downgrade"
-                    className="rounded-xl"
+                    className="rounded-xl w-full h-full"
                   />
                 </div>
-                {getMapExternalUrl(business.mapUrl) && (
+                {getMapExternalUrl(
+                  business.mapUrl,
+                  business.latitude,
+                  business.longitude,
+                  business.address ? `${business.name}, ${business.address}` : business.name
+                ) && (
                   <a
-                    href={getMapExternalUrl(business.mapUrl)}
+                    href={getMapExternalUrl(
+                      business.mapUrl,
+                      business.latitude,
+                      business.longitude,
+                      business.address ? `${business.name}, ${business.address}` : business.name
+                    )}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="mt-4 inline-flex items-center gap-2 text-primary-800 hover:text-brand-green font-medium"

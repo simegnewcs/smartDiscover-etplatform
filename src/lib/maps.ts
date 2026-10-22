@@ -3,8 +3,10 @@
  * Supports:
  * - Full <iframe> embed HTML: <iframe src="https://www.google.com/maps/embed?pb=..." ...></iframe>
  * - Direct embed URLs: https://www.google.com/maps/embed?pb=...
+ * - Truncated or malformed embed URLs (salvages coordinates and converts to clean embed)
  * - Standard Google Maps links: https://www.google.com/maps/place/... or https://maps.google.com/?q=...
  * - Coordinate links: https://www.google.com/maps/@lat,lng,z
+ * - Google Maps shortlinks (e.g. maps.app.goo.gl)
  */
 
 /**
@@ -12,78 +14,136 @@
  */
 export function extractMapUrl(input: string | null | undefined): string {
   if (!input) return ''
-  const trimmed = input.trim()
+  let trimmed = input.trim()
 
   // 1. If it contains an <iframe> tag, extract the src attribute
   const srcMatch = trimmed.match(/<iframe[^>]*\s+src=["']([^"']+)["']/i)
   if (srcMatch && srcMatch[1]) {
-    return srcMatch[1].trim()
+    return decodeHtmlEntities(srcMatch[1].trim())
   }
 
   // 2. If it has double quotes around a URL or starts with src=
   const altSrcMatch = trimmed.match(/^src=["']([^"']+)["']/i)
   if (altSrcMatch && altSrcMatch[1]) {
-    return altSrcMatch[1].trim()
+    return decodeHtmlEntities(altSrcMatch[1].trim())
   }
 
-  return trimmed
+  // 3. Strip surrounding quotation marks if pasted with quotes
+  trimmed = trimmed.replace(/^["']|["']$/g, '')
+
+  return decodeHtmlEntities(trimmed)
+}
+
+function decodeHtmlEntities(str: string): string {
+  return str
+    .replace(/&amp;/g, '&')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
 }
 
 /**
- * Converts any Google Maps URL or embed code into an embeddable URL for <iframe> src.
+ * Detects whether a Google Maps embed URL is truncated or malformed.
+ * Standard embed URLs end with parameters like !5e0!3m2!...
+ * If truncated (e.g. by a VARCHAR(191) MySQL column), Google returns HTTP 400 Bad Request.
  */
-export function getMapEmbedUrl(input: string | null | undefined): string {
-  if (!input) return ''
-  const cleanUrl = extractMapUrl(input)
-  if (!cleanUrl) return ''
+export function isTruncatedOrBrokenEmbed(url: string | null | undefined): boolean {
+  if (!url || !url.includes('/maps/embed')) return false
+  // A complete Google Maps embed pb parameter is typically > 200 chars and ends with !5e or !4v
+  if (url.includes('pb=')) {
+    const hasViewParams = url.includes('!5e') || url.includes('!4v') || url.includes('!5m')
+    if (!hasViewParams) return true
+  }
+  return false
+}
 
-  // Already an official embed URL
-  if (cleanUrl.includes('/maps/embed')) {
+/**
+ * Converts any Google Maps URL, embed code, or coordinates into a guaranteed working embeddable URL for <iframe> src.
+ */
+export function getMapEmbedUrl(
+  input?: string | null,
+  fallbackLat?: number | null,
+  fallbackLng?: number | null,
+  fallbackQuery?: string | null
+): string {
+  const cleanUrl = extractMapUrl(input)
+
+  // 1. If input is provided and contains /maps/embed
+  if (cleanUrl && cleanUrl.includes('/maps/embed')) {
+    // If it's broken or truncated, salvage coordinates so Google Maps doesn't throw a 400 error
+    if (isTruncatedOrBrokenEmbed(cleanUrl)) {
+      const coords = extractCoordinatesFromMapUrl(cleanUrl)
+      if (coords) {
+        return `https://maps.google.com/maps?q=${coords.lat},${coords.lng}&hl=en&z=16&output=embed`
+      }
+      if (fallbackLat != null && fallbackLng != null && !isNaN(Number(fallbackLat)) && !isNaN(Number(fallbackLng))) {
+        return `https://maps.google.com/maps?q=${fallbackLat},${fallbackLng}&hl=en&z=16&output=embed`
+      }
+    }
     return cleanUrl
   }
 
-  // Handle standard maps with ?q= coordinates or place name
-  const qMatch = cleanUrl.match(/[?&]q=([^&]+)/)
-  if (qMatch && qMatch[1]) {
-    const query = qMatch[1]
-    return `https://maps.google.com/maps?q=${query}&output=embed`
+  // 2. Try extracting coordinates directly from the URL if present
+  if (cleanUrl) {
+    const coords = extractCoordinatesFromMapUrl(cleanUrl)
+    if (coords) {
+      return `https://maps.google.com/maps?q=${coords.lat},${coords.lng}&hl=en&z=16&output=embed`
+    }
+
+    // Handle standard maps with ?q= coordinates or place name
+    const qMatch = cleanUrl.match(/[?&]q=([^&]+)/)
+    if (qMatch && qMatch[1]) {
+      const query = qMatch[1]
+      return `https://maps.google.com/maps?q=${query}&hl=en&z=16&output=embed`
+    }
+
+    // Handle place URLs: /maps/place/Place+Name/...
+    const placeMatch = cleanUrl.match(/\/maps\/place\/([^/@?]+)/)
+    if (placeMatch && placeMatch[1]) {
+      const placeName = placeMatch[1].replace(/\+/g, ' ')
+      return `https://maps.google.com/maps?q=${encodeURIComponent(placeName)}&hl=en&z=16&output=embed`
+    }
   }
 
-  // Handle URLs with @lat,lng format: /@9.0242,38.7468
-  const atMatch = cleanUrl.match(/@(-?\d+\.?\d*),(-?\d+\.?\d*)/)
-  if (atMatch && atMatch[1] && atMatch[2]) {
-    const lat = atMatch[1]
-    const lng = atMatch[2]
-    return `https://maps.google.com/maps?q=${lat},${lng}&output=embed`
+  // 3. Fallback to passed coordinates
+  if (fallbackLat != null && fallbackLng != null && !isNaN(Number(fallbackLat)) && !isNaN(Number(fallbackLng))) {
+    return `https://maps.google.com/maps?q=${fallbackLat},${fallbackLng}&hl=en&z=16&output=embed`
   }
 
-  // Handle place URLs: /maps/place/Place+Name/...
-  const placeMatch = cleanUrl.match(/\/maps\/place\/([^/@?]+)/)
-  if (placeMatch && placeMatch[1]) {
-    const placeName = placeMatch[1].replace(/\+/g, ' ')
-    return `https://maps.google.com/maps?q=${encodeURIComponent(placeName)}&output=embed`
+  // 4. Fallback to passed text query (address or business name)
+  if (fallbackQuery && fallbackQuery.trim()) {
+    return `https://maps.google.com/maps?q=${encodeURIComponent(fallbackQuery.trim())}&hl=en&z=16&output=embed`
   }
 
-  // Fallback: if it's a standard URL, try appending output=embed
-  if (cleanUrl.startsWith('http')) {
+  // 5. If it's a generic URL, try appending output=embed
+  if (cleanUrl && cleanUrl.startsWith('http') && !cleanUrl.includes('maps.app.goo.gl')) {
     if (cleanUrl.includes('output=embed')) return cleanUrl
     const separator = cleanUrl.includes('?') ? '&' : '?'
     return `${cleanUrl}${separator}output=embed`
   }
 
-  return cleanUrl
+  return cleanUrl || ''
 }
 
 /**
  * Converts an embed URL or standard URL into an external clickable URL for viewing in Google Maps.
  */
-export function getMapExternalUrl(input: string | null | undefined): string {
-  if (!input) return ''
+export function getMapExternalUrl(
+  input?: string | null,
+  fallbackLat?: number | null,
+  fallbackLng?: number | null,
+  fallbackQuery?: string | null
+): string {
   const cleanUrl = extractMapUrl(input)
-  if (!cleanUrl) return ''
 
-  // If it's an embed URL, attempt to extract coordinates or query for a direct view link
-  if (cleanUrl.includes('/maps/embed')) {
+  // Direct short links work natively when clicked externally
+  if (cleanUrl && (cleanUrl.includes('maps.app.goo.gl') || cleanUrl.includes('goo.gl/maps'))) {
+    return cleanUrl
+  }
+
+  // If it's an embed URL or broken embed URL, extract coordinates
+  if (cleanUrl && cleanUrl.includes('/maps/embed')) {
     const coords = extractCoordinatesFromMapUrl(cleanUrl)
     if (coords) {
       return `https://www.google.com/maps?q=${coords.lat},${coords.lng}`
@@ -94,8 +154,32 @@ export function getMapExternalUrl(input: string | null | undefined): string {
     }
   }
 
-  // If it's standard URL with output=embed, remove output=embed
-  return cleanUrl.replace(/[?&]output=embed/, '')
+  // If coordinates are extractable from any input format
+  if (cleanUrl) {
+    const coords = extractCoordinatesFromMapUrl(cleanUrl)
+    if (coords) {
+      return `https://www.google.com/maps?q=${coords.lat},${coords.lng}`
+    }
+    // Clean standard URL with output=embed
+    if (cleanUrl.includes('output=embed')) {
+      return cleanUrl.replace(/[?&]output=embed/, '')
+    }
+    if (cleanUrl.startsWith('http')) {
+      return cleanUrl
+    }
+  }
+
+  // Fallback to coordinates
+  if (fallbackLat != null && fallbackLng != null && !isNaN(Number(fallbackLat)) && !isNaN(Number(fallbackLng))) {
+    return `https://www.google.com/maps?q=${fallbackLat},${fallbackLng}`
+  }
+
+  // Fallback to search query
+  if (fallbackQuery && fallbackQuery.trim()) {
+    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(fallbackQuery.trim())}`
+  }
+
+  return ''
 }
 
 /**
@@ -108,7 +192,7 @@ export function extractCoordinatesFromMapUrl(input: string | null | undefined): 
 
   try {
     // 1. Check for pb parameter with !2d<lng>!3d<lat> (Standard in Google Maps Embeds)
-    // Note: in pb format, !2d is longitude and !3d is latitude
+    // Note: in Google Maps pb format, !2d is longitude and !3d is latitude
     const pbMatch = url.match(/!2d(-?\d+\.?\d*)!3d(-?\d+\.?\d*)/)
     if (pbMatch && pbMatch[1] && pbMatch[2]) {
       return {
@@ -144,8 +228,27 @@ export function extractCoordinatesFromMapUrl(input: string | null | undefined): 
       }
     }
 
+    // 5. Destination parameter
+    const destMatch = url.match(/[?&]destination=(-?\d+\.?\d*),(-?\d+\.?\d*)/)
+    if (destMatch && destMatch[1] && destMatch[2]) {
+      return {
+        lat: parseFloat(destMatch[1]),
+        lng: parseFloat(destMatch[2])
+      }
+    }
+
+    // 6. Direct comma-separated coordinates: "9.0242, 38.7468"
+    const rawMatch = url.match(/^(-?\d+\.?\d*)\s*,\s*(-?\d+\.?\d*)$/)
+    if (rawMatch && rawMatch[1] && rawMatch[2]) {
+      return {
+        lat: parseFloat(rawMatch[1]),
+        lng: parseFloat(rawMatch[2])
+      }
+    }
+
     return null
   } catch {
     return null
   }
 }
+

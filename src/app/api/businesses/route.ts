@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { extractMapUrl, extractCoordinatesFromMapUrl } from '@/lib/maps'
+import { extractMapUrl, extractCoordinatesFromMapUrl, isTruncatedOrBrokenEmbed } from '@/lib/maps'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -144,13 +144,17 @@ export async function POST(request: Request) {
 
       // Store Google Maps URL for location
       if (mapUrl) {
-        businessData.mapUrl = extractMapUrl(mapUrl)
+        let cleanMap = extractMapUrl(mapUrl)
         // Try to extract coordinates from Google Maps URL
         const coords = extractCoordinatesFromMapUrl(mapUrl)
         if (coords) {
           businessData.latitude = coords.lat
           businessData.longitude = coords.lng
+          if (cleanMap && isTruncatedOrBrokenEmbed(cleanMap)) {
+            cleanMap = `https://maps.google.com/maps?q=${coords.lat},${coords.lng}&hl=en&z=16&output=embed`
+          }
         }
+        businessData.mapUrl = cleanMap
       }
 
       // Store features as JSON (default to empty array)

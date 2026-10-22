@@ -622,7 +622,7 @@ export default function NewListingPage() {
                                   <MapPin className="w-3.5 h-3.5" /> Live Map Preview
                                 </span>
                                 <a
-                                  href={getMapExternalUrl(formData.mapUrl)}
+                                  href={getMapExternalUrl(formData.mapUrl, null, null, formData.address ? `${formData.name}, ${formData.address}` : formData.name)}
                                   target="_blank"
                                   rel="noopener noreferrer"
                                   className="text-[#16A34A] hover:underline inline-flex items-center gap-1"
@@ -632,7 +632,7 @@ export default function NewListingPage() {
                               </div>
                               <div className="aspect-video w-full rounded-lg overflow-hidden border border-neutral-200 bg-neutral-100 shadow-inner">
                                 <iframe
-                                  src={getMapEmbedUrl(formData.mapUrl)}
+                                  src={getMapEmbedUrl(formData.mapUrl, null, null, formData.address ? `${formData.name}, ${formData.address}` : formData.name)}
                                   width="100%"
                                   height="100%"
                                   style={{ border: 0 }}

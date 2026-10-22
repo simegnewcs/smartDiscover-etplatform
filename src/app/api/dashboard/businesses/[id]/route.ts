@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth/next'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
-import { extractMapUrl, extractCoordinatesFromMapUrl } from '@/lib/maps'
+import { extractMapUrl, extractCoordinatesFromMapUrl, isTruncatedOrBrokenEmbed } from '@/lib/maps'
 
 export const dynamic = 'force-dynamic'
 
@@ -174,7 +174,22 @@ export async function PUT(
     }
 
     // Clean map URL and extract coordinates if provided
-    const cleanMapUrl = mapUrl ? extractMapUrl(mapUrl) : (mapUrl === '' ? null : mapUrl)
+    let cleanMapUrl = mapUrl ? extractMapUrl(mapUrl) : (mapUrl === '' ? null : mapUrl)
+    let extractedLat: number | null = null
+    let extractedLng: number | null = null
+
+    if (mapUrl) {
+      const coords = extractCoordinatesFromMapUrl(mapUrl)
+      if (coords) {
+        extractedLat = coords.lat
+        extractedLng = coords.lng
+        // If the embed URL is truncated or malformed, repair it using the extracted coordinates
+        if (cleanMapUrl && isTruncatedOrBrokenEmbed(cleanMapUrl)) {
+          cleanMapUrl = `https://maps.google.com/maps?q=${coords.lat},${coords.lng}&hl=en&z=16&output=embed`
+        }
+      }
+    }
+
     const updateData: any = {
       name,
       description,
@@ -189,12 +204,9 @@ export async function PUT(
       features: features || []
     }
 
-    if (mapUrl) {
-      const coords = extractCoordinatesFromMapUrl(mapUrl)
-      if (coords) {
-        updateData.latitude = coords.lat
-        updateData.longitude = coords.lng
-      }
+    if (extractedLat !== null && extractedLng !== null) {
+      updateData.latitude = extractedLat
+      updateData.longitude = extractedLng
     }
 
     // Update business
