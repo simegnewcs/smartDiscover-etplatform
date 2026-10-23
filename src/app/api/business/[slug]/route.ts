@@ -12,7 +12,6 @@ export async function GET(
 ) {
   try {
     const slug = params.slug
-    console.log('Fetching business with slug:', slug)
 
     const business = await prisma.business.findUnique({
       where: { slug },
@@ -47,7 +46,6 @@ export async function GET(
     })
 
     if (!business) {
-      console.log('Business not found for slug:', slug)
       return NextResponse.json(
         { success: false, error: 'Business not found' },
         { status: 404 }
@@ -73,8 +71,6 @@ export async function GET(
         )
       }
     }
-
-    console.log('Business found:', business.name, 'ID:', business.id.toString())
 
     // Calculate average rating
     const avgRating = await prisma.review.aggregate({

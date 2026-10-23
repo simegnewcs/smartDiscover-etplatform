@@ -24,8 +24,9 @@ import {
 } from 'lucide-react'
 import 'leaflet/dist/leaflet.css'
 import dynamic from 'next/dynamic'
-import { getMapEmbedUrl, getMapExternalUrl } from '@/lib/maps'
+import { getMapEmbedUrl, getMapExternalUrl, getMapDirectionsUrl } from '@/lib/maps'
 import GoogleAdUnit from '@/components/ads/GoogleAdUnit'
+import InteractiveLocationMap from './InteractiveLocationMap'
 
 // Dynamic import for Leaflet Map component (must be outside component to avoid hook issues)
 import type { MapComponentProps } from './MapComponent'
@@ -651,54 +652,9 @@ export default function BusinessDetail({ slug }: { slug: string }) {
               </div>
             )}
 
-            {/* Map Card */}
+            {/* Interactive Location Map Card with Quick Data overlay */}
             {(business.mapUrl || (business.latitude && business.longitude) || business.address) && (
-              <div className="bg-white rounded-[2rem] shadow-premium border border-neutral-100 p-10 mb-8">
-                <h2 className="text-2xl font-bold text-neutral-800 mb-8 flex items-center gap-3">
-                  <span className="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center">
-                    <MapPin className="w-6 h-6 text-blue-600" />
-                  </span>
-                  Location Map
-                </h2>
-                <div className="aspect-video rounded-xl overflow-hidden bg-neutral-100">
-                  <iframe
-                    src={getMapEmbedUrl(
-                      business.mapUrl,
-                      business.latitude,
-                      business.longitude,
-                      business.address ? `${business.name}, ${business.address}` : business.name
-                    )}
-                    width="100%"
-                    height="100%"
-                    style={{ border: 0 }}
-                    allowFullScreen
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                    className="rounded-xl w-full h-full"
-                  />
-                </div>
-                {getMapExternalUrl(
-                  business.mapUrl,
-                  business.latitude,
-                  business.longitude,
-                  business.address ? `${business.name}, ${business.address}` : business.name
-                ) && (
-                  <a
-                    href={getMapExternalUrl(
-                      business.mapUrl,
-                      business.latitude,
-                      business.longitude,
-                      business.address ? `${business.name}, ${business.address}` : business.name
-                    )}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-4 inline-flex items-center gap-2 text-primary-800 hover:text-brand-green font-medium"
-                  >
-                    <MapPin className="w-4 h-4" />
-                    View on Google Maps
-                  </a>
-                )}
-              </div>
+              <InteractiveLocationMap business={business} />
             )}
 
             {/* Reviews Section Card */}

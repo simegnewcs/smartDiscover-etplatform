@@ -6,8 +6,6 @@ export const runtime = 'nodejs'
 
 export async function GET() {
   try {
-    console.log('Fetching categories from database...')
-    
     const categories = await prisma.category.findMany({
       include: {
         _count: {
@@ -20,8 +18,6 @@ export async function GET() {
         name: 'asc'
       }
     })
-
-    console.log(`Found ${categories.length} categories`)
 
     // Safely serialize categories with BigInt conversion
     const serializedCategories = categories.map(category => {

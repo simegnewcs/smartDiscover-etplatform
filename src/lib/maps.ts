@@ -65,21 +65,31 @@ export function getMapEmbedUrl(
   input?: string | null,
   fallbackLat?: number | null,
   fallbackLng?: number | null,
-  fallbackQuery?: string | null
+  fallbackQuery?: string | null,
+  mapType: 'roadmap' | 'satellite' = 'roadmap'
 ): string {
   const cleanUrl = extractMapUrl(input)
+  const typeParam = mapType === 'satellite' ? '&t=k' : ''
 
   // 1. If input is provided and contains /maps/embed
   if (cleanUrl && cleanUrl.includes('/maps/embed')) {
-    // If it's broken or truncated, salvage coordinates so Google Maps doesn't throw a 400 error
+    // If it's broken or truncated, salvage coordinates and prefer business place query
     if (isTruncatedOrBrokenEmbed(cleanUrl)) {
+      if (fallbackQuery && fallbackQuery.trim()) {
+        return `https://maps.google.com/maps?q=${encodeURIComponent(fallbackQuery.trim())}&hl=en&z=16&output=embed${typeParam}`
+      }
       const coords = extractCoordinatesFromMapUrl(cleanUrl)
       if (coords) {
-        return `https://maps.google.com/maps?q=${coords.lat},${coords.lng}&hl=en&z=16&output=embed`
+        return `https://maps.google.com/maps?q=${coords.lat},${coords.lng}&hl=en&z=16&output=embed${typeParam}`
       }
       if (fallbackLat != null && fallbackLng != null && !isNaN(Number(fallbackLat)) && !isNaN(Number(fallbackLng))) {
-        return `https://maps.google.com/maps?q=${fallbackLat},${fallbackLng}&hl=en&z=16&output=embed`
+        return `https://maps.google.com/maps?q=${fallbackLat},${fallbackLng}&hl=en&z=16&output=embed${typeParam}`
       }
+    }
+    // If not broken but satellite mode requested
+    if (mapType === 'satellite' && !cleanUrl.includes('t=k')) {
+      const sep = cleanUrl.includes('?') ? '&' : '?'
+      return `${cleanUrl}${sep}t=k`
     }
     return cleanUrl
   }
@@ -88,42 +98,64 @@ export function getMapEmbedUrl(
   if (cleanUrl) {
     const coords = extractCoordinatesFromMapUrl(cleanUrl)
     if (coords) {
-      return `https://maps.google.com/maps?q=${coords.lat},${coords.lng}&hl=en&z=16&output=embed`
+      if (fallbackQuery && fallbackQuery.trim()) {
+        return `https://maps.google.com/maps?q=${encodeURIComponent(fallbackQuery.trim())}&ll=${coords.lat},${coords.lng}&hl=en&z=16&output=embed${typeParam}`
+      }
+      return `https://maps.google.com/maps?q=${coords.lat},${coords.lng}&hl=en&z=16&output=embed${typeParam}`
     }
 
     // Handle standard maps with ?q= coordinates or place name
     const qMatch = cleanUrl.match(/[?&]q=([^&]+)/)
     if (qMatch && qMatch[1]) {
       const query = qMatch[1]
-      return `https://maps.google.com/maps?q=${query}&hl=en&z=16&output=embed`
+      return `https://maps.google.com/maps?q=${query}&hl=en&z=16&output=embed${typeParam}`
     }
 
     // Handle place URLs: /maps/place/Place+Name/...
     const placeMatch = cleanUrl.match(/\/maps\/place\/([^/@?]+)/)
     if (placeMatch && placeMatch[1]) {
       const placeName = placeMatch[1].replace(/\+/g, ' ')
-      return `https://maps.google.com/maps?q=${encodeURIComponent(placeName)}&hl=en&z=16&output=embed`
+      return `https://maps.google.com/maps?q=${encodeURIComponent(placeName)}&hl=en&z=16&output=embed${typeParam}`
     }
   }
 
-  // 3. Fallback to passed coordinates
-  if (fallbackLat != null && fallbackLng != null && !isNaN(Number(fallbackLat)) && !isNaN(Number(fallbackLng))) {
-    return `https://maps.google.com/maps?q=${fallbackLat},${fallbackLng}&hl=en&z=16&output=embed`
+  // 3. Fallback to passed text query (address or business name)
+  if (fallbackQuery && fallbackQuery.trim()) {
+    return `https://maps.google.com/maps?q=${encodeURIComponent(fallbackQuery.trim())}&hl=en&z=16&output=embed${typeParam}`
   }
 
-  // 4. Fallback to passed text query (address or business name)
-  if (fallbackQuery && fallbackQuery.trim()) {
-    return `https://maps.google.com/maps?q=${encodeURIComponent(fallbackQuery.trim())}&hl=en&z=16&output=embed`
+  // 4. Fallback to passed coordinates
+  if (fallbackLat != null && fallbackLng != null && !isNaN(Number(fallbackLat)) && !isNaN(Number(fallbackLng))) {
+    return `https://maps.google.com/maps?q=${fallbackLat},${fallbackLng}&hl=en&z=16&output=embed${typeParam}`
   }
 
   // 5. If it's a generic URL, try appending output=embed
   if (cleanUrl && cleanUrl.startsWith('http') && !cleanUrl.includes('maps.app.goo.gl')) {
-    if (cleanUrl.includes('output=embed')) return cleanUrl
+    if (cleanUrl.includes('output=embed')) {
+      return mapType === 'satellite' && !cleanUrl.includes('t=k') ? `${cleanUrl}&t=k` : cleanUrl
+    }
     const separator = cleanUrl.includes('?') ? '&' : '?'
-    return `${cleanUrl}${separator}output=embed`
+    return `${cleanUrl}${separator}output=embed${typeParam}`
   }
 
   return cleanUrl || ''
+}
+
+/**
+ * Returns a Google Maps directions URL to navigate to the business.
+ */
+export function getMapDirectionsUrl(
+  lat?: number | null,
+  lng?: number | null,
+  fallbackQuery?: string | null
+): string {
+  if (lat != null && lng != null && !isNaN(Number(lat)) && !isNaN(Number(lng))) {
+    return `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`
+  }
+  if (fallbackQuery && fallbackQuery.trim()) {
+    return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(fallbackQuery.trim())}`
+  }
+  return 'https://www.google.com/maps'
 }
 
 /**
