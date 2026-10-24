@@ -1,14 +1,16 @@
 'use client'
 
-import { useState, Suspense } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { signIn } from 'next-auth/react'
 import { Mail, Lock, Eye, EyeOff, ArrowLeft, Building2, User, AlertCircle } from 'lucide-react'
+import { GoogleIcon } from '@/components/icons/GoogleIcon'
 
 function LoginForm() {
   const searchParams = useSearchParams()
   const callbackUrl = searchParams?.get('callbackUrl') || '/'
+  const errorParam = searchParams?.get('error')
   
   const [formData, setFormData] = useState({
     email: '',
@@ -16,7 +18,32 @@ function LoginForm() {
   })
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false)
   const [error, setError] = useState('')
+
+  useEffect(() => {
+    if (errorParam === 'OAuthSignin' || errorParam === 'OAuthCallback') {
+      setError('Google sign-in could not be completed. Please ensure your Google OAuth credentials are configured or try again.')
+    } else if (errorParam === 'AccessDenied') {
+      setError('Google sign-in was cancelled or access was denied.')
+    } else if (errorParam) {
+      setError(`Authentication error: ${errorParam}`)
+    }
+  }, [errorParam])
+
+  const handleGoogleSignIn = async () => {
+    setIsGoogleLoading(true)
+    setError('')
+    try {
+      await signIn('google', {
+        callbackUrl: callbackUrl && callbackUrl !== '/' ? callbackUrl : '/'
+      })
+    } catch (err) {
+      console.error('Google sign-in error:', err)
+      setError('Failed to initiate Google sign-in. Please try again.')
+      setIsGoogleLoading(false)
+    }
+  }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -115,6 +142,33 @@ function LoginForm() {
               </div>
             </div>
           )}
+
+          {/* Google Sign In Button */}
+          <button
+            type="button"
+            onClick={handleGoogleSignIn}
+            disabled={isGoogleLoading || isLoading}
+            className="w-full flex items-center justify-center gap-3 py-3 px-4 bg-white hover:bg-neutral-50 active:bg-neutral-100 text-neutral-800 font-medium rounded-xl border border-neutral-300 shadow-sm transition-all hover:shadow hover:border-neutral-400 disabled:opacity-60 disabled:cursor-not-allowed mb-6 group cursor-pointer"
+          >
+            {isGoogleLoading ? (
+              <div className="w-5 h-5 border-2 border-neutral-400 border-t-transparent rounded-full animate-spin" />
+            ) : (
+              <GoogleIcon className="w-5 h-5 flex-shrink-0 transition-transform group-hover:scale-105" />
+            )}
+            <span className="text-sm font-semibold">
+              {isGoogleLoading ? 'Connecting to Google...' : 'Continue with Google'}
+            </span>
+          </button>
+
+          {/* Divider */}
+          <div className="relative mb-6 flex items-center justify-center">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-neutral-200" />
+            </div>
+            <span className="relative bg-white px-3 text-xs uppercase tracking-wider text-neutral-500 font-medium">
+              Or continue with email
+            </span>
+          </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>

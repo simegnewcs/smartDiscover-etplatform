@@ -2,7 +2,9 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { signIn } from 'next-auth/react'
 import { ArrowLeft, Eye, EyeOff, Mail, User, Briefcase, Lock, Building2, Star, TrendingUp } from 'lucide-react'
+import { GoogleIcon } from '@/components/icons/GoogleIcon'
 
 export default function RegisterPage() {
   const [userType, setUserType] = useState<'USER' | 'BUSINESS_OWNER'>('USER')
@@ -15,8 +17,21 @@ export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
+
+  const handleGoogleSignUp = async () => {
+    setIsGoogleLoading(true)
+    setError('')
+    try {
+      await signIn('google', { callbackUrl: '/' })
+    } catch (err) {
+      console.error('Google sign-up error:', err)
+      setError('Failed to initiate Google sign-up. Please try again.')
+      setIsGoogleLoading(false)
+    }
+  }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
@@ -172,6 +187,33 @@ export default function RegisterPage() {
                 </div>
               </button>
             </div>
+          </div>
+
+          {/* Google Sign Up Button */}
+          <button
+            type="button"
+            onClick={handleGoogleSignUp}
+            disabled={isGoogleLoading || isLoading}
+            className="w-full flex items-center justify-center gap-3 py-3 px-4 bg-white hover:bg-neutral-50 active:bg-neutral-100 text-neutral-800 font-medium rounded-xl border border-neutral-300 shadow-sm transition-all hover:shadow hover:border-neutral-400 disabled:opacity-60 disabled:cursor-not-allowed mb-6 group cursor-pointer"
+          >
+            {isGoogleLoading ? (
+              <div className="w-5 h-5 border-2 border-neutral-400 border-t-transparent rounded-full animate-spin" />
+            ) : (
+              <GoogleIcon className="w-5 h-5 flex-shrink-0 transition-transform group-hover:scale-105" />
+            )}
+            <span className="text-sm font-semibold">
+              {isGoogleLoading ? 'Connecting to Google...' : 'Sign up with Google'}
+            </span>
+          </button>
+
+          {/* Divider */}
+          <div className="relative mb-6 flex items-center justify-center">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-neutral-200" />
+            </div>
+            <span className="relative bg-white px-3 text-xs uppercase tracking-wider text-neutral-500 font-medium">
+              Or register with email
+            </span>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">

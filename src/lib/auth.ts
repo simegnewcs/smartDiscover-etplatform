@@ -1,5 +1,6 @@
 import { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
+import GoogleProvider from 'next-auth/providers/google'
 
 // Extend NextAuth types
 declare module 'next-auth' {
@@ -68,6 +69,22 @@ async function getUserById(id: number) {
 
 export const authOptions: NextAuthOptions = {
   providers: [
+    ...(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
+      ? [
+          GoogleProvider({
+            clientId: process.env.GOOGLE_CLIENT_ID,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+            allowDangerousEmailAccountLinking: true
+          })
+        ]
+      : [
+          // Fallback Google provider configuration so UI / NextAuth client can target 'google'
+          GoogleProvider({
+            clientId: process.env.GOOGLE_CLIENT_ID || 'google-client-id-placeholder',
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET || 'google-client-secret-placeholder',
+            allowDangerousEmailAccountLinking: true
+          })
+        ]),
     CredentialsProvider({
       name: 'credentials',
       credentials: {
@@ -107,10 +124,54 @@ export const authOptions: NextAuthOptions = {
     signIn: '/auth/login'
   },
   callbacks: {
+    async signIn({ user, account }) {
+      if (account?.provider === 'google') {
+        if (!user.email) return false
+
+        const { prisma } = await import('./prisma')
+        try {
+          // Check if user exists in database
+          let dbUser = await prisma.user.findUnique({
+            where: { email: user.email }
+          })
+
+          if (!dbUser) {
+            // Automatically sign up new user via Google
+            dbUser = await prisma.user.create({
+              data: {
+                email: user.email,
+                name: user.name || 'Google User',
+                passwordHash: 'GOOGLE_OAUTH_ACCOUNT',
+                profileImage: user.image || null,
+                role: 'USER'
+              }
+            })
+          } else if (user.image && !dbUser.profileImage) {
+            // Sync Google profile image if not set
+            await prisma.user
+              .update({
+                where: { id: dbUser.id },
+                data: { profileImage: user.image }
+              })
+              .catch(() => {})
+          }
+
+          // Populate NextAuth user object
+          user.id = dbUser.id.toString()
+          user.role = dbUser.role
+          return true
+        } catch (error) {
+          console.error('Error in Google signIn callback:', error)
+          return false
+        }
+      }
+      return true
+    },
     async jwt({ token, user, trigger, session: updateData }) {
       if (user) {
         token.id = user.id
         token.role = user.role
+        if (user.image) token.picture = user.image
       }
 
       // On sign in, fetch fresh data from DB
