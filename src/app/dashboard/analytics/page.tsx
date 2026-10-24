@@ -12,8 +12,15 @@ import {
   CheckCircle2,
   ArrowUpRight,
   MapPin,
-  Tag
+  Tag,
+  Activity,
+  Users,
+  Eye,
+  Clock,
+  Calendar,
+  Sparkles
 } from 'lucide-react'
+import TrafficAnalysisModal from '@/components/dashboard/TrafficAnalysisModal'
 
 interface OverviewStats {
   totalBusinesses: number
@@ -59,6 +66,9 @@ export default function AnalyticsPage() {
   const [reviewTrend, setReviewTrend] = useState<ReviewTrendItem[]>([])
   const [businessPerformance, setBusinessPerformance] = useState<BusinessPerformance[]>([])
   const [categoryBreakdown, setCategoryBreakdown] = useState<CategoryBreakdown[]>([])
+  const [trafficData, setTrafficData] = useState<any>(null)
+  const [trafficTab, setTrafficTab] = useState<'daily' | '7d' | 'monthly'>('7d')
+  const [isTrafficModalOpen, setIsTrafficModalOpen] = useState(false)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -67,15 +77,23 @@ export default function AnalyticsPage() {
 
   const fetchAnalytics = async () => {
     try {
-      const res = await fetch('/api/dashboard/analytics')
-      const data = await res.json()
-
+      const [resAnalytics, resTraffic] = await Promise.all([
+        fetch('/api/dashboard/analytics'),
+        fetch('/api/dashboard/traffic?scope=business')
+      ])
+      
+      const data = await resAnalytics.json()
       if (data.success) {
         setOverview(data.data.overview)
         setRatingDistribution(data.data.ratingDistribution)
         setReviewTrend(data.data.reviewTrend)
         setBusinessPerformance(data.data.businessPerformance)
         setCategoryBreakdown(data.data.categoryBreakdown)
+      }
+
+      const trafficJson = await resTraffic.json()
+      if (trafficJson.success && trafficJson.data) {
+        setTrafficData(trafficJson.data)
       }
     } catch (error) {
       console.error('Error fetching analytics:', error)
@@ -95,13 +113,178 @@ export default function AnalyticsPage() {
     )
   }
 
+  const currentTraffic = trafficData
+    ? trafficTab === 'daily'
+      ? trafficData.daily
+      : trafficTab === '7d'
+      ? trafficData.weekly
+      : trafficData.monthly
+    : null
+
+  const chartItems = trafficData
+    ? trafficTab === 'daily'
+      ? trafficData.daily.hourly
+      : trafficTab === '7d'
+      ? trafficData.weekly.days
+      : trafficData.monthly.weeks
+    : []
+
+  const maxChartVisitors = Math.max(...chartItems.map((item: any) => item.visitors || 1), 1)
+
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-neutral-800">Analytics</h1>
-        <p className="text-neutral-600 mt-1">Track how your businesses are performing</p>
+    <div className="space-y-7">
+      {/* Header with Traffic Launch Button */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-extrabold text-neutral-900 tracking-tight flex items-center gap-2">
+            <span>My Business Traffic &amp; Analytics</span>
+            <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
+              Owner Scope
+            </span>
+          </h1>
+          <p className="text-neutral-500 text-sm mt-0.5">
+            Monitor real-time visitors, phone calls, and directions for your business listings
+          </p>
+        </div>
+
+        <button
+          onClick={() => setIsTrafficModalOpen(true)}
+          className="inline-flex items-center gap-2 bg-[#16A34A] hover:bg-[#15803D] text-white px-5 py-2.5 rounded-2xl font-bold transition-all shadow-md shadow-[#16A34A]/20 text-xs self-start sm:self-auto"
+        >
+          <Activity className="w-4 h-4 text-emerald-200" />
+          <span>Open My Business Traffic</span>
+        </button>
       </div>
+
+      {/* NEW: Platform Traffic Overview Card (Daily, 7D, Monthly) */}
+      {currentTraffic && (
+        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-neutral-200/80 shadow-sm space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-neutral-100">
+            <div>
+              <div className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full mb-1">
+                <Users className="w-3.5 h-3.5" />
+                <span>Site Visitor Traffic</span>
+              </div>
+              <h2 className="text-lg font-extrabold text-neutral-900">
+                Audience &amp; Traffic Volume
+              </h2>
+            </div>
+
+            {/* Timeframe Switcher Tabs */}
+            <div className="inline-flex p-1 bg-neutral-100 rounded-2xl self-start sm:self-auto">
+              <button
+                onClick={() => setTrafficTab('daily')}
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                  trafficTab === 'daily'
+                    ? 'bg-white text-emerald-800 shadow-sm'
+                    : 'text-neutral-600 hover:text-neutral-900'
+                }`}
+              >
+                <Clock className="w-3.5 h-3.5" />
+                <span>Every Day</span>
+              </button>
+              <button
+                onClick={() => setTrafficTab('7d')}
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                  trafficTab === '7d'
+                    ? 'bg-white text-emerald-800 shadow-sm'
+                    : 'text-neutral-600 hover:text-neutral-900'
+                }`}
+              >
+                <Calendar className="w-3.5 h-3.5" />
+                <span>7 Days (7D)</span>
+              </button>
+              <button
+                onClick={() => setTrafficTab('monthly')}
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                  trafficTab === 'monthly'
+                    ? 'bg-white text-emerald-800 shadow-sm'
+                    : 'text-neutral-600 hover:text-neutral-900'
+                }`}
+              >
+                <BarChart3 className="w-3.5 h-3.5" />
+                <span>Monthly (30D)</span>
+              </button>
+            </div>
+          </div>
+
+          {/* 3 KPI Highlights */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-100">
+              <span className="text-xs font-bold text-emerald-800 uppercase tracking-wider">
+                {trafficTab === 'daily' ? 'Today\'s Visitors' : trafficTab === '7d' ? '7-Day Visitors' : 'Monthly Visitors'}
+              </span>
+              <div className="text-2xl sm:text-3xl font-black text-neutral-900 mt-1">
+                {currentTraffic.visitors.toLocaleString()}
+              </div>
+              <div className="flex items-center gap-1 text-xs font-bold text-emerald-600 mt-1">
+                <TrendingUp className="w-3.5 h-3.5" />
+                <span>{currentTraffic.change}</span>
+                <span className="text-neutral-400 font-normal">vs prev period</span>
+              </div>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-blue-50/70 border border-blue-100">
+              <span className="text-xs font-bold text-blue-800 uppercase tracking-wider">
+                Total Page Views
+              </span>
+              <div className="text-2xl sm:text-3xl font-black text-neutral-900 mt-1">
+                {currentTraffic.pageViews.toLocaleString()}
+              </div>
+              <div className="text-xs text-neutral-500 mt-1">
+                ~{(currentTraffic.pageViews / Math.max(currentTraffic.visitors, 1)).toFixed(1)} pages per session
+              </div>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-purple-50/70 border border-purple-100">
+              <span className="text-xs font-bold text-purple-800 uppercase tracking-wider">
+                Avg. Session Time
+              </span>
+              <div className="text-2xl sm:text-3xl font-black text-neutral-900 mt-1">
+                {currentTraffic.avgDuration}
+              </div>
+              <div className="text-xs text-purple-700 font-medium mt-1">
+                Bounce rate: {currentTraffic.bounceRate}
+              </div>
+            </div>
+          </div>
+
+          {/* Mini Interactive Visitor Bar Chart */}
+          <div className="pt-2">
+            <div className="flex items-center justify-between text-xs font-bold text-neutral-600 mb-3">
+              <span>Visitor Distribution ({trafficTab === 'daily' ? 'Hourly' : trafficTab === '7d' ? 'Day by Day' : 'Weekly'})</span>
+              <span className="text-emerald-700">Peak: {maxChartVisitors.toLocaleString()} visitors</span>
+            </div>
+            <div className="h-44 flex items-end gap-1.5 sm:gap-2 pt-4 pb-2 border-b border-neutral-100">
+              {chartItems.map((item: any, i: number) => {
+                const heightPercent = Math.max(Math.round((item.visitors / maxChartVisitors) * 100), 10)
+                const label = item.hour || item.day || item.week
+                return (
+                  <div key={i} className="flex-1 flex flex-col items-center h-full justify-end group relative cursor-pointer">
+                    <div className="opacity-0 group-hover:opacity-100 absolute -top-8 bg-neutral-900 text-white text-[10px] font-bold px-2 py-0.5 rounded-lg pointer-events-none transition-opacity whitespace-nowrap z-10">
+                      {item.visitors.toLocaleString()}
+                    </div>
+                    <div
+                      style={{ height: `${heightPercent}%` }}
+                      className="w-full bg-[#16A34A]/80 hover:bg-[#16A34A] rounded-t-lg transition-all"
+                    />
+                    <span className="text-[10px] text-neutral-400 font-medium mt-1 truncate w-full text-center">
+                      {label}
+                    </span>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Traffic Analysis Modal Instance - Business Owner Scope */}
+      <TrafficAnalysisModal
+        isOpen={isTrafficModalOpen}
+        onClose={() => setIsTrafficModalOpen(false)}
+        scope="business"
+      />
 
       {/* Overview Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">

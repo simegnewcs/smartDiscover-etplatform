@@ -129,27 +129,38 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ])
 
-  // 4. Programmatic City + Category Combinations (e.g., Restaurants in Addis Ababa)
-  const topCombos: MetadataRoute.Sitemap = [
-    { cat: 'Restaurants', city: 'Addis Ababa' },
-    { cat: 'Hotels', city: 'Addis Ababa' },
-    { cat: 'Cafes', city: 'Addis Ababa' },
-    { cat: 'Pharmacies', city: 'Addis Ababa' },
-    { cat: 'Supermarkets', city: 'Addis Ababa' },
-    { cat: 'Hotels', city: 'Bahir Dar' },
-    { cat: 'Restaurants', city: 'Bahir Dar' },
-    { cat: 'Hotels', city: 'Hawassa' },
-    { cat: 'Restaurants', city: 'Hawassa' },
-    { cat: 'Hotels', city: 'Gondar' },
-    { cat: 'Hotels', city: 'Lalibela' },
-    { cat: 'Restaurants', city: 'Dire Dawa' },
-    { cat: 'Cafes', city: 'Jimma' },
-  ].map((combo) => ({
-    url: `${siteUrl}/businesses?category=${encodeURIComponent(combo.cat)}&city=${encodeURIComponent(combo.city)}`,
-    lastModified: now,
-    changeFrequency: 'daily' as const,
-    priority: 0.82,
-  }))
+  // 4. Programmatic City + Category High-Intent Landing Pages (e.g. /city/addis-ababa/restaurants)
+  const coreCities = [
+    'addis-ababa',
+    'bahir-dar',
+    'hawassa',
+    'gondar',
+    'dire-dawa',
+    'mekelle',
+    'jimma',
+    'lalibela',
+    'adama',
+    'harar'
+  ]
+
+  const coreCategories = [
+    'restaurants',
+    'hotels',
+    'cafes',
+    'pharmacies',
+    'supermarkets',
+    'tourist-attractions',
+    'local-services'
+  ]
+
+  const programmaticCityCategoryPages: MetadataRoute.Sitemap = coreCities.flatMap((citySlug) =>
+    coreCategories.map((catSlug) => ({
+      url: `${siteUrl}/city/${citySlug}/${catSlug}`,
+      lastModified: now,
+      changeFrequency: 'daily' as const,
+      priority: 0.9,
+    }))
+  )
 
   // 5. Dynamic Business Profile Pages (Fetched directly from DB)
   let businessPages: MetadataRoute.Sitemap = []
@@ -180,7 +191,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...corePages,
     ...categoryPages,
     ...cityPages,
-    ...topCombos,
+    ...programmaticCityCategoryPages,
     ...businessPages,
   ]
 }

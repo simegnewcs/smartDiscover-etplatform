@@ -22,8 +22,10 @@ import {
   ChevronDown,
   ShieldCheck,
   CheckCircle2,
-  MapPin
+  MapPin,
+  Activity
 } from 'lucide-react'
+import TrafficAnalysisModal from '@/components/dashboard/TrafficAnalysisModal'
 
 const navItems = [
   { href: '/admin', label: 'Dashboard', icon: LayoutDashboard, exact: true },
@@ -42,6 +44,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false)
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false)
+  const [isPlatformTrafficOpen, setIsPlatformTrafficOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
 
   useEffect(() => {
@@ -266,7 +269,21 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </div>
 
           {/* Right: Language Flag + Notification Bell + Profile Avatar */}
-          <div className="flex items-center gap-2 sm:gap-4">
+          <div className="flex items-center gap-2 sm:gap-3">
+            {/* General Platform Traffic Analysis Button */}
+            <button
+              onClick={() => setIsPlatformTrafficOpen(true)}
+              className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-2xl bg-gradient-to-r from-[#16A34A] to-[#15803D] hover:from-[#15803D] hover:to-[#166534] text-white text-xs font-bold shadow-sm hover:shadow-md transition-all active:scale-95 group"
+              title="View General Platform Traffic across Ethiopia (Daily, 7D, Monthly)"
+            >
+              <Activity className="w-4 h-4 text-[#DCFCE7] group-hover:scale-110 transition-transform" />
+              <span className="hidden sm:inline">Platform Traffic</span>
+              <span className="flex h-2 w-2 relative">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#86EFAC] opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#DCFCE7]"></span>
+              </span>
+            </button>
+
             {/* Language Selector Dropdown */}
             <div className="hidden md:flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-[#F1F5F9] cursor-pointer transition-colors text-xs font-bold text-[#0F172A]">
               <span className="text-base leading-none">🇪🇹</span>
@@ -387,6 +404,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           {children}
         </main>
       </div>
+
+      {/* General Platform Traffic Analysis Modal */}
+      <TrafficAnalysisModal
+        isOpen={isPlatformTrafficOpen}
+        onClose={() => setIsPlatformTrafficOpen(false)}
+        scope="platform"
+      />
     </div>
   )
 }

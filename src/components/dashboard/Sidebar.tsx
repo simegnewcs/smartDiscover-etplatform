@@ -138,7 +138,7 @@ export default function Sidebar({ onClose, isCollapsed = false }: SidebarProps) 
           icon: Star,
           badge: stats.reviewCount > 0 ? stats.reviewCount : undefined
         },
-        { name: 'Analytics', href: '/dashboard/analytics', icon: TrendingUp },
+        { name: 'Traffic & Analytics', href: '/dashboard/analytics', icon: TrendingUp, badge: 'Live' },
         { 
           name: 'Messages', 
           href: '/dashboard/messages', 
@@ -170,6 +170,7 @@ export default function Sidebar({ onClose, isCollapsed = false }: SidebarProps) 
           icon: History,
           badge: stats.recentActivityCount > 0 ? stats.recentActivityCount : undefined
         },
+        { name: 'Traffic Analytics', href: '/dashboard/analytics', icon: TrendingUp },
         { 
           name: 'Notifications', 
           href: '/notifications', 

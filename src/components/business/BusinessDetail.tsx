@@ -145,6 +145,22 @@ export default function BusinessDetail({ slug }: { slug: string }) {
     }
   }
 
+  const trackAnalytics = (eventType: 'PAGE_VIEW' | 'CALL' | 'DIRECTION' | 'CLICK', bId?: any) => {
+    const targetId = bId || business?.id
+    if (!targetId) return
+    try {
+      fetch('/api/analytics/track', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          businessId: targetId.toString(),
+          eventType,
+          path: typeof window !== 'undefined' ? window.location.pathname : '/'
+        })
+      }).catch(() => {})
+    } catch {}
+  }
+
   const fetchBusiness = async () => {
     try {
       const response = await fetch(`/api/business/${slug}`)
@@ -154,6 +170,7 @@ export default function BusinessDetail({ slug }: { slug: string }) {
         setBusiness(data.data)
         setIsUnverified(false)
         setError(null)
+        trackAnalytics('PAGE_VIEW', data.data.id)
       } else {
         if (data.unverified) {
           setIsUnverified(true)
@@ -580,6 +597,7 @@ export default function BusinessDetail({ slug }: { slug: string }) {
                 {business.phone && (
                   <a 
                     href={`tel:${business.phone}`} 
+                    onClick={() => trackAnalytics('CALL')}
                     className="flex items-center gap-4 p-4 bg-neutral-50 rounded-xl hover:bg-green-50 transition-colors group"
                   >
                     <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center group-hover:bg-green-200 transition-colors">
@@ -870,6 +888,7 @@ export default function BusinessDetail({ slug }: { slug: string }) {
                 {business.phone && (
                   <a 
                     href={`tel:${business.phone}`}
+                    onClick={() => trackAnalytics('CALL')}
                     className="flex items-center justify-center gap-2 w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-xl font-semibold transition-colors shadow-md"
                   >
                     <Phone className="w-5 h-5" />
@@ -904,6 +923,7 @@ export default function BusinessDetail({ slug }: { slug: string }) {
                   href={`https://www.google.com/maps/dir/?api=1&destination=${business.latitude},${business.longitude}`}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => trackAnalytics('DIRECTION')}
                   className="flex items-center justify-center gap-2 w-full mt-4 bg-blue-500 hover:bg-blue-600 text-white py-2.5 rounded-xl font-semibold transition-colors text-sm"
                 >
                   <Navigation className="w-4 h-4" />

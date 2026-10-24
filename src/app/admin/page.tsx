@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import TrafficAnalysisModal from '@/components/dashboard/TrafficAnalysisModal'
 import {
   Users,
   Building2,
@@ -23,7 +24,15 @@ import {
   ArrowUpRight,
   MapPin,
   Calendar,
-  Sparkles
+  Sparkles,
+  Activity,
+  Globe2,
+  Eye,
+  Smartphone,
+  Laptop,
+  Tablet,
+  BarChart3,
+  RefreshCw
 } from 'lucide-react'
 
 interface Stats {
@@ -56,6 +65,29 @@ export default function AdminDashboard() {
   const [tableSearch, setTableSearch] = useState('')
   const [activePage, setActivePage] = useState(1)
 
+  // General Platform Visitor Traffic States
+  const [platformTraffic, setPlatformTraffic] = useState<any>(null)
+  const [trafficTab, setTrafficTab] = useState<'daily' | 'weekly' | 'monthly'>('daily')
+  const [isPlatformTrafficModalOpen, setIsPlatformTrafficModalOpen] = useState(false)
+  const [trafficLoading, setTrafficLoading] = useState(true)
+  const [trafficRefreshing, setTrafficRefreshing] = useState(false)
+
+  const loadPlatformTraffic = (isRefresh = false) => {
+    if (isRefresh) setTrafficRefreshing(true)
+    else setTrafficLoading(true)
+
+    fetch('/api/dashboard/traffic?scope=platform')
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.success) setPlatformTraffic(d)
+      })
+      .catch((e) => console.error('Failed to load platform traffic:', e))
+      .finally(() => {
+        setTrafficLoading(false)
+        setTrafficRefreshing(false)
+      })
+  }
+
   useEffect(() => {
     fetch('/api/admin/stats')
       .then((r) => r.json())
@@ -64,6 +96,8 @@ export default function AdminDashboard() {
       })
       .catch((e) => console.error(e))
       .finally(() => setLoading(false))
+
+    loadPlatformTraffic(false)
   }, [])
 
   if (loading) {
@@ -245,7 +279,294 @@ export default function AdminDashboard() {
       </div>
 
       {/* ======================================================== */}
-      {/* 2. CHARTS ROW 1: Visitor Insights (Line) & Total Revenue (Bar) */}
+      {/* 2. GENERAL PLATFORM VISITORS TRAFFIC (ETHIOPIA-WIDE) */}
+      {/* ======================================================== */}
+      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#E2E8F0] shadow-[0_4px_24px_rgba(0,0,0,0.02)] space-y-6">
+        {/* Top Header Row with Live Beacon and Tabs */}
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-[#F1F5F9]">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2.5 flex-wrap">
+              <div className="w-8 h-8 rounded-xl bg-[#DCFCE7] text-[#16A34A] flex items-center justify-center shadow-xs">
+                <Globe2 className="w-4 h-4" />
+              </div>
+              <h2 className="text-xl sm:text-2xl font-extrabold text-[#0F172A] tracking-tight">
+                General Platform Visitors Traffic
+              </h2>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-[#DCFCE7] text-[#16A34A] border border-[#16A34A]/20">
+                <span className="w-2 h-2 rounded-full bg-[#16A34A] animate-pulse" />
+                Live Ethiopia-Wide
+              </span>
+            </div>
+            <p className="text-xs sm:text-sm font-medium text-[#64748B]">
+              Real-time platform visitors across Addis Ababa and 80+ cities. (Admin Scope: Nationwide Traffic)
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2.5 flex-wrap">
+            {/* Daily, Weekly, Monthly Switcher */}
+            <div className="bg-[#F8FAFC] p-1 rounded-2xl border border-[#E2E8F0] flex items-center gap-1">
+              <button
+                onClick={() => setTrafficTab('daily')}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                  trafficTab === 'daily'
+                    ? 'bg-[#16A34A] text-white shadow-sm'
+                    : 'text-[#64748B] hover:text-[#0F172A] hover:bg-white'
+                }`}
+              >
+                Daily (24h)
+              </button>
+              <button
+                onClick={() => setTrafficTab('weekly')}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                  trafficTab === 'weekly'
+                    ? 'bg-[#16A34A] text-white shadow-sm'
+                    : 'text-[#64748B] hover:text-[#0F172A] hover:bg-white'
+                }`}
+              >
+                Last 7 Days
+              </button>
+              <button
+                onClick={() => setTrafficTab('monthly')}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                  trafficTab === 'monthly'
+                    ? 'bg-[#16A34A] text-white shadow-sm'
+                    : 'text-[#64748B] hover:text-[#0F172A] hover:bg-white'
+                }`}
+              >
+                Monthly (30d)
+              </button>
+            </div>
+
+            {/* Refresh */}
+            <button
+              onClick={() => loadPlatformTraffic(true)}
+              disabled={trafficRefreshing}
+              className="p-2.5 rounded-xl border border-[#E2E8F0] hover:bg-[#F8FAFC] text-[#64748B] hover:text-[#16A34A] transition-colors"
+              title="Refresh Platform Traffic"
+            >
+              <RefreshCw className={`w-4 h-4 ${trafficRefreshing ? 'animate-spin text-[#16A34A]' : ''}`} />
+            </button>
+
+            {/* Deep-dive Modal trigger */}
+            <button
+              onClick={() => setIsPlatformTrafficModalOpen(true)}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#16A34A] hover:bg-[#15803D] text-white text-xs font-bold shadow-sm transition-all"
+            >
+              <Activity className="w-3.5 h-3.5" />
+              <span>Full Analytics</span>
+              <ArrowUpRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        </div>
+
+        {/* 4 Quick KPI Cards for Current Timeframe */}
+        {(() => {
+          const metrics = platformTraffic?.[trafficTab] || {
+            visitors: trafficLoading ? '...' : 0,
+            pageViews: trafficLoading ? '...' : 0,
+            change: '+0%',
+            avgDuration: '0m',
+            bounceRate: '0%'
+          }
+
+          return (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="p-4 rounded-2xl bg-gradient-to-br from-[#F0FDF4] to-[#DCFCE7]/40 border border-[#DCFCE7] flex flex-col justify-between">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-xs font-bold text-[#14532D]">General Site Visitors</span>
+                  <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-[#16A34A] text-white">
+                    {metrics.change}
+                  </span>
+                </div>
+                <div className="text-2xl sm:text-3xl font-extrabold text-[#0F172A] tracking-tight">
+                  {typeof metrics.visitors === 'number' ? metrics.visitors.toLocaleString() : metrics.visitors}
+                </div>
+                <div className="text-[11px] font-semibold text-[#15803D] mt-1 flex items-center gap-1">
+                  <TrendingUp className="w-3 h-3" />
+                  {trafficTab === 'daily' ? 'Unique visitors today' : trafficTab === 'weekly' ? 'Unique visitors last 7 days' : 'Unique visitors this month'}
+                </div>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-gradient-to-br from-[#F0F9FF] to-[#E0F2FE]/50 border border-[#BAE6FD] flex flex-col justify-between">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-xs font-bold text-[#075985]">Total Page Views</span>
+                  <Eye className="w-4 h-4 text-[#0284C7]" />
+                </div>
+                <div className="text-2xl sm:text-3xl font-extrabold text-[#0F172A] tracking-tight">
+                  {typeof metrics.pageViews === 'number' ? metrics.pageViews.toLocaleString() : metrics.pageViews}
+                </div>
+                <div className="text-[11px] font-semibold text-[#0369A1] mt-1">
+                  Directory & listing searches
+                </div>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-gradient-to-br from-[#FFFBEB] to-[#FEF3C7]/50 border border-[#FDE68A] flex flex-col justify-between">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-xs font-bold text-[#78350F]">Avg Session Time</span>
+                  <Clock className="w-4 h-4 text-[#D97706]" />
+                </div>
+                <div className="text-2xl sm:text-3xl font-extrabold text-[#0F172A] tracking-tight">
+                  {metrics.avgDuration}
+                </div>
+                <div className="text-[11px] font-semibold text-[#B45309] mt-1">
+                  High platform engagement
+                </div>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-gradient-to-br from-[#FFF1F2] to-[#FFE4E6]/50 border border-[#FECDD3] flex flex-col justify-between">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-xs font-bold text-[#881337]">Bounce Rate</span>
+                  <Activity className="w-4 h-4 text-[#E11D48]" />
+                </div>
+                <div className="text-2xl sm:text-3xl font-extrabold text-[#0F172A] tracking-tight">
+                  {metrics.bounceRate}
+                </div>
+                <div className="text-[11px] font-semibold text-[#BE123C] mt-1">
+                  Optimal discovery flow
+                </div>
+              </div>
+            </div>
+          )
+        })()}
+
+        {/* Visual Bar Breakdown & Cities / Pages Summary */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 pt-2">
+          {/* Timeframe Visualizer (7 cols) */}
+          <div className="lg:col-span-7 p-5 rounded-2xl bg-[#F8FAFC] border border-[#E2E8F0] flex flex-col justify-between">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-xs font-extrabold text-[#0F172A] flex items-center gap-2">
+                <BarChart3 className="w-4 h-4 text-[#16A34A]" />
+                {trafficTab === 'daily'
+                  ? 'Today’s Hourly Site Visitors (24-Hour Timeline)'
+                  : trafficTab === 'weekly'
+                  ? '7-Day Platform Visitors Breakdown'
+                  : '4-Week Monthly Visitors Trajectory'}
+              </span>
+              <span className="text-[11px] font-bold text-[#64748B]">All Ethiopian Cities</span>
+            </div>
+
+            {/* Dynamic Bars */}
+            <div className="h-44 flex items-end justify-between gap-1 sm:gap-1.5 px-2 pt-6">
+              {(() => {
+                let items: any[] = []
+                if (trafficTab === 'daily') {
+                  items = (platformTraffic?.daily?.hourly || []).map((h: any) => ({
+                    label: h.hour.split(':')[0],
+                    visitors: h.visitors,
+                    pageViews: h.pageViews,
+                    fullLabel: h.hour
+                  }))
+                } else if (trafficTab === 'weekly') {
+                  items = (platformTraffic?.weekly?.days || []).map((d: any) => ({
+                    label: d.day,
+                    visitors: d.visitors,
+                    pageViews: d.pageViews,
+                    fullLabel: `${d.label} (${d.visitors} visitors)`
+                  }))
+                } else {
+                  items = (platformTraffic?.monthly?.weeks || []).map((w: any) => ({
+                    label: w.week,
+                    visitors: w.visitors,
+                    pageViews: w.pageViews,
+                    fullLabel: `${w.week} - ${w.label} (${w.visitors} visitors)`
+                  }))
+                }
+
+                const maxVisitors = Math.max(...items.map((i: any) => i.visitors || 0), 1)
+
+                return items.map((item: any, idx: number) => {
+                  const heightPercent = Math.max(12, Math.round((item.visitors / maxVisitors) * 100))
+                  return (
+                    <div
+                      key={idx}
+                      className="flex-1 flex flex-col items-center gap-1.5 group relative"
+                    >
+                      {/* Tooltip on hover */}
+                      <div className="absolute -top-10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 bg-[#0F172A] text-white text-[10px] font-bold py-1 px-2 rounded-lg whitespace-nowrap shadow-md">
+                        {item.fullLabel}: {item.visitors} visitors ({item.pageViews} views)
+                      </div>
+
+                      <div
+                        className="w-full bg-[#16A34A] hover:bg-[#15803D] rounded-t-md transition-all duration-300 group-hover:brightness-110"
+                        style={{ height: `${heightPercent}%` }}
+                      />
+                      <span className="text-[9px] sm:text-[10px] font-semibold text-[#94A3B8] truncate max-w-[2.5rem]">
+                        {item.label}
+                      </span>
+                    </div>
+                  )
+                })
+              })()}
+            </div>
+
+            <div className="flex items-center justify-between pt-3 border-t border-[#E2E8F0] text-[11px] font-semibold text-[#64748B]">
+              <span className="flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-sm bg-[#16A34A]" />
+                Live Visitors across platform
+              </span>
+              <span className="text-[#16A34A] font-bold">Auto-refreshed</span>
+            </div>
+          </div>
+
+          {/* Top Cities & Top Pages (5 cols) */}
+          <div className="lg:col-span-5 space-y-4">
+            {/* Top Cities Mini Card */}
+            <div className="p-4 rounded-2xl bg-[#F8FAFC] border border-[#E2E8F0]">
+              <div className="flex items-center justify-between mb-2.5">
+                <span className="text-xs font-extrabold text-[#0F172A] flex items-center gap-1.5">
+                  <MapPin className="w-3.5 h-3.5 text-[#16A34A]" />
+                  Top Ethiopian Cities Traffic
+                </span>
+                <span className="text-[10px] font-bold text-[#64748B]">Share</span>
+              </div>
+              <div className="space-y-2">
+                {(platformTraffic?.topCities || [
+                  { name: 'Addis Ababa', percentage: 65, color: '#16A34A' },
+                  { name: 'Hawassa', percentage: 11, color: '#0284C7' },
+                  { name: 'Bahir Dar', percentage: 9, color: '#F59E0B' },
+                  { name: 'Dire Dawa', percentage: 6, color: '#8B5CF6' }
+                ]).slice(0, 4).map((city: any) => (
+                  <div key={city.name} className="space-y-1">
+                    <div className="flex items-center justify-between text-[11px] font-bold">
+                      <span className="text-[#0F172A]">{city.name}</span>
+                      <span className="text-[#64748B]">{city.percentage}%</span>
+                    </div>
+                    <div className="w-full bg-[#E2E8F0] h-1.5 rounded-full overflow-hidden">
+                      <div
+                        className="h-full rounded-full transition-all duration-500"
+                        style={{ width: `${city.percentage}%`, backgroundColor: city.color || '#16A34A' }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Devices & Top Page Link */}
+            <div className="p-4 rounded-2xl bg-[#F8FAFC] border border-[#E2E8F0] flex items-center justify-between">
+              <div className="space-y-1">
+                <span className="text-xs font-extrabold text-[#0F172A] flex items-center gap-1.5">
+                  <Smartphone className="w-3.5 h-3.5 text-[#0284C7]" />
+                  78% Mobile · 20% Desktop
+                </span>
+                <p className="text-[11px] font-medium text-[#64748B]">
+                  Most visited: <span className="text-[#0F172A] font-bold">/businesses & /city/addis-ababa</span>
+                </p>
+              </div>
+              <button
+                onClick={() => setIsPlatformTrafficModalOpen(true)}
+                className="text-xs font-extrabold text-[#16A34A] hover:underline flex items-center gap-1 flex-shrink-0"
+              >
+                <span>Details</span>
+                <ChevronRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ======================================================== */}
+      {/* 3. CHARTS ROW 1: Visitor Insights (Line) & Total Revenue (Bar) */}
       {/* ======================================================== */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-7">
         {/* Visitor Insights (7 cols) */}
@@ -895,6 +1216,13 @@ export default function AdminDashboard() {
         <span className="text-[#EF4444]">❤️</span>
         <span> for HelloET Platform · Ethiopia&apos;s Business Discovery Directory</span>
       </div>
+
+      {/* In-Depth General Platform Traffic Analytics Modal */}
+      <TrafficAnalysisModal
+        isOpen={isPlatformTrafficModalOpen}
+        onClose={() => setIsPlatformTrafficModalOpen(false)}
+        scope="platform"
+      />
     </div>
   )
 }

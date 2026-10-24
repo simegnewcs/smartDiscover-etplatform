@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useSession } from 'next-auth/react'
+import TrafficAnalysisModal from '@/components/dashboard/TrafficAnalysisModal'
 import { 
   Building2, 
   TrendingUp, 
@@ -30,7 +31,8 @@ import {
   Compass,
   Briefcase,
   Share2,
-  ShieldCheck
+  ShieldCheck,
+  Activity
 } from 'lucide-react'
 
 // ========================================================
@@ -320,6 +322,7 @@ function UserDashboard({ session }: { session: any }) {
 function BusinessOwnerDashboard({ session }: { session: any }) {
   const [businesses, setBusinesses] = useState<any[]>([])
   const [recentReviews, setRecentReviews] = useState<any[]>([])
+  const [isOwnerTrafficOpen, setIsOwnerTrafficOpen] = useState(false)
   const [stats, setStats] = useState({
     averageRating: 0,
     profileCompletion: 0,
@@ -383,13 +386,23 @@ function BusinessOwnerDashboard({ session }: { session: any }) {
               Welcome back, {session?.user?.name?.split(' ')[0] || 'Partner'}! Manage your listings and customer feedback.
             </p>
           </div>
-          <Link 
-            href="/dashboard/listings/new"
-            className="inline-flex items-center gap-2 bg-[#16A34A] hover:bg-[#15803D] text-white px-5 py-2.5 rounded-2xl font-bold transition-all shadow-md shadow-[#16A34A]/20 text-xs self-start sm:self-auto"
-          >
-            <Plus className="w-4 h-4" />
-            <span>Add Business</span>
-          </Link>
+          <div className="flex items-center gap-3 self-start sm:self-auto flex-wrap">
+            <button
+              onClick={() => setIsOwnerTrafficOpen(true)}
+              className="inline-flex items-center gap-2 bg-[#F0FDF4] hover:bg-[#DCFCE7] text-[#16A34A] border border-[#16A34A]/30 px-4 py-2.5 rounded-2xl font-bold transition-all text-xs shadow-xs"
+              title="View Traffic & Customers for your businesses only"
+            >
+              <Activity className="w-4 h-4 text-[#16A34A]" />
+              <span>My Business Traffic</span>
+            </button>
+            <Link 
+              href="/dashboard/listings/new"
+              className="inline-flex items-center gap-2 bg-[#16A34A] hover:bg-[#15803D] text-white px-5 py-2.5 rounded-2xl font-bold transition-all shadow-md shadow-[#16A34A]/20 text-xs"
+            >
+              <Plus className="w-4 h-4" />
+              <span>Add Business</span>
+            </Link>
+          </div>
         </div>
 
         {/* 4 Pastel Stat Cards (HelloET Palette) */}
@@ -699,6 +712,13 @@ function BusinessOwnerDashboard({ session }: { session: any }) {
         <span className="text-[#EF4444]">❤️</span>
         <span> for HelloET Platform · Ethiopia&apos;s Business Discovery Directory</span>
       </div>
+
+      {/* Owner-Scoped Traffic Modal */}
+      <TrafficAnalysisModal
+        isOpen={isOwnerTrafficOpen}
+        onClose={() => setIsOwnerTrafficOpen(false)}
+        scope="business"
+      />
     </div>
   )
 }

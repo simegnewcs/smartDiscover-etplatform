@@ -18,9 +18,11 @@ import {
   Star,
   CheckCircle2,
   Compass,
-  Building2
+  Building2,
+  Activity
 } from 'lucide-react'
 import Sidebar from '@/components/dashboard/Sidebar'
+import TrafficAnalysisModal from '@/components/dashboard/TrafficAnalysisModal'
 
 export default function DashboardLayout({
   children,
@@ -34,6 +36,7 @@ export default function DashboardLayout({
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false)
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false)
+  const [isTrafficModalOpen, setIsTrafficModalOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
 
   useEffect(() => {
@@ -122,7 +125,21 @@ export default function DashboardLayout({
           </div>
 
           {/* Right Controls */}
-          <div className="flex items-center gap-2 sm:gap-4">
+          <div className="flex items-center gap-2 sm:gap-3">
+            {/* Traffic Analysis Button - Owner Scope */}
+            <button
+              onClick={() => setIsTrafficModalOpen(true)}
+              className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-2xl bg-gradient-to-r from-[#16A34A] to-[#15803D] hover:from-[#15803D] hover:to-[#166534] text-white text-xs font-bold shadow-sm hover:shadow-md transition-all active:scale-95 group"
+              title="View your business traffic (Daily, 7D, Monthly)"
+            >
+              <Activity className="w-4 h-4 text-[#DCFCE7] group-hover:scale-110 transition-transform" />
+              <span className="hidden sm:inline">My Business Traffic</span>
+              <span className="flex h-2 w-2 relative">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#86EFAC] opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#DCFCE7]"></span>
+              </span>
+            </button>
+
             {/* Language Selector */}
             <div className="hidden md:flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-[#F1F5F9] cursor-pointer transition-colors text-xs font-bold text-[#0F172A]">
               <span className="text-base leading-none">🇪🇹</span>
@@ -289,6 +306,13 @@ export default function DashboardLayout({
           {children}
         </main>
       </div>
+
+      {/* Traffic Analysis Modal - Business Owner Scope Only */}
+      <TrafficAnalysisModal
+        isOpen={isTrafficModalOpen}
+        onClose={() => setIsTrafficModalOpen(false)}
+        scope="business"
+      />
     </div>
   )
 }

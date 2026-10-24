@@ -26,14 +26,21 @@ export const metadata: Metadata = {
     apple: '/apple-touch-icon.png',
   },
   keywords: [
-    // --- Platform ---
+    // --- Platform & Competitive Benchmarks ---
     'HelloET', 'HelloET Ethiopia', 'helloet.devvoltz.com',
     'Ethiopia business directory', 'Ethiopian business listings',
     'local businesses Ethiopia', 'find businesses Ethiopia',
     'Ethiopia yellow pages', 'Ethiopian companies directory',
     'verified Ethiopian businesses', 'trusted businesses Ethiopia',
     'local discovery platform Ethiopia', 'businesses near me Ethiopia',
-    'Ethiopian entrepreneurs', 'small business Ethiopia',
+    'Tripadvisor Ethiopia', 'Booking com Ethiopia', 'Top10Hotels Ethiopia',
+    
+    // --- Direct Search & Near Me Intent ---
+    'better restaurant in Addis Ababa', 'nearest restaurant', 'nearest restaurant to me',
+    'restaurants near me Addis Ababa', 'nearest hotel', 'nearest hotel near me',
+    'hotels near me Ethiopia', 'coffee house near me', 'coffee house Addis Ababa',
+    'supermarket near me', 'nearest supermarket Addis Ababa',
+    'pharmacy near me', 'nearest pharmacy Addis Ababa', '24 hour pharmacy near me',
 
     // --- Restaurants + Cities ---
     'restaurants in Ethiopia', 'best restaurants Ethiopia',
