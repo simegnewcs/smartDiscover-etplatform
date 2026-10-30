@@ -218,7 +218,7 @@ export default function BusinessDetail({ slug }: { slug: string }) {
       return
     }
 
-    if (!session?.user?.id) {
+    if (!session?.user) {
       setReviewError('Please sign in to submit a review')
       return
     }

@@ -39,11 +39,17 @@ async function getUserFromDb(email: string) {
 }
 
 // Helper to get user by ID with profileImage
-async function getUserById(id: number) {
+async function getUserById(id: number | string | bigint) {
   const { prisma } = await import('./prisma')
   try {
     const user = await prisma.user.findUnique({
-      where: { id }
+      where: { id: BigInt(id) },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true
+      }
     })
     if (!user) return null
 

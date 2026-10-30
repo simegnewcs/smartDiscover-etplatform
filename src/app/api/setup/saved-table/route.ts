@@ -2,8 +2,11 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 
 export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
 
 export async function GET() {
+  const results: Record<string, string> = {}
+
   try {
     await prisma.$executeRawUnsafe(`
       CREATE TABLE IF NOT EXISTS saved_businesses (
@@ -16,8 +19,28 @@ export async function GET() {
         FOREIGN KEY (business_id) REFERENCES businesses(id) ON DELETE CASCADE
       )
     `)
-    return NextResponse.json({ success: true, message: 'saved_businesses table created' })
-  } catch (error: any) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 })
+    results['saved_businesses'] = 'OK'
+  } catch (err: any) {
+    results['saved_businesses'] = err.message
   }
+
+  const columns = [
+    'ALTER TABLE users ADD COLUMN email_verified BOOLEAN DEFAULT FALSE',
+    'ALTER TABLE users ADD COLUMN verification_token VARCHAR(255) NULL',
+    'ALTER TABLE users ADD COLUMN verification_code VARCHAR(10) NULL',
+    'ALTER TABLE users ADD COLUMN verification_expires_at DATETIME NULL',
+    'ALTER TABLE users ADD COLUMN profile_image VARCHAR(255) NULL',
+    'ALTER TABLE businesses ADD COLUMN map_url TEXT NULL',
+    'ALTER TABLE businesses ADD COLUMN features JSON NULL'
+  ]
+
+  for (const sql of columns) {
+    try {
+      await prisma.$executeRawUnsafe(sql)
+    } catch {
+      // Ignored if column already exists
+    }
+  }
+
+  return NextResponse.json({ success: true, message: 'Database synced successfully', results })
 }

@@ -1,4 +1,6 @@
 import { NextResponse } from 'next/server'
+import { getServerSession } from 'next-auth/next'
+import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 
 export const dynamic = 'force-dynamic'
@@ -10,20 +12,71 @@ export async function POST(
 ) {
   try {
     const slug = params.slug
-    const body = await request.json()
+    const body = await request.json().catch(() => ({}))
     const { rating, comment, userId } = body
 
-    // Validate required fields
-    if (!rating || rating < 1 || rating > 5) {
+    // 1. Validate rating
+    const numRating = parseInt(String(rating))
+    if (!numRating || numRating < 1 || numRating > 5) {
       return NextResponse.json(
         { success: false, error: 'Rating must be between 1 and 5' },
         { status: 400 }
       )
     }
 
-    // Find the business
+    // 2. Resolve User from NextAuth Session or Request Body
+    const session = await getServerSession(authOptions)
+    const candidateUserId = session?.user?.id || userId
+
+    let user = null
+
+    // Try finding by ID if provided
+    if (candidateUserId) {
+      try {
+        user = await prisma.user.findUnique({
+          where: { id: BigInt(candidateUserId) },
+          select: {
+            id: true,
+            name: true,
+            email: true
+          }
+        })
+      } catch (idErr) {
+        console.warn('[Review API] User lookup by ID error:', idErr)
+      }
+    }
+
+    // Fallback: Try finding user by session email
+    if (!user && session?.user?.email) {
+      try {
+        user = await prisma.user.findUnique({
+          where: { email: session.user.email },
+          select: {
+            id: true,
+            name: true,
+            email: true
+          }
+        })
+      } catch (emailErr) {
+        console.warn('[Review API] User lookup by email error:', emailErr)
+      }
+    }
+
+    if (!user) {
+      return NextResponse.json(
+        { success: false, error: 'Please sign in to submit a review' },
+        { status: 401 }
+      )
+    }
+
+    // 3. Find the business (select only required fields to avoid schema mismatch)
     const business = await prisma.business.findUnique({
-      where: { slug }
+      where: { slug },
+      select: {
+        id: true,
+        name: true,
+        slug: true
+      }
     })
 
     if (!business) {
@@ -33,27 +86,19 @@ export async function POST(
       )
     }
 
-    // Check if user exists
-    const user = await prisma.user.findUnique({
-      where: { id: BigInt(userId) }
-    })
-
-    if (!user) {
-      return NextResponse.json(
-        { success: false, error: 'User not found' },
-        { status: 404 }
-      )
-    }
-
-    // Create the review
+    // 4. Create the review
     const review = await prisma.review.create({
       data: {
-        rating: parseInt(rating),
-        comment: comment || null,
+        rating: numRating,
+        comment: comment?.trim() || null,
         businessId: business.id,
-        userId: BigInt(userId)
+        userId: user.id
       },
-      include: {
+      select: {
+        id: true,
+        rating: true,
+        comment: true,
+        createdAt: true,
         user: {
           select: {
             id: true,
@@ -63,11 +108,20 @@ export async function POST(
       }
     })
 
-    // Calculate new average rating
-    const avgRating = await prisma.review.aggregate({
-      where: { businessId: business.id },
-      _avg: { rating: true }
-    })
+    // 5. Calculate new aggregate rating
+    let computedAvg = numRating
+    let totalCount = 1
+
+    try {
+      const avgRating = await prisma.review.aggregate({
+        where: { businessId: business.id },
+        _avg: { rating: true }
+      })
+      computedAvg = avgRating._avg.rating || numRating
+      totalCount = await prisma.review.count({ where: { businessId: business.id } })
+    } catch (aggErr) {
+      console.warn('[Review API] Rating aggregate warning:', aggErr)
+    }
 
     return NextResponse.json({
       success: true,
@@ -82,14 +136,17 @@ export async function POST(
             name: review.user.name
           }
         },
-        averageRating: avgRating._avg.rating || 0,
-        totalReviews: await prisma.review.count({ where: { businessId: business.id } })
+        averageRating: Number(computedAvg.toFixed(1)),
+        totalReviews: totalCount
       }
     })
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error creating review:', error)
     return NextResponse.json(
-      { success: false, error: 'Failed to create review' },
+      { 
+        success: false, 
+        error: error?.message || 'Failed to create review' 
+      },
       { status: 500 }
     )
   }
