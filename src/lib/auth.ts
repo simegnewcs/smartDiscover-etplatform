@@ -108,6 +108,11 @@ export const authOptions: NextAuthOptions = {
           return null
         }
 
+        // Check if user has verified their email address
+        if (user.emailVerified === false && user.role !== 'ADMIN') {
+          throw new Error('EMAIL_NOT_VERIFIED')
+        }
+
         return {
           id: user.id.toString(),
           email: user.email,
@@ -136,24 +141,31 @@ export const authOptions: NextAuthOptions = {
           })
 
           if (!dbUser) {
-            // Automatically sign up new user via Google
+            // Automatically sign up new user via Google (Google emails are pre-verified)
             dbUser = await prisma.user.create({
               data: {
                 email: user.email,
                 name: user.name || 'Google User',
                 passwordHash: 'GOOGLE_OAUTH_ACCOUNT',
                 profileImage: user.image || null,
-                role: 'USER'
+                role: 'USER',
+                emailVerified: true
               }
             })
-          } else if (user.image && !dbUser.profileImage) {
-            // Sync Google profile image if not set
-            await prisma.user
-              .update({
-                where: { id: dbUser.id },
-                data: { profileImage: user.image }
-              })
-              .catch(() => {})
+          } else {
+            // Ensure emailVerified is true since Google authenticated them
+            const updatePayload: Record<string, any> = {}
+            if (!dbUser.emailVerified) updatePayload.emailVerified = true
+            if (user.image && !dbUser.profileImage) updatePayload.profileImage = user.image
+
+            if (Object.keys(updatePayload).length > 0) {
+              await prisma.user
+                .update({
+                  where: { id: dbUser.id },
+                  data: updatePayload
+                })
+                .catch(() => {})
+            }
           }
 
           // Populate NextAuth user object

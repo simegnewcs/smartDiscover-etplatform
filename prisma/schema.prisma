@@ -16,9 +16,13 @@ model User {
   name         String
   passwordHash String   @map("password_hash")
   profileImage String?  @map("profile_image")
-  role         UserRole @default(USER)
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @updatedAt @map("updated_at")
+  role                  UserRole  @default(USER)
+  emailVerified         Boolean   @default(false) @map("email_verified")
+  verificationToken     String?   @map("verification_token")
+  verificationCode      String?   @map("verification_code")
+  verificationExpiresAt DateTime? @map("verification_expires_at")
+  createdAt             DateTime  @default(now()) @map("created_at")
+  updatedAt             DateTime  @updatedAt @map("updated_at")
 
   // Relations
   ownedBusinesses  Business[]      @relation("BusinessOwner")

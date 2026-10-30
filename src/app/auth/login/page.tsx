@@ -74,7 +74,11 @@ function LoginForm() {
       })
 
       if (result?.error) {
-        setError('Login failed. Please check your credentials.')
+        if (result.error.includes('EMAIL_NOT_VERIFIED')) {
+          setError('EMAIL_NOT_VERIFIED')
+        } else {
+          setError('Login failed. Please check your credentials.')
+        }
         setIsLoading(false)
         return
       }
@@ -137,8 +141,24 @@ function LoginForm() {
             <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start space-x-3">
               <AlertCircle className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" />
               <div>
-                <p className="text-sm text-red-800 font-medium">Login Error</p>
-                <p className="text-sm text-red-600">{error}</p>
+                <p className="text-sm text-red-800 font-medium">
+                  {error === 'EMAIL_NOT_VERIFIED' ? 'Email Not Verified' : 'Login Error'}
+                </p>
+                <p className="text-sm text-red-600">
+                  {error === 'EMAIL_NOT_VERIFIED' ? (
+                    <>
+                      Please verify your email address to activate your account. A verification email was sent by <strong>DevVoltz Technology</strong>.{' '}
+                      <Link
+                        href={`/auth/verify-email?email=${encodeURIComponent(formData.email)}`}
+                        className="text-[#16A34A] underline font-semibold block mt-1 hover:text-[#166534]"
+                      >
+                        Enter 6-digit code or resend verification &rarr;
+                      </Link>
+                    </>
+                  ) : (
+                    error
+                  )}
+                </p>
               </div>
             </div>
           )}

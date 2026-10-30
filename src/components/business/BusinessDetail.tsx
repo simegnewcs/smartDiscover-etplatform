@@ -532,11 +532,29 @@ export default function BusinessDetail({ slug }: { slug: string }) {
                     <span className="bg-gradient-to-r from-brand-green to-primary-800 text-white px-4 py-1.5 rounded-full text-sm font-semibold shadow-md">
                       {business.category.name}
                     </span>
-                    <div className="flex items-center gap-1 bg-yellow-50 px-3 py-1.5 rounded-full">
-                      <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                      <span className="font-semibold text-neutral-700">{business.averageRating.toFixed(1)}</span>
-                      <span className="text-sm text-neutral-500">({business.totalReviews} reviews)</span>
-                    </div>
+                    {(() => {
+                      const googleReviewFeature = Array.isArray(business.features) 
+                        ? business.features.find((f: any) => typeof f === 'string' && f.startsWith('googleReviews:'))
+                        : null
+                      const customGoogleCount = googleReviewFeature ? googleReviewFeature.replace('googleReviews:', '') : null
+                      return (
+                        <>
+                          <div className="flex items-center gap-1 bg-yellow-50 px-3 py-1.5 rounded-full">
+                            <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                            <span className="font-semibold text-neutral-700">{business.averageRating.toFixed(1)}</span>
+                            <span className="text-sm text-neutral-500">
+                              ({business.totalReviews} reviews {customGoogleCount ? `• ${customGoogleCount}` : (business.mapUrl ? '• on Google Maps' : '')})
+                            </span>
+                          </div>
+                          {business.mapUrl && (
+                            <span className="inline-flex items-center gap-1.5 bg-blue-50 text-blue-700 border border-blue-200 px-3 py-1.5 rounded-full text-xs font-bold">
+                              <CheckCircle2 className="w-3.5 h-3.5 text-blue-600" />
+                              Google Maps Verified
+                            </span>
+                          )}
+                        </>
+                      )
+                    })()}
                   </div>
                 </div>
               </div>
@@ -827,6 +845,50 @@ export default function BusinessDetail({ slug }: { slug: string }) {
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
+                  </a>
+                </div>
+              )}
+
+              {/* Google Maps Social Proof Card */}
+              {business.mapUrl && (
+                <div className="mb-6 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center shrink-0 border border-blue-100">
+                      <svg className="w-5 h-5" viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                      </svg>
+                    </div>
+                    {(() => {
+                      const googleReviewFeature = Array.isArray(business.features) 
+                        ? business.features.find((f: any) => typeof f === 'string' && f.startsWith('googleReviews:'))
+                        : null
+                      const customGoogleCount = googleReviewFeature ? googleReviewFeature.replace('googleReviews:', '') : null
+                      return (
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <p className="font-bold text-neutral-800 text-sm">Google Maps Verified Listing</p>
+                            <span className="text-[11px] font-bold px-2 py-0.5 bg-blue-100 text-blue-800 rounded-full">
+                              {customGoogleCount || 'Reviews & Videos'}
+                            </span>
+                          </div>
+                          <p className="text-xs text-neutral-600 mt-0.5">
+                            Browse verified guest photos, customer video walkthroughs, and full review history on Google Maps.
+                          </p>
+                        </div>
+                      )
+                    })()}
+                  </div>
+                  <a
+                    href={business.mapUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-all shadow-sm hover:shadow shrink-0"
+                  >
+                    <span>View on Google Maps</span>
+                    <Navigation className="w-3.5 h-3.5" />
                   </a>
                 </div>
               )}

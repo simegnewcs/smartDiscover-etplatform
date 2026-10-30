@@ -107,12 +107,11 @@ export default function RegisterPage() {
       const data = await response.json()
 
       if (response.ok) {
-        setSuccess(userType === 'BUSINESS_OWNER'
-          ? 'Registration successful! You can now add your business from the dashboard.'
-          : 'Registration successful! Redirecting to login...')
+        const targetEmail = formData.email.trim()
+        setSuccess('Account created! A verification email has been sent from DevVoltz Technology to ' + targetEmail + '. Redirecting to verification...')
         setTimeout(() => {
-          window.location.href = '/auth/login'
-        }, 2500)
+          window.location.href = `/auth/verify-email?email=${encodeURIComponent(targetEmail)}`
+        }, 1800)
       } else {
         setError(data.message || 'Registration failed. Please try again.')
       }

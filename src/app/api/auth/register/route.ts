@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server'
+import { randomBytes } from 'crypto'
 import { prisma } from '@/lib/prisma'
+import { sendVerificationEmail } from '@/lib/email'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -20,6 +22,9 @@ export async function POST(request: Request) {
       )
     }
 
+    const trimmedEmail = email.trim().toLowerCase()
+    const trimmedName = name.trim()
+
     // Password must be at least 8 characters
     if (password.length < 8) {
       return NextResponse.json(
@@ -31,7 +36,7 @@ export async function POST(request: Request) {
     // Check if user already exists
     try {
       const existingUser = await prisma.user.findUnique({
-        where: { email }
+        where: { email: trimmedEmail }
       })
 
       if (existingUser) {
@@ -50,17 +55,25 @@ export async function POST(request: Request) {
 
     // Validate role
     const userRole = role === 'BUSINESS_OWNER' || role === 'ADMIN' ? role : 'USER'
-    console.log('User role will be:', userRole)
 
-    // Create user (using plain text password for demo - in production use bcrypt)
-    let user;
+    // Generate secure token and 6-digit verification code
+    const verificationToken = randomBytes(32).toString('hex')
+    const verificationCode = Math.floor(100000 + Math.random() * 900000).toString()
+    const verificationExpiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000) // 24 hours
+
+    // Create user in database
+    let user
     try {
       user = await prisma.user.create({
         data: {
-          name,
-          email,
-          passwordHash: password, // In production, hash this with bcrypt
+          name: trimmedName,
+          email: trimmedEmail,
+          passwordHash: password,
           role: userRole,
+          emailVerified: false,
+          verificationToken,
+          verificationCode,
+          verificationExpiresAt,
         }
       })
     } catch (createError) {
@@ -71,17 +84,31 @@ export async function POST(request: Request) {
       )
     }
 
-    // Remove sensitive data and convert BigInt to string
-    const { passwordHash, ...userWithoutPassword } = user
-    const userForResponse = {
-      ...userWithoutPassword,
-      id: user.id.toString() // Convert BigInt to string
+    // Send verification email via DevVoltz Technology
+    try {
+      await sendVerificationEmail({
+        toEmail: trimmedEmail,
+        recipientName: trimmedName,
+        verificationToken,
+        verificationCode,
+      })
+    } catch (emailError) {
+      console.error('Error sending verification email:', emailError)
     }
 
+    // Return response
     return NextResponse.json({
       success: true,
-      message: 'Registration successful',
-      user: userForResponse
+      requireVerification: true,
+      email: trimmedEmail,
+      message: 'Account created! Please check your email to verify your account.',
+      user: {
+        id: user.id.toString(),
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        emailVerified: false,
+      }
     })
 
   } catch (error) {
@@ -92,3 +119,4 @@ export async function POST(request: Request) {
     )
   }
 }
+

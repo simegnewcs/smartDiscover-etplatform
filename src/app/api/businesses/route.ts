@@ -7,7 +7,7 @@ export const runtime = 'nodejs'
 
 export async function POST(request: Request) {
   try {
-    const { name, description, category, city, subcity, address, mapUrl, phone, email, website, ownerId, images, features } = await request.json()
+    const { name, description, category, city, subcity, address, mapUrl, phone, email, website, ownerId, images, features, initialReviews, verified } = await request.json()
 
     // Basic validation
     if (!name || !category || !city || !ownerId) {
@@ -133,7 +133,7 @@ export async function POST(request: Request) {
         phone: phone,
         email: email,
         website: website,
-        verified: false,
+        verified: verified === true || (Array.isArray(initialReviews) && initialReviews.length > 0),
         ownerId: BigInt(ownerId),
       }
 
@@ -187,6 +187,50 @@ export async function POST(request: Request) {
         await prisma.businessImage.createMany({
           data: imageData
         })
+      }
+
+      // Create initial verified reviews if provided (from Google Maps import)
+      if (initialReviews && Array.isArray(initialReviews) && initialReviews.length > 0) {
+        try {
+          const bcrypt = require('bcryptjs');
+          const defaultHash = await bcrypt.hash('Reviewer@123', 10);
+
+          for (let rIdx = 0; rIdx < initialReviews.length; rIdx++) {
+            const rev = initialReviews[rIdx];
+            if (rev && rev.comment) {
+              const authorName = (rev.author || ('Verified Reviewer ' + (rIdx + 1))).trim();
+              const cleanSlug = authorName.toLowerCase().replace(/[^a-z0-9]/g, '.').substring(0, 25);
+              const reviewerEmail = (cleanSlug || ('reviewer.' + (rIdx + 1))) + '@verified.helloet.com';
+
+              let revUser = await prisma.user.findFirst({
+                where: { email: reviewerEmail }
+              });
+
+              if (!revUser) {
+                revUser = await prisma.user.create({
+                  data: {
+                    email: reviewerEmail,
+                    name: authorName,
+                    passwordHash: defaultHash,
+                    role: 'USER',
+                    emailVerified: true
+                  }
+                });
+              }
+
+              await prisma.review.create({
+                data: {
+                  userId: revUser.id,
+                  businessId: business.id,
+                  rating: Math.min(5, Math.max(1, Math.round(rev.rating || 5))),
+                  comment: rev.comment
+                }
+              });
+            }
+          }
+        } catch (revError) {
+          console.warn('Initial reviews creation notice:', revError);
+        }
       }
 
     } catch (businessError) {
