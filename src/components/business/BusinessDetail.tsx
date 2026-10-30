@@ -902,11 +902,11 @@ export default function BusinessDetail({ slug }: { slug: string }) {
                         <div className="flex items-center gap-4">
                           <div className="w-12 h-12 bg-gradient-to-br from-brand-green to-primary-800 rounded-full flex items-center justify-center shadow-md">
                             <span className="text-white font-bold text-lg">
-                              {review.user.name.charAt(0).toUpperCase()}
+                              {(review.user?.name || 'Verified Customer').charAt(0).toUpperCase()}
                             </span>
                           </div>
                           <div>
-                            <div className="font-bold text-neutral-800">{review.user.name}</div>
+                            <div className="font-bold text-neutral-800">{review.user?.name || 'Verified Customer'}</div>
                             <div className="flex items-center gap-1 mt-1">
                               {[...Array(5)].map((_, i) => (
                                 <Star

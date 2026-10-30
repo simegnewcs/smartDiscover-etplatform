@@ -191,45 +191,73 @@ export async function POST(request: Request) {
 
       // Create initial verified reviews if provided (from Google Maps import)
       if (initialReviews && Array.isArray(initialReviews) && initialReviews.length > 0) {
-        try {
-          const bcrypt = require('bcryptjs');
-          const defaultHash = await bcrypt.hash('Reviewer@123', 10);
+        const STATIC_REVIEWER_HASH = '$2a$10$w095aGj9o0K4fB1dF6pSyeB8pY8o0x8E8Wc4yF1Jds0f8g7h6j5k';
 
-          for (let rIdx = 0; rIdx < initialReviews.length; rIdx++) {
-            const rev = initialReviews[rIdx];
-            if (rev && rev.comment) {
-              const authorName = (rev.author || ('Verified Reviewer ' + (rIdx + 1))).trim();
-              const cleanSlug = authorName.toLowerCase().replace(/[^a-z0-9]/g, '.').substring(0, 25);
-              const reviewerEmail = (cleanSlug || ('reviewer.' + (rIdx + 1))) + '@verified.helloet.com';
+        for (let rIdx = 0; rIdx < initialReviews.length; rIdx++) {
+          const rev = initialReviews[rIdx];
+          if (!rev || !rev.comment) continue;
 
-              let revUser = await prisma.user.findFirst({
-                where: { email: reviewerEmail }
-              });
+          try {
+            const authorName = (rev.author || ('Verified Reviewer ' + (rIdx + 1))).trim();
+            const safePrefix = authorName.toLowerCase().replace(/[^a-z0-9]/g, '').substring(0, 15) || 'reviewer';
+            const reviewerEmail = `${safePrefix}.${rIdx + 1}@verified.helloet.com`;
 
-              if (!revUser) {
+            let revUser = await prisma.user.findFirst({
+              where: { email: reviewerEmail }
+            });
+
+            if (!revUser) {
+              try {
+                // Try with emailVerified: true (if schema migration applied)
                 revUser = await prisma.user.create({
                   data: {
                     email: reviewerEmail,
                     name: authorName,
-                    passwordHash: defaultHash,
+                    passwordHash: STATIC_REVIEWER_HASH,
                     role: 'USER',
                     emailVerified: true
                   }
                 });
+              } catch (userCreateErr) {
+                // Resilient fallback without emailVerified if column missing in production
+                revUser = await prisma.user.create({
+                  data: {
+                    email: reviewerEmail,
+                    name: authorName,
+                    passwordHash: STATIC_REVIEWER_HASH,
+                    role: 'USER'
+                  }
+                });
               }
+            }
 
-              await prisma.review.create({
-                data: {
-                  userId: revUser.id,
-                  businessId: business.id,
-                  rating: Math.min(5, Math.max(1, Math.round(rev.rating || 5))),
-                  comment: rev.comment
-                }
-              });
+            const finalRating = Math.min(5, Math.max(1, Math.round(rev.rating || 5)));
+            await prisma.review.create({
+              data: {
+                userId: revUser.id,
+                businessId: business.id,
+                rating: finalRating,
+                comment: rev.comment
+              }
+            });
+          } catch (itemErr) {
+            console.warn(`[Review Creation] Error creating initial review ${rIdx}:`, itemErr);
+            // Fallback: Link review to business owner if user creation failed
+            try {
+              if (business.ownerId && rev.comment) {
+                await prisma.review.create({
+                  data: {
+                    userId: business.ownerId,
+                    businessId: business.id,
+                    rating: Math.min(5, Math.max(1, Math.round(rev.rating || 5))),
+                    comment: rev.comment
+                  }
+                });
+              }
+            } catch (fallbackErr) {
+              console.warn('[Review Creation] Owner fallback review skipped:', fallbackErr);
             }
           }
-        } catch (revError) {
-          console.warn('Initial reviews creation notice:', revError);
         }
       }
 
