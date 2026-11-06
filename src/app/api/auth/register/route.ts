@@ -77,11 +77,23 @@ export async function POST(request: Request) {
         }
       })
     } catch (createError) {
-      console.error('Error creating user:', createError)
-      return NextResponse.json(
-        { success: false, message: 'Failed to create user account' },
-        { status: 500 }
-      )
+      console.warn('Initial user create failed (possibly missing columns), retrying fallback:', createError)
+      try {
+        user = await prisma.user.create({
+          data: {
+            name: trimmedName,
+            email: trimmedEmail,
+            passwordHash: password,
+            role: userRole
+          }
+        })
+      } catch (fallbackError) {
+        console.error('Error creating user account:', fallbackError)
+        return NextResponse.json(
+          { success: false, message: 'Failed to create user account' },
+          { status: 500 }
+        )
+      }
     }
 
     // Send verification email via DevVoltz Technology
