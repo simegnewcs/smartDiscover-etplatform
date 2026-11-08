@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { motion, AnimatePresence } from 'framer-motion'
 import {
   Building2,
   Search,
@@ -14,7 +15,10 @@ import {
   Eye,
   Plus,
   Clock,
-  Edit
+  Edit,
+  AlertTriangle,
+  AlertCircle,
+  X
 } from 'lucide-react'
 
 interface Business {
@@ -40,7 +44,10 @@ export default function AdminBusinessesPage() {
   const [search, setSearch] = useState('')
   const [verifiedFilter, setVerifiedFilter] = useState('')
   const [togglingId, setTogglingId] = useState<string | null>(null)
-  const [deletingId, setDeletingId] = useState<string | null>(null)
+  const [businessToDelete, setBusinessToDelete] = useState<Business | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [deleteError, setDeleteError] = useState<string | null>(null)
+  const [successBanner, setSuccessBanner] = useState<string | null>(null)
 
   const fetchBusinesses = async () => {
     setLoading(true)
@@ -91,15 +98,39 @@ export default function AdminBusinessesPage() {
     }
   }
 
-  const handleDelete = async (id: string) => {
-    if (!confirm('Delete this business? This will remove all associated reviews and data.')) return
-    setDeletingId(id)
+  const openDeleteModal = (biz: Business) => {
+    setBusinessToDelete(biz)
+    setDeleteError(null)
+  }
+
+  const closeDeleteModal = () => {
+    if (isDeleting) return
+    setBusinessToDelete(null)
+    setDeleteError(null)
+  }
+
+  const handleConfirmDelete = async () => {
+    if (!businessToDelete) return
+    setIsDeleting(true)
+    setDeleteError(null)
+
     try {
-      const res = await fetch(`/api/admin/businesses/${id}`, { method: 'DELETE' })
+      const res = await fetch(`/api/admin/businesses/${businessToDelete.id}`, { method: 'DELETE' })
       const data = await res.json()
-      if (data.success) setBusinesses((prev) => prev.filter((b) => b.id !== id))
+      if (data.success) {
+        const deletedName = businessToDelete.name
+        setBusinesses((prev) => prev.filter((b) => b.id !== businessToDelete.id))
+        setTotal((prev) => Math.max(0, prev - 1))
+        setBusinessToDelete(null)
+        setSuccessBanner(`"${deletedName}" was successfully deleted.`)
+        setTimeout(() => setSuccessBanner(null), 4000)
+      } else {
+        setDeleteError(data.message || 'Failed to delete business. Please try again.')
+      }
+    } catch (err) {
+      setDeleteError('Network error while deleting business. Please try again.')
     } finally {
-      setDeletingId(null)
+      setIsDeleting(false)
     }
   }
 
@@ -122,6 +153,30 @@ export default function AdminBusinessesPage() {
           <Plus className="w-4 h-4" /> Add Business
         </Link>
       </div>
+
+      {/* Success Notification Banner */}
+      <AnimatePresence>
+        {successBanner && (
+          <motion.div
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            className="p-3.5 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-2xl flex items-center justify-between text-xs font-semibold shadow-sm"
+          >
+            <div className="flex items-center gap-2.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+              <span>{successBanner}</span>
+            </div>
+            <button
+              onClick={() => setSuccessBanner(null)}
+              className="p-1 hover:bg-emerald-100 rounded-lg text-emerald-700 transition-colors"
+              aria-label="Dismiss"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-3">
@@ -257,16 +312,11 @@ export default function AdminBusinessesPage() {
                           )}
                         </button>
                         <button
-                          onClick={() => handleDelete(biz.id)}
-                          disabled={deletingId === biz.id}
+                          onClick={() => openDeleteModal(biz)}
                           className="p-2 rounded-xl text-[#64748B] hover:bg-[#FEF2F2] hover:text-[#DC2626] transition-colors"
                           title="Delete business"
                         >
-                          {deletingId === biz.id ? (
-                            <Loader2 className="w-4 h-4 animate-spin" />
-                          ) : (
-                            <Trash2 className="w-4 h-4" />
-                          )}
+                          <Trash2 className="w-4 h-4" />
                         </button>
                       </div>
                     </td>
@@ -302,6 +352,112 @@ export default function AdminBusinessesPage() {
           </div>
         )}
       </div>
+
+      {/* Custom Styled Delete Confirmation Modal */}
+      <AnimatePresence>
+        {businessToDelete && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={closeDeleteModal}
+              className="fixed inset-0 bg-[#0F172A]/60 backdrop-blur-sm"
+            />
+
+            {/* Modal Dialog Card */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 14 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 14 }}
+              transition={{ duration: 0.2, ease: 'easeOut' }}
+              className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl border border-[#E2E8F0] overflow-hidden z-10"
+            >
+              {/* Top Accent Danger Bar */}
+              <div className="h-1.5 bg-gradient-to-r from-red-500 via-rose-500 to-red-600" />
+
+              <div className="p-6 sm:p-7">
+                {/* Close Button */}
+                <button
+                  type="button"
+                  onClick={closeDeleteModal}
+                  disabled={isDeleting}
+                  className="absolute right-5 top-5 p-2 rounded-xl text-[#94A3B8] hover:text-[#0F172A] hover:bg-[#F1F5F9] transition-colors disabled:opacity-40"
+                  aria-label="Close"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+
+                {/* Warning Icon Badge */}
+                <div className="w-14 h-14 rounded-2xl bg-red-50 border border-red-100 flex items-center justify-center mx-auto text-[#DC2626] mb-4 shadow-sm shadow-red-100">
+                  <AlertTriangle className="w-7 h-7" />
+                </div>
+
+                {/* Dialog Content */}
+                <div className="text-center space-y-2">
+                  <h3 className="text-xl font-extrabold text-[#0F172A] tracking-tight">
+                    Delete Business?
+                  </h3>
+                  <p className="text-xs text-[#64748B]">
+                    Are you sure you want to permanently delete this listing?
+                  </p>
+                  <div className="inline-block mt-1 px-3.5 py-1.5 bg-[#F8FAFC] rounded-xl font-bold text-xs text-[#0F172A] max-w-full truncate border border-[#E2E8F0]">
+                    {businessToDelete.name}
+                  </div>
+                </div>
+
+                {/* Warning Callout Box */}
+                <div className="mt-4 p-3.5 bg-[#FEF2F2] border border-[#FEE2E2] rounded-2xl flex items-start gap-3 text-left">
+                  <AlertCircle className="w-4 h-4 text-[#DC2626] flex-shrink-0 mt-0.5" />
+                  <div className="text-[11px] leading-relaxed text-[#991B1B] font-medium">
+                    <strong className="font-bold text-[#7F1D1D]">This action cannot be undone.</strong>{' '}
+                    The business details, photos, and all{' '}
+                    <strong>{businessToDelete.reviewCount} customer review(s)</strong> will be permanently removed from HelloET.
+                  </div>
+                </div>
+
+                {/* Error Banner if deletion failed */}
+                {deleteError && (
+                  <div className="mt-3 p-3 bg-red-100 border border-red-200 rounded-xl text-xs text-red-800 font-semibold text-center">
+                    {deleteError}
+                  </div>
+                )}
+
+                {/* Action Buttons */}
+                <div className="mt-6 flex items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={closeDeleteModal}
+                    disabled={isDeleting}
+                    className="flex-1 px-4 py-2.5 rounded-xl border border-[#E2E8F0] hover:bg-[#F8FAFC] text-[#64748B] hover:text-[#0F172A] font-bold transition-colors text-xs disabled:opacity-50"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleConfirmDelete}
+                    disabled={isDeleting}
+                    className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#DC2626] hover:bg-[#B91C1C] active:bg-[#991B1B] text-white font-bold transition-all text-xs shadow-md shadow-[#DC2626]/20 disabled:opacity-60"
+                  >
+                    {isDeleting ? (
+                      <>
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        <span>Deleting...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Trash2 className="w-3.5 h-3.5" />
+                        <span>Yes, Delete</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
