@@ -229,8 +229,9 @@ export default function RegisterPage() {
                   value={formData.name}
                   onChange={handleInputChange}
                   required
+                  autoComplete="off"
                   className="w-full pl-10 pr-4 py-3 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#16A34A]"
-                  placeholder="Enter Name"
+                  placeholder="e.g. Kaleab Mengistu"
                 />
               </div>
             </div>
