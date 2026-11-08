@@ -297,10 +297,15 @@ export async function DELETE(
       )
     }
 
-    // Delete business (cascade will handle related records)
-    await prisma.business.delete({
-      where: { id: businessId }
-    })
+    // Delete all child records in a transaction to satisfy foreign key constraints before deleting business
+    await prisma.$transaction([
+      prisma.review.deleteMany({ where: { businessId } }),
+      prisma.businessImage.deleteMany({ where: { businessId } }),
+      prisma.businessHour.deleteMany({ where: { businessId } }),
+      prisma.savedBusiness.deleteMany({ where: { businessId } }),
+      prisma.subscription.deleteMany({ where: { businessId } }),
+      prisma.business.delete({ where: { id: businessId } }),
+    ])
 
     return NextResponse.json({
       success: true,

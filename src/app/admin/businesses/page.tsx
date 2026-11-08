@@ -125,7 +125,7 @@ export default function AdminBusinessesPage() {
         setSuccessBanner(`"${deletedName}" was successfully deleted.`)
         setTimeout(() => setSuccessBanner(null), 4000)
       } else {
-        setDeleteError(data.message || 'Failed to delete business. Please try again.')
+        setDeleteError(data.error || data.message || 'Failed to delete business. Please try again.')
       }
     } catch (err) {
       setDeleteError('Network error while deleting business. Please try again.')

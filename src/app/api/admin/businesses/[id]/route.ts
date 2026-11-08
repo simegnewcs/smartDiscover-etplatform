@@ -39,14 +39,30 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   const session = await requireAdmin()
-  if (!session) return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  if (!session) return NextResponse.json({ success: false, error: 'Forbidden' }, { status: 403 })
 
   const businessId = parseInt(params.id)
+  if (isNaN(businessId)) {
+    return NextResponse.json({ success: false, error: 'Invalid business ID' }, { status: 400 })
+  }
 
   try {
-    await prisma.business.delete({ where: { id: businessId } })
-    return NextResponse.json({ success: true })
-  } catch (error) {
-    return NextResponse.json({ error: 'Failed to delete business' }, { status: 500 })
+    // Cascade-delete all child records in a transaction to satisfy foreign key constraints
+    await prisma.$transaction([
+      prisma.review.deleteMany({ where: { businessId } }),
+      prisma.businessImage.deleteMany({ where: { businessId } }),
+      prisma.businessHour.deleteMany({ where: { businessId } }),
+      prisma.savedBusiness.deleteMany({ where: { businessId } }),
+      prisma.subscription.deleteMany({ where: { businessId } }),
+      prisma.business.delete({ where: { id: businessId } }),
+    ])
+
+    return NextResponse.json({ success: true, message: 'Business deleted successfully' })
+  } catch (error: any) {
+    console.error('Error deleting business:', error)
+    return NextResponse.json(
+      { success: false, error: error?.message || 'Failed to delete business' },
+      { status: 500 }
+    )
   }
 }
