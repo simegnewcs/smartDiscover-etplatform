@@ -23,10 +23,30 @@ export async function GET(request: Request) {
       user = await prisma.user.findFirst({
         where: { verificationToken: token }
       })
-    } else if (email) {
-      user = await prisma.user.findUnique({
+    }
+
+    // If user was not found by token (e.g. token already cleared after prior verification, or expired),
+    // check by email to provide friendly feedback
+    if (!user && email) {
+      const emailUser = await prisma.user.findUnique({
         where: { email: email.toLowerCase() }
       })
+      if (emailUser) {
+        if (emailUser.emailVerified) {
+          return NextResponse.json({
+            success: true,
+            alreadyVerified: true,
+            message: 'Your email has already been verified. You can log in.'
+          })
+        }
+        if (token && emailUser.verificationToken !== token) {
+          return NextResponse.json(
+            { success: false, message: 'Invalid or expired verification token. Please use the newest link or request a new one.' },
+            { status: 400 }
+          )
+        }
+        user = emailUser
+      }
     }
 
     if (!user) {

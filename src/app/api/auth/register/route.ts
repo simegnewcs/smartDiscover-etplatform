@@ -99,11 +99,16 @@ export async function POST(request: Request) {
 
     // Send verification email via DevVoltz Technology
     try {
+      const host = request.headers.get('x-forwarded-host') || request.headers.get('host')
+      const proto = request.headers.get('x-forwarded-proto') || (host?.includes('localhost') ? 'http' : 'https')
+      const appUrl = host ? `${proto}://${host}` : undefined
+
       await sendVerificationEmail({
         toEmail: trimmedEmail,
         recipientName: trimmedName,
         verificationToken,
         verificationCode,
+        appUrl,
       })
     } catch (emailError) {
       console.error('Error sending verification email:', emailError)

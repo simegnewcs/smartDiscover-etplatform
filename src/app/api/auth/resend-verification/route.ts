@@ -55,11 +55,16 @@ export async function POST(request: Request) {
     })
 
     // Send email via DevVoltz Technology
+    const host = request.headers.get('x-forwarded-host') || request.headers.get('host')
+    const proto = request.headers.get('x-forwarded-proto') || (host?.includes('localhost') ? 'http' : 'https')
+    const appUrl = host ? `${proto}://${host}` : undefined
+
     await sendVerificationEmail({
       toEmail: user.email,
       recipientName: user.name,
       verificationToken,
       verificationCode,
+      appUrl,
     })
 
     return NextResponse.json({

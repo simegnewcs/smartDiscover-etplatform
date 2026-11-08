@@ -5,11 +5,29 @@ interface VerificationEmailParams {
   recipientName: string
   verificationToken: string
   verificationCode: string
+  appUrl?: string
 }
 
-function getBaseUrl(): string {
+function getBaseUrl(appUrl?: string): string {
+  if (appUrl && appUrl.startsWith('http')) {
+    return appUrl.replace(/\/$/, '')
+  }
+  if (process.env.NEXT_PUBLIC_APP_URL) {
+    return process.env.NEXT_PUBLIC_APP_URL.replace(/\/$/, '')
+  }
   if (process.env.NEXTAUTH_URL) {
-    return process.env.NEXTAUTH_URL.replace(/\/$/, '')
+    const raw = process.env.NEXTAUTH_URL.replace(/\/$/, '')
+    // Sanitize stale or mistyped vercel domain
+    if (raw.includes('smart-discover-etplatform.vercel.app')) {
+      return 'https://helloet.devvoltz.com'
+    }
+    return raw
+  }
+  if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
+    return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+  }
+  if (process.env.NODE_ENV === 'production') {
+    return 'https://helloet.devvoltz.com'
   }
   return 'http://localhost:3000'
 }
@@ -40,8 +58,9 @@ export async function sendVerificationEmail({
   recipientName,
   verificationToken,
   verificationCode,
+  appUrl,
 }: VerificationEmailParams): Promise<{ success: boolean; simulated?: boolean; message?: string }> {
-  const baseUrl = getBaseUrl()
+  const baseUrl = getBaseUrl(appUrl)
   const verificationUrl = `${baseUrl}/auth/verify-email?token=${verificationToken}&email=${encodeURIComponent(toEmail)}`
   const senderEmail = process.env.SMTP_USER || 'devvoltztech@gmail.com'
   const senderName = process.env.SMTP_FROM || `DevVoltz Technology <${senderEmail}>`
