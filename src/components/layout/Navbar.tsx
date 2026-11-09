@@ -5,7 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { Menu, X, User, LogIn, LogOut, Plus, ChevronDown, Compass, LayoutDashboard, Search, Building2, Heart, Bell, Bookmark, CreditCard } from 'lucide-react'
+import { Menu, X, User, LogIn, LogOut, Plus, ChevronDown, Compass, LayoutDashboard, Search, Building2, Heart, Bell, Bookmark, CreditCard, HelpCircle } from 'lucide-react'
 import UniversalSidebar from '@/components/layout/UniversalSidebar'
 
 export default function Navbar() {
@@ -97,9 +97,20 @@ export default function Navbar() {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
+  const handleNavClick = (href: string) => {
+    if (href.startsWith('/#')) {
+      const elementId = href.replace('/#', '')
+      const el = document.getElementById(elementId)
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' })
+      }
+    }
+  }
+
   const navigationItems = [
     { name: 'Businesses', href: '/businesses', icon: Building2 },
     { name: 'Pricing', href: '/pricing', icon: CreditCard },
+    { name: 'FAQ', href: '/#faq', icon: HelpCircle },
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard }
   ]
 
@@ -151,6 +162,7 @@ export default function Navbar() {
                 <Link
                   key={item.name}
                   href={item.href}
+                  onClick={() => handleNavClick(item.href)}
                   className="flex items-center space-x-1.5 px-4 py-2 rounded-lg text-white/90 hover:text-white hover:bg-white/10 transition-all font-medium"
                 >
                   <item.icon className="w-4 h-4" />
@@ -427,7 +439,10 @@ export default function Navbar() {
                   key={item.name}
                   href={item.href}
                   className="flex items-center space-x-3 text-neutral-700 hover:text-[#16A34A] hover:bg-neutral-50 font-medium px-4 py-3 rounded-xl transition-colors"
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  onClick={() => {
+                    setIsMobileMenuOpen(false)
+                    handleNavClick(item.href)
+                  }}
                 >
                   <item.icon className="w-5 h-5 text-neutral-400" />
                   <span>{item.name}</span>

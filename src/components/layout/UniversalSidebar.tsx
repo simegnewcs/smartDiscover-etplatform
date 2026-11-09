@@ -151,6 +151,15 @@ export default function UniversalSidebar({ isOpen, onClose }: UniversalSidebarPr
                 <CreditCard className="w-5 h-5" />
                 <span className="font-medium">Pricing & Plans</span>
               </Link>
+
+              <Link
+                href="/#faq"
+                onClick={onClose}
+                className="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-green-100 hover:bg-white/10 hover:text-white transition-colors"
+              >
+                <HelpCircle className="w-5 h-5" />
+                <span className="font-medium">FAQ</span>
+              </Link>
               
               <Link
                 href="/search"

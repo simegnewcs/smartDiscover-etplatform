@@ -3,6 +3,7 @@ import HeroSection from '@/components/layout/HeroSection'
 import TrustStrip from '@/components/layout/TrustStrip'
 import CategoryGrid from '@/components/layout/CategoryGrid'
 import FeaturedListings from '@/components/layout/FeaturedListings'
+import FaqSection from '@/components/layout/FaqSection'
 
 const siteUrl = process.env.NEXTAUTH_URL || 'https://helloet.devvoltz.com'
 
@@ -207,6 +208,7 @@ export default function Home() {
         <TrustStrip />
         <CategoryGrid />
         <FeaturedListings />
+        <FaqSection />
       </div>
     </>
   )
