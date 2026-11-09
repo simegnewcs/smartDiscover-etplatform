@@ -5,7 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { Menu, X, User, LogIn, LogOut, Plus, ChevronDown, Compass, LayoutDashboard, Search, Building2, Heart, Bell, Bookmark } from 'lucide-react'
+import { Menu, X, User, LogIn, LogOut, Plus, ChevronDown, Compass, LayoutDashboard, Search, Building2, Heart, Bell, Bookmark, CreditCard } from 'lucide-react'
 import UniversalSidebar from '@/components/layout/UniversalSidebar'
 
 export default function Navbar() {
@@ -99,6 +99,7 @@ export default function Navbar() {
 
   const navigationItems = [
     { name: 'Businesses', href: '/businesses', icon: Building2 },
+    { name: 'Pricing', href: '/pricing', icon: CreditCard },
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard }
   ]
 

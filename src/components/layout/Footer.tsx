@@ -141,6 +141,7 @@ export default function Footer() {
               {[
                 { label: 'Home', href: '/' },
                 { label: 'All Businesses', href: '/businesses' },
+                { label: 'Pricing & Packages', href: '/pricing' },
                 { label: 'About HelloET', href: '/about' },
                 { label: 'Contact Us', href: '/contact' },
                 { label: 'How HelloET Works', href: '/help' },
